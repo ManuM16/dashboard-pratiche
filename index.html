@@ -825,6 +825,11 @@ tr:hover td{background:var(--surface3)}
           <div class="comm-assign-actions">
             <span id="comm-assign-status" style="font-size:12px;color:var(--ink3)">0 / 0 assegnate</span>
             <button class="btn-comm btn-comm-secondary" onclick="commAssignAll()" title="Assegna tutte le pratiche al commerciale selezionato">Assegna tutto a…</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commExportJSON()" title="Scarica backup assegnazioni">💾 Esporta dati</button>
+            <label class="btn-comm btn-comm-secondary" style="cursor:pointer" title="Ripristina assegnazioni da backup">
+              📂 Importa dati
+              <input type="file" accept=".json" style="display:none" onchange="commImportJSON(this)">
+            </label>
             <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi">Genera analisi →</button>
           </div>
         </div>
@@ -2863,6 +2868,68 @@ calcCQS();
     commFiltered.forEach(r=>{commAssign[r.__id]=chosen;});
     saveAssign();
     renderTable();
+  };
+
+  /* ---- Esporta / Importa JSON ---- */
+  window.commExportJSON=function(){
+    // Raccoglie tutte le chiavi comm_assign_* dal localStorage
+    const allAssign={};
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith('comm_assign_')){
+        try{ allAssign[k]=JSON.parse(localStorage.getItem(k)); }catch(e){}
+      }
+    }
+    const payload={
+      version:1,
+      exportedAt:new Date().toISOString(),
+      assignments:allAssign,
+      // Include anche assegnazioni correnti in memoria (non ancora salvate per qualsiasi motivo)
+      currentKey:'comm_assign_'+commFileKey(),
+      currentAssign:commAssign
+    };
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    const date=new Date().toISOString().slice(0,10);
+    a.download=`dashboard-assegnazioni-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  window.commImportJSON=function(input){
+    const file=input.files[0];
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=function(e){
+      try{
+        const payload=JSON.parse(e.target.result);
+        if(!payload.version||!payload.assignments) throw new Error('Formato non valido');
+        // Ripristina tutte le chiavi nel localStorage
+        let totalKeys=0, matchedPratiche=0;
+        Object.entries(payload.assignments).forEach(([k,v])=>{
+          localStorage.setItem(k,JSON.stringify(v));
+          totalKeys++;
+        });
+        // Carica le assegnazioni del file corrente se presenti
+        const currentSaved=loadAssign();
+        if(currentSaved){
+          const currentIds=new Set(commPratiche.map(r=>r.__id));
+          Object.entries(currentSaved).forEach(([id,agent])=>{
+            if(currentIds.has(id)){commAssign[id]=agent;matchedPratiche++;}
+          });
+          saveAssign();
+          renderTable();
+        }
+        const exportDate=payload.exportedAt?new Date(payload.exportedAt).toLocaleDateString('it-IT'):'—';
+        alert(`✅ Importazione completata!\n\nBackup del: ${exportDate}\nPeriodi ripristinati: ${totalKeys}\nPratiche caricate: ${matchedPratiche}`);
+      }catch(err){
+        alert('❌ Errore nell\'importare il file: '+err.message);
+      }
+      input.value='';
+    };
+    reader.readAsText(file);
   };
 
   function updateAssignStatus(){
