@@ -825,11 +825,8 @@ tr:hover td{background:var(--surface3)}
           <div class="comm-assign-actions">
             <span id="comm-assign-status" style="font-size:12px;color:var(--ink3)">0 / 0 assegnate</span>
             <button class="btn-comm btn-comm-secondary" onclick="commAssignAll()" title="Assegna tutte le pratiche al commerciale selezionato">Assegna tutto a…</button>
-            <button class="btn-comm btn-comm-secondary" onclick="commExportJSON()" title="Scarica backup assegnazioni">💾 Esporta dati</button>
-            <label class="btn-comm btn-comm-secondary" style="cursor:pointer" title="Ripristina assegnazioni da backup">
-              📂 Importa dati
-              <input type="file" accept=".json" style="display:none" onchange="commImportJSON(this)">
-            </label>
+            <button class="btn-comm btn-comm-secondary" onclick="commExportGitHub()" title="Salva backup su GitHub">☁️ Salva su GitHub</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub()" title="Carica backup da GitHub">📥 Carica da GitHub</button>
             <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi">Genera analisi →</button>
           </div>
         </div>
@@ -2870,9 +2867,21 @@ calcCQS();
     renderTable();
   };
 
-  /* ---- Esporta / Importa JSON ---- */
-  window.commExportJSON=function(){
-    // Raccoglie tutte le chiavi comm_assign_* dal localStorage
+  /* ---- GitHub sync helpers ---- */
+  const GH_OWNER='ManuM16';
+  const GH_REPO='dashboard-pratiche';
+  const GH_FILE='dati-assegnazioni.json';
+
+  function ghGetToken(){
+    let t=localStorage.getItem('gh_pat');
+    if(!t){
+      t=prompt('Inserisci il tuo GitHub Personal Access Token (verrà salvato localmente):');
+      if(t) localStorage.setItem('gh_pat',t.trim());
+    }
+    return t?t.trim():null;
+  }
+
+  function ghBuildPayload(){
     const allAssign={};
     for(let i=0;i<localStorage.length;i++){
       const k=localStorage.key(i);
@@ -2880,20 +2889,63 @@ calcCQS();
         try{ allAssign[k]=JSON.parse(localStorage.getItem(k)); }catch(e){}
       }
     }
-    const payload={
-      version:1,
-      exportedAt:new Date().toISOString(),
-      assignments:allAssign,
-      // Include anche assegnazioni correnti in memoria (non ancora salvate per qualsiasi motivo)
-      currentKey:'comm_assign_'+commFileKey(),
-      currentAssign:commAssign
-    };
+    return {version:1,exportedAt:new Date().toISOString(),assignments:allAssign,currentKey:'comm_assign_'+commFileKey(),currentAssign:commAssign};
+  }
+
+  window.commExportGitHub=async function(){
+    const token=ghGetToken(); if(!token) return;
+    const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+    let sha=null;
+    // Recupera SHA del file esistente (necessario per update)
+    try{
+      const res=await fetch(apiUrl,{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+      if(res.ok){const j=await res.json();sha=j.sha;}
+    }catch(e){}
+    const payload=ghBuildPayload();
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
+    const body={message:`Backup assegnazioni ${new Date().toISOString().slice(0,10)}`,content};
+    if(sha) body.sha=sha;
+    try{
+      const res=await fetch(apiUrl,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+      if(!res.ok){const e=await res.json();throw new Error(e.message||res.status);}
+      alert('✅ Dati salvati su GitHub con successo!');
+    }catch(err){
+      alert('❌ Errore nel salvataggio su GitHub:\n'+err.message);
+    }
+  };
+
+  window.commImportGitHub=async function(){
+    const token=ghGetToken(); if(!token) return;
+    const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+    try{
+      const res=await fetch(apiUrl,{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+      if(!res.ok) throw new Error(res.status===404?'Nessun backup trovato su GitHub.':'Errore '+res.status);
+      const j=await res.json();
+      const payload=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
+      if(!payload.version||!payload.assignments) throw new Error('Formato non valido');
+      let totalKeys=0, matchedPratiche=0;
+      Object.entries(payload.assignments).forEach(([k,v])=>{localStorage.setItem(k,JSON.stringify(v));totalKeys++;});
+      const currentSaved=loadAssign();
+      if(currentSaved){
+        const currentIds=new Set(commPratiche.map(r=>r.__id));
+        Object.entries(currentSaved).forEach(([id,agent])=>{if(currentIds.has(id)){commAssign[id]=agent;matchedPratiche++;}});
+        saveAssign(); renderTable();
+      }
+      const exportDate=payload.exportedAt?new Date(payload.exportedAt).toLocaleDateString('it-IT'):'—';
+      alert(`✅ Dati caricati da GitHub!\n\nBackup del: ${exportDate}\nPeriodi ripristinati: ${totalKeys}\nPratiche caricate: ${matchedPratiche}`);
+    }catch(err){
+      alert('❌ Errore nel caricamento da GitHub:\n'+err.message);
+    }
+  };
+
+  /* ---- Esporta / Importa JSON (locale — mantenuto come fallback) ---- */
+  window.commExportJSON=function(){
+    const payload=ghBuildPayload();
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
     a.href=url;
-    const date=new Date().toISOString().slice(0,10);
-    a.download=`dashboard-assegnazioni-${date}.json`;
+    a.download=`dashboard-assegnazioni-${new Date().toISOString().slice(0,10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -2906,21 +2958,13 @@ calcCQS();
       try{
         const payload=JSON.parse(e.target.result);
         if(!payload.version||!payload.assignments) throw new Error('Formato non valido');
-        // Ripristina tutte le chiavi nel localStorage
         let totalKeys=0, matchedPratiche=0;
-        Object.entries(payload.assignments).forEach(([k,v])=>{
-          localStorage.setItem(k,JSON.stringify(v));
-          totalKeys++;
-        });
-        // Carica le assegnazioni del file corrente se presenti
+        Object.entries(payload.assignments).forEach(([k,v])=>{localStorage.setItem(k,JSON.stringify(v));totalKeys++;});
         const currentSaved=loadAssign();
         if(currentSaved){
           const currentIds=new Set(commPratiche.map(r=>r.__id));
-          Object.entries(currentSaved).forEach(([id,agent])=>{
-            if(currentIds.has(id)){commAssign[id]=agent;matchedPratiche++;}
-          });
-          saveAssign();
-          renderTable();
+          Object.entries(currentSaved).forEach(([id,agent])=>{if(currentIds.has(id)){commAssign[id]=agent;matchedPratiche++;}});
+          saveAssign(); renderTable();
         }
         const exportDate=payload.exportedAt?new Date(payload.exportedAt).toLocaleDateString('it-IT'):'—';
         alert(`✅ Importazione completata!\n\nBackup del: ${exportDate}\nPeriodi ripristinati: ${totalKeys}\nPratiche caricate: ${matchedPratiche}`);
