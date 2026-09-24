@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-24T07:30:11.131Z",
+  "exportedAt": "2026-09-24T07:33:00.704Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-09-23": {
       "null": "Francesca Pipia",
@@ -11,7 +11,26 @@
       "5001310301": "Valeria Del Vecchio",
       "4997015301": "Maria Teresa Meloni",
       "4992567301": "Francesca Pipia",
-      "4984236301": "Annamaria Esposito"
+      "4984236301": "Annamaria Esposito",
+      "5009794301": "Giada Boccia",
+      "5009773301": "Monica Caocci",
+      "5009629301": "Laura Balestrino",
+      "5009253301": "Giada Boccia",
+      "5008810301": "Valeria Muscas",
+      "5008550301": "Maria Teresa Meloni",
+      "5008489301": "Eleonora Lupi",
+      "5006940301": "Valentina Corsini",
+      "5006876301": "Noemi Ricciu",
+      "5006816301": "Maria Teresa Meloni",
+      "5006744301": "Francesca Pipia",
+      "5006334301": "Daria Danzini",
+      "5006109301": "Carlo Zamuner",
+      "5005447301": "Valeria Muscas",
+      "5005109301": "Eleonora Lupi",
+      "5003408301": "Valeria Del Vecchio",
+      "5002174301": "Carlo Zamuner",
+      "4999192301": "Alessio Dicati",
+      "4970637301": "Francesca Pipia"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-09-23",
@@ -24,6 +43,25 @@
     "5001310301": "Valeria Del Vecchio",
     "4997015301": "Maria Teresa Meloni",
     "4992567301": "Francesca Pipia",
-    "4984236301": "Annamaria Esposito"
+    "4984236301": "Annamaria Esposito",
+    "5009794301": "Giada Boccia",
+    "5009773301": "Monica Caocci",
+    "5009629301": "Laura Balestrino",
+    "5009253301": "Giada Boccia",
+    "5008810301": "Valeria Muscas",
+    "5008550301": "Maria Teresa Meloni",
+    "5008489301": "Eleonora Lupi",
+    "5006940301": "Valentina Corsini",
+    "5006876301": "Noemi Ricciu",
+    "5006816301": "Maria Teresa Meloni",
+    "5006744301": "Francesca Pipia",
+    "5006334301": "Daria Danzini",
+    "5006109301": "Carlo Zamuner",
+    "5005447301": "Valeria Muscas",
+    "5005109301": "Eleonora Lupi",
+    "5003408301": "Valeria Del Vecchio",
+    "5002174301": "Carlo Zamuner",
+    "4999192301": "Alessio Dicati",
+    "4970637301": "Francesca Pipia"
   }
 }
