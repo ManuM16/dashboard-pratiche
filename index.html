@@ -827,6 +827,7 @@ tr:hover td{background:var(--surface3)}
             <button class="btn-comm btn-comm-secondary" onclick="commAssignAll()" title="Assegna tutte le pratiche al commerciale selezionato">Assegna tutto a…</button>
             <button class="btn-comm btn-comm-secondary" onclick="commExportGitHub()" title="Salva backup su GitHub">☁️ Salva su GitHub</button>
             <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub()" title="Carica backup da GitHub">📥 Carica da GitHub</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commClearAllData()" title="Cancella tutti i dati salvati nel browser" style="color:var(--red)">🗑 Azzera dati</button>
             <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi">Genera analisi →</button>
           </div>
         </div>
@@ -2974,6 +2975,21 @@ calcCQS();
       input.value='';
     };
     reader.readAsText(file);
+  };
+
+  window.commClearAllData=function(){
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&(k.startsWith('comm_assign_')||k==='gh_pat')) keys.push(k);
+    }
+    if(!keys.length){alert('Nessun dato salvato nel browser.');return;}
+    const keysNoToken=keys.filter(k=>k!=='gh_pat');
+    if(!confirm(`⚠️ Stai per cancellare ${keysNoToken.length} periodi di assegnazioni salvati nel browser.\n\nQuesto non può essere annullato. Vuoi continuare?`)) return;
+    keys.forEach(k=>{ if(k!=='gh_pat') localStorage.removeItem(k); });
+    commAssign={};
+    renderTable();
+    alert('✅ Tutti i dati di assegnazione sono stati cancellati.');
   };
 
   function updateAssignStatus(){
