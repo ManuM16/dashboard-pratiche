@@ -2906,19 +2906,48 @@ calcCQS();
   window.commExportGitHub=async function(){
     const token=ghGetToken(); if(!token) return;
     const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+    const ghHeaders={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
+
+    // 1. Recupera SHA fresco — necessario se il file esiste già
     let sha=null;
-    // Recupera SHA fresco (no-cache) — obbligatorio per evitare conflitti
     try{
-      const res=await fetch(apiUrl+'?t='+Date.now(),{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Cache-Control':'no-cache'}});
-      if(res.ok){const j=await res.json();sha=j.sha;}
-    }catch(e){}
+      const shaRes=await fetch(apiUrl+'?t='+Date.now(),{
+        headers:{...ghHeaders,'Cache-Control':'no-cache','Pragma':'no-cache'}
+      });
+      if(shaRes.ok){
+        const j=await shaRes.json();
+        sha=j.sha||null;
+      }
+      // 404 = file non esiste ancora → primo upload, sha=null è corretto
+    }catch(e){/* errore di rete: tentiamo comunque */}
+
+    // 2. Costruisce payload e tenta il PUT
     const payload=ghBuildPayload();
     const content=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
-    const body={message:`Backup assegnazioni ${new Date().toISOString().slice(0,10)}`,content};
-    if(sha) body.sha=sha;
+    const doPut=async(s)=>{
+      const body={message:`Backup assegnazioni ${new Date().toISOString().slice(0,10)}`,content};
+      if(s) body.sha=s;
+      return fetch(apiUrl,{method:'PUT',headers:ghHeaders,body:JSON.stringify(body)});
+    };
+
     try{
-      const res=await fetch(apiUrl,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-      if(!res.ok){const e=await res.json();throw new Error(e.message||res.status);}
+      let res=await doPut(sha);
+      // 422 "sha wasn't supplied" = il file esiste ma non siamo riusciti a leggere lo SHA
+      // → riproviamo una volta con uno SHA fresco forzato
+      if(res.status===422||res.status===409){
+        const errJson=await res.json().catch(()=>({}));
+        if((errJson.message||'').toLowerCase().includes('sha')){
+          // Rileggi SHA in modo sincrono e riprova
+          const retry=await fetch(apiUrl+'?t='+Date.now(),{headers:{...ghHeaders,'Cache-Control':'no-cache'}});
+          if(!retry.ok) throw new Error('Impossibile leggere SHA aggiornato da GitHub ('+retry.status+')');
+          const rj=await retry.json();
+          if(!rj.sha) throw new Error('SHA non trovato nella risposta GitHub');
+          res=await doPut(rj.sha);
+        } else {
+          throw new Error(errJson.message||res.status);
+        }
+      }
+      if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||res.status);}
       alert('✅ Dati salvati su GitHub con successo!');
     }catch(err){
       alert('❌ Errore nel salvataggio su GitHub:\n'+err.message);
