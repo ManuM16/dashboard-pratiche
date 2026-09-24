@@ -810,13 +810,13 @@ tr:hover td{background:var(--surface3)}
             <table class="comm-assign-table">
               <thead>
                 <tr>
-                  <th style="width:110px">N° Pratica</th>
-                  <th>Cliente</th>
-                  <th style="width:130px">Prodotto</th>
-                  <th style="width:110px;text-align:right">Importo €</th>
-                  <th style="width:80px;text-align:center">Polizza</th>
-                  <th style="width:110px">Financial</th>
-                  <th style="width:170px">Commerciale</th>
+                  <th style="width:90px;text-align:left">N° Pratica</th>
+                  <th style="width:180px;text-align:left">Cliente</th>
+                  <th style="width:120px;text-align:left">Prodotto</th>
+                  <th style="width:100px;text-align:right">Importo €</th>
+                  <th style="width:70px;text-align:center">Polizza</th>
+                  <th style="width:100px;text-align:left">Financial</th>
+                  <th style="width:160px;text-align:left">Commerciale</th>
                 </tr>
               </thead>
               <tbody id="comm-tbody"></tbody>
@@ -1164,8 +1164,14 @@ function nav(id, btn){
   // Mostra/nascondi albero mesi nella sidebar
   const sbTree = document.getElementById('sb-mo-tree');
   if(id==='pratiche'){
-    sbTree.style.display='block';
-    buildMonthTree();
+    const alreadyOpen = sbTree.style.display==='block';
+    if(alreadyOpen){
+      sbTree.style.display='none';
+      document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+    } else {
+      sbTree.style.display='block';
+      buildMonthTree();
+    }
   } else {
     sbTree.style.display='none';
   }
@@ -2675,13 +2681,10 @@ calcCQS();
       // ── FILTRO CORTO ──
       if(tipo!=='CORTO') return;
 
-      const firstKey=keys[0];
-      const rawId=r[firstKey];
-      // ID robusto: combina prima colonna + cliente + data + importo per evitare collisioni con backup vecchi
-      const clienteRaw=get(['DES_CLIENTE'])||'';
-      const importoRaw=get(['IMPORTO_FINANZIATO'])||'';
-      const dataRaw=get(['DATA_LIQUIDAZIONE'])||'';
-      const id=`${rawId}|${clienteRaw}|${importoRaw}|${dataRaw}`;
+      // Cerca il numero pratica in colonne note, poi fallback alla prima colonna non-null
+      const numPratica = get(['NUM_PRATICA','N_PRATICA','NUMERO_PRATICA','COD_PRATICA','ID','ID_PRATICA'])
+        || keys.map(k=>r[k]).find(v=>v!=null&&v!=='')
+        || i;
       const cliente=get(['DES_CLIENTE']);
       const prodotto=get(['AUT_Fami']);
       // Helper: converte numero o stringa in float (gestisce sia numeri nativi che stringhe con virgola/punto)
@@ -2731,7 +2734,9 @@ calcCQS();
       const cittaRaw=get(['DES_SUBAGENTE','H']);
       const finKey=cityToFinKey(cittaRaw);
       const financial=finKey?FINANCIAL_MAP[finKey].label:(cittaRaw||'—');
-      parsed.push({__id:id,__idx:i,__dateStr:dateStr,cliente,prodotto,tipo,importo,netto,nRate,rata,polizza,financial,finKey,cittaRaw});
+      // ID univoco: numero pratica + cliente + importo + dateStr (stringa pulita, non oggetto Date)
+      const id=`${numPratica}|${cliente||''}|${importo}|${dateStr}`;
+      parsed.push({__id:id,__num:numPratica,__idx:i,__dateStr:dateStr,cliente,prodotto,tipo,importo,netto,nRate,rata,polizza,financial,finKey,cittaRaw});
     });
     return parsed;
   }
@@ -2834,7 +2839,7 @@ calcCQS();
       const polBadge=r.polizza!=null?`<span class="comm-badge-polizza">€ ${fe(r.polizza)}</span>`:'<span class="comm-badge-nopol">—</span>';
       const finColor=r.finKey?FINANCIAL_MAP[r.finKey].color:'var(--ink3)';
       return `<tr>
-        <td style="font-family:monospace;font-size:11px;color:var(--ink3)">${(r.__id||'').split('|')[0]||'—'}</td>
+        <td style="font-family:monospace;font-size:11px;color:var(--ink3)">${r.__num||'—'}</td>
         <td style="font-weight:500">${esc(r.cliente||'—')}</td>
         <td style="font-size:11.5px;color:var(--ink2)">${esc(r.prodotto||'—')}</td>
         <td style="text-align:right;font-weight:600">${r.importo?fe(r.importo):'—'}</td>
