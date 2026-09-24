@@ -2843,10 +2843,16 @@ calcCQS();
         </select></td>
       </tr>`;
     }).join('');
-    // Restore selections
+    // Restore selections — forza sempre selectedIndex=0 prima, poi applica solo se assegnato
     tbody.querySelectorAll('select[data-pid]').forEach(sel=>{
+      sel.selectedIndex=0; // garantisce "— scegli —" di default
       const pid=sel.dataset.pid;
-      if(commAssign[pid]){sel.value=commAssign[pid];sel.classList.add('assigned');}
+      if(commAssign[pid]){
+        sel.value=commAssign[pid];
+        // Verifica che il valore sia stato accettato (opzione esistente)
+        if(sel.value===commAssign[pid]) sel.classList.add('assigned');
+        else { delete commAssign[pid]; sel.selectedIndex=0; } // valore non trovato → rimuovi assegnazione
+      }
     });
     updateAssignStatus();
   }
@@ -3117,6 +3123,10 @@ calcCQS();
 
   /* ---- KPI generation ---- */
   window.commGenerateKPI=function(){
+    // DEBUG: mostra quante assegnazioni ci sono in memoria
+    const assignCount=Object.keys(commAssign).length;
+    console.log('[KPI] commAssign contiene',assignCount,'voci:', Object.entries(commAssign).slice(0,5));
+
     // Build stats per agente e per financial
     const agentStats={};
     const finStats={};
