@@ -2796,25 +2796,27 @@ calcCQS();
   }
 
   /* ---- Opzioni select commerciali (raggruppate per Financial) ---- */
-  function buildAgentOpts(finKey){
-    // Se la pratica ha un finKey noto, mostra prima i commerciali di quel financial
-    let html='<option value="">— scegli —</option>';
+  function buildAgentOpts(finKey, selectedAgent){
+    // selectedAgent: nome già assegnato (o '' per nessuno)
+    const sel=selectedAgent||'';
+    const opt=(a)=>`<option value="${esc(a)}"${a===sel?' selected':''}>${esc(a)}</option>`;
+    // Prima opzione vuota — selected se nessuna assegnazione
+    let html=`<option value=""${!sel?' selected':''}>— scegli —</option>`;
     if(finKey && FINANCIAL_MAP[finKey]){
       const f=FINANCIAL_MAP[finKey];
       html+=`<optgroup label="${esc(f.label)}">`;
-      f.agents.forEach(a=>{html+=`<option value="${esc(a)}">${esc(a)}</option>`;});
+      f.agents.forEach(a=>{html+=opt(a);});
       html+=`</optgroup>`;
-      // Aggiungi gli altri financial come gruppi secondari
       Object.entries(FINANCIAL_MAP).forEach(([k,f2])=>{
         if(k===finKey) return;
         html+=`<optgroup label="${esc(f2.label)}">`;
-        f2.agents.forEach(a=>{html+=`<option value="${esc(a)}">${esc(a)}</option>`;});
+        f2.agents.forEach(a=>{html+=opt(a);});
         html+=`</optgroup>`;
       });
     } else {
       Object.entries(FINANCIAL_MAP).forEach(([k,f])=>{
         html+=`<optgroup label="${esc(f.label)}">`;
-        f.agents.forEach(a=>{html+=`<option value="${esc(a)}">${esc(a)}</option>`;});
+        f.agents.forEach(a=>{html+=opt(a);});
         html+=`</optgroup>`;
       });
     }
@@ -2839,21 +2841,11 @@ calcCQS();
         <td style="text-align:center">${polBadge}</td>
         <td><span style="font-size:11px;font-weight:600;color:${finColor};white-space:nowrap">${esc(r.financial)}</span></td>
         <td><select class="comm-sel${cur?' assigned':''}" data-pid="${r.__id}" onchange="commAssignOne(this)">
-          ${buildAgentOpts(r.finKey)}
+          ${buildAgentOpts(r.finKey, cur)}
         </select></td>
       </tr>`;
     }).join('');
-    // Restore selections — forza sempre selectedIndex=0 prima, poi applica solo se assegnato
-    tbody.querySelectorAll('select[data-pid]').forEach(sel=>{
-      sel.selectedIndex=0; // garantisce "— scegli —" di default
-      const pid=sel.dataset.pid;
-      if(commAssign[pid]){
-        sel.value=commAssign[pid];
-        // Verifica che il valore sia stato accettato (opzione esistente)
-        if(sel.value===commAssign[pid]) sel.classList.add('assigned');
-        else { delete commAssign[pid]; sel.selectedIndex=0; } // valore non trovato → rimuovi assegnazione
-      }
-    });
+    // Nessun restore JS necessario: il valore selected è già nel markup HTML (buildAgentOpts lo imposta)
     updateAssignStatus();
   }
 
@@ -3123,9 +3115,19 @@ calcCQS();
 
   /* ---- KPI generation ---- */
   window.commGenerateKPI=function(){
-    // DEBUG: mostra quante assegnazioni ci sono in memoria
-    const assignCount=Object.keys(commAssign).length;
-    console.log('[KPI] commAssign contiene',assignCount,'voci:', Object.entries(commAssign).slice(0,5));
+    // Sincronizza commAssign con lo stato ATTUALE dei select nel DOM
+    // Questo è l'unico modo sicuro: leggiamo il DOM invece di fidarci dello stato in memoria
+    document.querySelectorAll('#comm-tbody select[data-pid]').forEach(sel=>{
+      const pid=sel.dataset.pid;
+      const val=sel.value; // valore realmente selezionato nel DOM ora
+      if(val && val!==''){
+        commAssign[pid]=val;
+      } else {
+        delete commAssign[pid];
+      }
+    });
+
+    console.log('[KPI] commAssign dopo sync DOM:', Object.keys(commAssign).length,'voci');
 
     // Build stats per agente e per financial
     const agentStats={};
