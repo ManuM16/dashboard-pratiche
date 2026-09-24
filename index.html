@@ -2676,7 +2676,12 @@ calcCQS();
       if(tipo!=='CORTO') return;
 
       const firstKey=keys[0];
-      const id=r[firstKey];
+      const rawId=r[firstKey];
+      // ID robusto: combina prima colonna + cliente + data + importo per evitare collisioni con backup vecchi
+      const clienteRaw=get(['DES_CLIENTE'])||'';
+      const importoRaw=get(['IMPORTO_FINANZIATO'])||'';
+      const dataRaw=get(['DATA_LIQUIDAZIONE'])||'';
+      const id=`${rawId}|${clienteRaw}|${importoRaw}|${dataRaw}`;
       const cliente=get(['DES_CLIENTE']);
       const prodotto=get(['AUT_Fami']);
       // Helper: converte numero o stringa in float (gestisce sia numeri nativi che stringhe con virgola/punto)
@@ -3032,30 +3037,42 @@ calcCQS();
       const agents=Object.values(_lastAgentStats).filter(s=>s.finKey===finKey);
       agents.sort((a,b)=>b.importoTot-a.importoTot);
 
-      const agentCards=agents.map(s=>{
-        const avg=s.n?s.importoTot/s.n:0;
-        const pct=s.n?Math.round(s.conPolizza/s.n*100):0;
-        const prodChips=Object.entries(s.prodotti).sort((a,b)=>b[1]-a[1]).map(([p,n])=>`<span style="background:var(--surface2);padding:2px 7px;border-radius:4px;font-size:10.5px">${esc(p)} ×${n}</span>`).join(' ');
-        const initials=s.name.split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
-        const col=AVATAR_COLORS[ALL_AGENTS.indexOf(s.name)%AVATAR_COLORS.length]||'#999';
-        return `<div class="comm-agent-card">
-          <div class="comm-agent-header">
-            <div class="comm-agent-avatar" style="background:${col}">${initials}</div>
-            <div>
-              <div style="font-weight:600;font-size:13px">${esc(s.name)}</div>
-              <div style="font-size:10.5px;color:var(--ink3)">${s.n} pratica${s.n!==1?'e':''} · media ${fe(avg)}</div>
-            </div>
-            <div style="margin-left:auto;text-align:right">
-              <div style="font-weight:700;font-size:13px;font-family:'Syne',sans-serif">€ ${fe(s.importoTot)}</div>
-            </div>
-          </div>
-          <div style="padding:10px 16px;display:flex;gap:10px;flex-wrap:wrap;font-size:11px">
-            <span>🛡 <b>${s.conPolizza}</b> polizze (${pct}%)</span>
-            <span style="color:var(--amber)">💰 premi: <b>${fe(s.totPolizza)}</b></span>
-          </div>
-          ${prodChips?`<div class="comm-agent-breakdown" style="margin:0 16px 10px">${prodChips}</div>`:''}
-        </div>`;
-      }).join('');
+      const agentCards=`<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px">
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead>
+            <tr style="background:var(--surface2);border-bottom:1px solid var(--border)">
+              <th style="padding:6px 12px;text-align:left;font-weight:600;color:var(--ink2);font-size:11px">Commerciale</th>
+              <th style="padding:6px 10px;text-align:center;font-weight:600;color:var(--ink2);font-size:11px">Pratiche</th>
+              <th style="padding:6px 10px;text-align:right;font-weight:600;color:var(--ink2);font-size:11px">Finanziato tot.</th>
+              <th style="padding:6px 10px;text-align:right;font-weight:600;color:var(--ink2);font-size:11px">Media</th>
+              <th style="padding:6px 10px;text-align:center;font-weight:600;color:var(--ink2);font-size:11px">Polizze</th>
+              <th style="padding:6px 12px;text-align:right;font-weight:600;color:var(--ink2);font-size:11px">Premi tot.</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${agents.map((s,idx)=>{
+              const avg=s.n?s.importoTot/s.n:0;
+              const pct=s.n?Math.round(s.conPolizza/s.n*100):0;
+              const initials=s.name.split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
+              const col=AVATAR_COLORS[ALL_AGENTS.indexOf(s.name)%AVATAR_COLORS.length]||'#999';
+              const zebra=idx%2===1?'background:var(--surface2)':'';
+              return `<tr style="border-top:1px solid var(--border);${zebra}">
+                <td style="padding:7px 12px">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:26px;height:26px;border-radius:50%;background:${col};color:#fff;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif">${initials}</div>
+                    <span style="font-weight:600;font-size:12.5px">${esc(s.name)}</span>
+                  </div>
+                </td>
+                <td style="padding:7px 10px;text-align:center;font-weight:700;font-size:13px">${s.n}</td>
+                <td style="padding:7px 10px;text-align:right;font-weight:700;font-family:'Syne',sans-serif;font-size:12.5px">€ ${fe(s.importoTot)}</td>
+                <td style="padding:7px 10px;text-align:right;color:var(--ink2);font-size:11.5px">${fe(avg)}</td>
+                <td style="padding:7px 10px;text-align:center;font-size:11.5px"><b>${s.conPolizza}</b><span style="color:var(--ink3)"> / ${s.n}</span> <span style="color:var(--ink3);font-size:10px">(${pct}%)</span></td>
+                <td style="padding:7px 12px;text-align:right;color:var(--amber);font-weight:600;font-size:12px">${s.totPolizza>0?'€ '+fe(s.totPolizza):'—'}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
 
       return `<div style="margin-bottom:28px">
         <!-- Financial header -->
