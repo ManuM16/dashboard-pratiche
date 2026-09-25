@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.1 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.2 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3292,7 +3292,7 @@ calcCQS();
 
     const thead=`<thead>
       <tr style="background:var(--surface2);border-bottom:1px solid var(--border)">
-        <th style="padding:7px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--ink2);white-space:nowrap">Commerciale</th>
+        <th style="padding:7px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--ink2);white-space:nowrap"></th>
         ${COLS.map(c=>`<th style="padding:7px 14px;text-align:right;font-size:11px;font-weight:600;color:${c.color};white-space:nowrap">${c.label}</th>`).join('')}
       </tr>
     </thead>`;
@@ -3324,7 +3324,7 @@ calcCQS();
           <div style="display:flex;align-items:center;gap:8px">
             <div style="width:10px;height:10px;border-radius:50%;background:${f.color};flex-shrink:0"></div>
             <span style="font-weight:700;font-size:13px;font-family:'Syne',sans-serif;color:${f.color}">${esc(f.label)}</span>
-            <span style="font-size:11px;color:var(--ink3)">${f.n} tot. · ${f.nAssegnate} assegnate</span>
+            <span style="font-size:11px;color:var(--ink3)">${f.n} pratiche</span>
           </div>
         </td>
         ${COLS.map(c=>`<td style="padding:8px 14px;text-align:right;font-size:13px;font-weight:700;color:${c.color};font-family:'Syne',sans-serif">${c.fmt(f)}</td>`).join('')}
