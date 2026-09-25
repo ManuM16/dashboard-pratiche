@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.8 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.9 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -2650,6 +2650,38 @@ calcCQS();
     const saved=localStorage.getItem('comm_assign_'+k);
     return saved?JSON.parse(saved):null;
   }
+  // Pulisce il localStorage: mantiene SOLO le assegnazioni di pratiche CORTO
+  // con data nel mese più recente del file. Elimina tutto il resto.
+  function cleanupAssignStorage(){
+    if(!commPratiche.length) return null;
+    // Mese più recente nel file (es. "2026-09")
+    const dates=commPratiche.map(r=>r.__dateStr).filter(Boolean).sort();
+    const lastMonth=dates[dates.length-1].slice(0,7);
+    // ID validi: solo pratiche CORTO del mese più recente
+    const validIds=new Set(
+      commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(lastMonth)).map(r=>r.__id)
+    );
+    // 1) Leggi tutte le assegnazioni salvate in tutte le chiavi comm_assign_*
+    const allSaved={};
+    const keysToDelete=[];
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith('comm_assign_')){
+        keysToDelete.push(k);
+        try{ Object.assign(allSaved,JSON.parse(localStorage.getItem(k))); }catch(e){}
+      }
+    }
+    // 2) Cancella tutto
+    keysToDelete.forEach(k=>localStorage.removeItem(k));
+    // 3) Tieni solo le assegnazioni valide
+    const cleaned={};
+    Object.entries(allSaved).forEach(([id,agent])=>{if(validIds.has(id))cleaned[id]=agent;});
+    // 4) Risalva nella chiave del periodo corrente
+    const currentKey='comm_assign_'+commFileKey();
+    localStorage.setItem(currentKey,JSON.stringify(cleaned));
+    console.log('[CLEANUP] Mese: '+lastMonth+' | Valide: '+Object.keys(cleaned).length+' / Totali salvate: '+Object.keys(allSaved).length);
+    return cleaned;
+  }
   function showRestoreBanner(saved){
     // Conta quante pratiche del file corrente hanno un'assegnazione salvata
     const matchIds=commPratiche.map(r=>r.__id).filter(id=>saved[id]);
@@ -2701,18 +2733,9 @@ calcCQS();
         commAssign={};
         // Salva i dati parsati in cache per ripristino automatico
         savePraticheCache(file.name);
-        // Carica assegnazioni salvate e filtra SOLO quelle con ID presenti in commPratiche (solo CORTO)
-        const savedAssign=loadAssign();
-        if(savedAssign){
-          const currentIds=new Set(commPratiche.map(r=>r.__id));
-          let matched=0;
-          Object.entries(savedAssign).forEach(([id,agent])=>{
-            if(currentIds.has(id)){commAssign[id]=agent;matched++;}
-          });
-          // Risalva in localStorage già pulito (senza pratiche non-CORTO)
-          saveAssign();
-          console.log('[LOAD] Assegnazioni ripristinate automaticamente: '+matched+' su '+Object.keys(savedAssign).length+' salvate');
-        }
+        // Pulisce localStorage e carica solo assegnazioni valide (pratiche CORTO del file)
+        const cleanedAssign=cleanupAssignStorage();
+        if(cleanedAssign) Object.assign(commAssign,cleanedAssign);
         // Popola anni disponibili
         populateYearSelect();
         // default filter = today (modalità giorno)
@@ -3469,16 +3492,9 @@ calcCQS();
     commPratiche=cache.pratiche;
     commFileName=cache.fileName||'';
     commAssign={};
-    // Carica assegnazioni e filtra SOLO quelle con ID presenti in commPratiche (solo CORTO)
-    const savedAssign=loadAssign();
-    if(savedAssign){
-      const currentIds=new Set(commPratiche.map(r=>r.__id));
-      Object.entries(savedAssign).forEach(([id,agent])=>{
-        if(currentIds.has(id)) commAssign[id]=agent;
-      });
-      // Risalva già pulito nel localStorage
-      saveAssign();
-    }
+    // Pulisce localStorage e carica solo assegnazioni valide (pratiche CORTO del file)
+    const cleanedAssign2=cleanupAssignStorage();
+    if(cleanedAssign2) Object.assign(commAssign,cleanedAssign2);
     populateYearSelect();
     commDateMode='day';
     const today=new Date().toISOString().slice(0,10);
