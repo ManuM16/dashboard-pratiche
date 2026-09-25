@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.9 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.1.0 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -880,6 +880,8 @@ tr:hover td{background:var(--surface3)}
             <button class="btn-comm btn-comm-secondary" onclick="commAssignAll()" title="Assegna tutte le pratiche al commerciale selezionato">Assegna tutto a…</button>
             <button class="btn-comm btn-comm-secondary" onclick="commExportGitHub()" title="Salva backup su GitHub">☁️ Salva su GitHub</button>
             <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub()" title="Carica backup da GitHub">📥 Carica da GitHub</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commDebugLS()" title="Mostra contenuto localStorage" style="color:var(--ink2)">🔍 Debug LS</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commNukeAssign()" title="Cancella TUTTE le assegnazioni salvate (non i dati pratiche)" style="color:orange">🧹 Reset assegnazioni</button>
             <button class="btn-comm btn-comm-secondary" onclick="commClearAllData()" title="Cancella tutti i dati salvati nel browser" style="color:var(--red)">🗑 Azzera dati</button>
             <button class="btn-comm btn-comm-secondary" onclick="commExportReport()" title="Visualizza report erogato per financial e commerciale">📊 Report Erogato</button>
             <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi">Genera analisi →</button>
@@ -3159,6 +3161,49 @@ calcCQS();
       input.value='';
     };
     reader.readAsText(file);
+  };
+
+  window.commDebugLS=function(){
+    const lines=['=== localStorage comm_assign_* ==='];
+    let total=0;
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith('comm_assign_')){
+        try{
+          const obj=JSON.parse(localStorage.getItem(k));
+          const n=Object.keys(obj).length;
+          total+=n;
+          // Conta per agente
+          const byAgent={};
+          Object.values(obj).forEach(a=>{byAgent[a]=(byAgent[a]||0)+1;});
+          const agentStr=Object.entries(byAgent).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([a,n])=>a+'='+n).join(', ');
+          lines.push('KEY: '+k+'\n  Voci: '+n+'\n  Top agenti: '+agentStr);
+          // Mostra anche i primi 3 ID per capire il formato
+          const ids=Object.keys(obj).slice(0,3);
+          lines.push('  Esempi ID: '+ids.join(' | '));
+        }catch(e){ lines.push('KEY: '+k+' → errore parse'); }
+      }
+    }
+    lines.push('\ncommPratiche: '+commPratiche.length+' righe');
+    lines.push('commAssign in memoria: '+Object.keys(commAssign).length+' voci');
+    if(commPratiche.length){
+      const ids=commPratiche.slice(0,3).map(r=>r.__id);
+      lines.push('Esempi __id pratiche: '+ids.join(' | '));
+    }
+    alert(lines.join('\n'));
+  };
+
+  window.commNukeAssign=function(){
+    if(!confirm('Cancella TUTTE le assegnazioni salvate? Le pratiche restano caricate.')) return;
+    const keys=[];
+    for(let i=0;i<localStorage.length;i++){
+      const k=localStorage.key(i);
+      if(k&&k.startsWith('comm_assign_')) keys.push(k);
+    }
+    keys.forEach(k=>localStorage.removeItem(k));
+    commAssign={};
+    renderTable();
+    alert('✅ Assegnazioni cancellate ('+keys.length+' chiavi rimosse). Ora puoi riassegnare da zero.');
   };
 
   window.commClearAllData=function(){
