@@ -828,6 +828,7 @@ tr:hover td{background:var(--surface3)}
             <button class="btn-comm btn-comm-secondary" onclick="commExportGitHub()" title="Salva backup su GitHub">☁️ Salva su GitHub</button>
             <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub()" title="Carica backup da GitHub">📥 Carica da GitHub</button>
             <button class="btn-comm btn-comm-secondary" onclick="commClearAllData()" title="Cancella tutti i dati salvati nel browser" style="color:var(--red)">🗑 Azzera dati</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commExportReport()" title="Visualizza report erogato per financial e commerciale">📊 Report Erogato</button>
             <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi">Genera analisi →</button>
           </div>
         </div>
@@ -2566,6 +2567,7 @@ calcCQS();
   let commPratiche = [];    // righe CORTO parsed
   let commFiltered = [];    // righe mostrate in tabella
   let commAssign   = {};    // { praticaId: nomeCommerciale }
+  let commFileName = '';    // nome file caricato
 
   const AVATAR_COLORS = ['#1A56DB','#0E7A5F','#5B44C7','#92500A','#B82525','#2563EB','#059669','#7C3AED'];
 
@@ -2642,7 +2644,10 @@ calcCQS();
         const ws=wb.Sheets[wsName];
         const raw=XLSX.utils.sheet_to_json(ws,{defval:null,raw:true,cellDates:true});
         commPratiche=parsePratiche(raw);
+        commFileName=file.name;
         commAssign={};
+        // Salva i dati parsati in cache per ripristino automatico
+        savePraticheCache(file.name);
         // Controlla se esistono assegnazioni salvate per questo periodo
         const savedAssign=loadAssign();
         // Popola anni disponibili
@@ -3008,15 +3013,20 @@ calcCQS();
     const keys=[];
     for(let i=0;i<localStorage.length;i++){
       const k=localStorage.key(i);
-      if(k&&(k.startsWith('comm_assign_')||k==='gh_pat')) keys.push(k);
+      if(k&&(k.startsWith('comm_assign_')||k===PRATICHE_CACHE_KEY||k==='gh_pat')) keys.push(k);
     }
     if(!keys.length){alert('Nessun dato salvato nel browser.');return;}
     const keysNoToken=keys.filter(k=>k!=='gh_pat');
-    if(!confirm(`⚠️ Stai per cancellare ${keysNoToken.length} periodi di assegnazioni salvati nel browser.\n\nQuesto non può essere annullato. Vuoi continuare?`)) return;
+    if(!confirm(`⚠️ Stai per cancellare ${keysNoToken.length} voci salvate nel browser (assegnazioni + dati Excel).\n\nQuesto non può essere annullato. Vuoi continuare?`)) return;
     keys.forEach(k=>{ if(k!=='gh_pat') localStorage.removeItem(k); });
     commAssign={};
+    commPratiche=[];
+    commFiltered=[];
+    document.getElementById('comm-loaded-area').style.display='none';
+    document.querySelector('.comm-upload-label').textContent='Carica file Excel (.xlsx)';
+    document.querySelector('.comm-upload-sub').textContent='Trascina qui o clicca per selezionare';
     renderTable();
-    alert('✅ Tutti i dati di assegnazione sono stati cancellati.');
+    alert('✅ Tutti i dati sono stati cancellati (assegnazioni + dati Excel).');
   };
 
   function updateAssignStatus(){
@@ -3192,6 +3202,153 @@ calcCQS();
     section.scrollIntoView({behavior:'smooth',block:'start'});
   };
 
+  /* ---- Salvataggio/ripristino dati Excel in localStorage ---- */
+  const PRATICHE_CACHE_KEY = 'comm_pratiche_cache';
+
+  function savePraticheCache(fileName){
+    try{
+      const data={fileName,savedAt:new Date().toISOString(),pratiche:commPratiche};
+      localStorage.setItem(PRATICHE_CACHE_KEY, JSON.stringify(data));
+    }catch(e){
+      // localStorage pieno — silenzioso (i dati restano in memoria)
+      console.warn('[cache] impossibile salvare pratiche:',e.message);
+    }
+  }
+
+  function loadPraticheCache(){
+    try{
+      const raw=localStorage.getItem(PRATICHE_CACHE_KEY);
+      if(!raw) return null;
+      return JSON.parse(raw);
+    }catch(e){ return null; }
+  }
+
+  function restorePraticheFromCache(cache){
+    commPratiche=cache.pratiche;
+    commFileName=cache.fileName||'';
+    commAssign={};
+    const savedAssign=loadAssign();
+    populateYearSelect();
+    commDateMode='day';
+    const today=new Date().toISOString().slice(0,10);
+    document.getElementById('comm-date-filter').value=today;
+    ['day','range','month','year','all'].forEach(m=>{
+      document.getElementById('dmode-panel-'+m).style.display=(m==='day'?'flex':'none');
+      document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
+    });
+    document.getElementById('comm-loaded-area').style.display='';
+    applyFilters();
+    if(savedAssign) showRestoreBanner(savedAssign);
+    const savedDate=new Date(cache.savedAt).toLocaleDateString('it-IT');
+    document.querySelector('.comm-upload-label').textContent='🔄 '+commFileName+' (ripristinato)';
+    document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche — salvate il '+savedDate;
+  }
+
+  // Ripristino automatico all'apertura della sezione commerciali
+  (function tryRestoreOnInit(){
+    const cache=loadPraticheCache();
+    if(cache && cache.pratiche && cache.pratiche.length){
+      restorePraticheFromCache(cache);
+    }
+  })();
+
+  /* ---- Report Erogato (tabella pivot) ---- */
+  window.commExportReport=function(){
+    if(!commPratiche.length){alert('Nessuna pratica caricata.');return;}
+
+    // Raccoglie dati: per ogni pratica usa importo come "finanziato"
+    // e polizza come "confermato" (importo polizza = premio confermato)
+    const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia'];
+    const pivot={};  // { finKey: { label, agenti: { nome: {finanziato, confermato} }, totFin, totConf } }
+
+    commPratiche.forEach(r=>{
+      const finKey=r.finKey||'altro';
+      const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:'Altro';
+      const agente=commAssign[r.__id]||'(non assegnato)';
+      const importo=r.importo||0;
+      const confermato=r.polizza||0;
+
+      if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel.replace('FS ','FS '),agenti:{},totFin:0,totConf:0};
+      const f=pivot[finKey];
+      if(!f.agenti[agente]) f.agenti[agente]={finanziato:0,confermato:0};
+      f.agenti[agente].finanziato+=importo;
+      f.agenti[agente].confermato+=confermato;
+      f.totFin+=importo;
+      f.totConf+=confermato;
+    });
+
+    let totGlobFin=0,totGlobConf=0;
+    Object.values(pivot).forEach(f=>{totGlobFin+=f.totFin;totGlobConf+=f.totConf;});
+
+    const fmtE=n=>n?fe(n)+' €':'';
+    const finKeys=finOrder.filter(k=>pivot[k]);
+    // Aggiungi eventuali financial non in ordine
+    Object.keys(pivot).forEach(k=>{if(!finKeys.includes(k))finKeys.push(k);});
+
+    // Genera HTML report
+    const rows=finKeys.map(finKey=>{
+      const f=pivot[finKey];
+      const agentRows=Object.entries(f.agenti).sort((a,b)=>b[1].finanziato-a[1].finanziato).map(([nome,d])=>`
+        <tr>
+          <td style="padding:5px 12px 5px 28px;font-size:12.5px">${esc(nome)}</td>
+          <td style="padding:5px 12px;text-align:right;font-size:12.5px">${fmtE(d.finanziato)}</td>
+          <td style="padding:5px 12px;text-align:right;font-size:12.5px;color:var(--teal)">${fmtE(d.confermato)}</td>
+        </tr>`).join('');
+      return `
+        <tr style="background:var(--surface2)">
+          <td style="padding:7px 12px;font-weight:700;font-size:13px">⊟ ${esc(f.label)}</td>
+          <td style="padding:7px 12px;text-align:right;font-weight:700;font-size:13px">${fmtE(f.totFin)}</td>
+          <td style="padding:7px 12px;text-align:right;font-weight:700;font-size:13px;color:var(--teal)">${fmtE(f.totConf)}</td>
+        </tr>
+        ${agentRows}`;
+    }).join('');
+
+    const html=`
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;display:flex;align-items:center;justify-content:center" id="report-modal" onclick="if(event.target.id==='report-modal')document.getElementById('report-modal').remove()">
+      <div style="background:var(--surface);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);max-width:680px;width:95%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden">
+        <div style="padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">📊 Report Erogato</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:2px">Importo finanziato e confermato per financial e commerciale</div>
+          </div>
+          <button onclick="document.getElementById('report-modal').remove()" style="border:none;background:none;font-size:20px;cursor:pointer;color:var(--ink3);padding:4px 8px">✕</button>
+        </div>
+        <div style="overflow-y:auto;flex:1">
+          <table style="width:100%;border-collapse:collapse;font-family:'Outfit',sans-serif">
+            <thead>
+              <tr style="background:var(--ink);color:#fff;position:sticky;top:0">
+                <th style="padding:9px 12px;text-align:left;font-size:12px;font-weight:600">Etichette di riga</th>
+                <th style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600">Somma di IMPORTO_FINANZIATO</th>
+                <th style="padding:9px 12px;text-align:right;font-size:12px;font-weight:600">Somma di CONFERMATO</th>
+              </tr>
+            </thead>
+            <tbody style="border:1px solid var(--border)">
+              ${rows}
+              <tr style="background:var(--ink);color:#fff;font-weight:700">
+                <td style="padding:9px 12px;font-size:13px">Totale complessivo</td>
+                <td style="padding:9px 12px;text-align:right;font-size:13px">${fmtE(totGlobFin)}</td>
+                <td style="padding:9px 12px;text-align:right;font-size:13px">${fmtE(totGlobConf)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn-comm btn-comm-secondary" onclick="commCopyReport()">📋 Copia tabella</button>
+          <button class="btn-comm btn-comm-primary" onclick="document.getElementById('report-modal').remove()">Chiudi</button>
+        </div>
+      </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend',html);
+  };
+
+  window.commCopyReport=function(){
+    const table=document.querySelector('#report-modal table');
+    if(!table) return;
+    // Copia come testo tab-separated per incollare su Excel
+    const rows=[...table.querySelectorAll('tr')];
+    const tsv=rows.map(tr=>[...tr.querySelectorAll('th,td')].map(c=>c.textContent.trim()).join('\t')).join('\n');
+    navigator.clipboard.writeText(tsv).then(()=>alert('✅ Tabella copiata negli appunti — incollala su Excel!')).catch(()=>alert('❌ Impossibile copiare. Seleziona la tabella manualmente.'));
+  };
 
 })();
 </script>
