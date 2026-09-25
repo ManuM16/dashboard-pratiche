@@ -749,89 +749,105 @@ tr:hover td{background:var(--surface3)}
         <span style="font-size:11.5px;color:var(--ink3);background:var(--surface2);padding:5px 10px;border-radius:7px;border:1px solid var(--border)">Solo pratiche <strong>CORTO</strong></span>
       </div>
 
-      <!-- Upload zone -->
-      <div class="comm-upload-zone" id="comm-upload-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="commHandleDrop(event)">
-        <input type="file" accept=".xlsx,.xls" onchange="commLoadFile(this.files[0])">
-        <div class="comm-upload-icon">📂</div>
-        <div class="comm-upload-label">Carica file erogato Excel</div>
-        <div class="comm-upload-sub">Trascina qui il file XLSX oppure clicca per selezionarlo</div>
-      </div>
+      <!-- Layout a due colonne: sinistra=upload+controlli, destra=calendario -->
+      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start">
 
-      <!-- Date filter (shown after file loaded) -->
-      <div id="comm-loaded-area" style="display:none;margin-top:16px">
-        <!-- Filtro date avanzato -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-            <span style="font-size:12px;font-weight:600;color:var(--ink2)">📅 Periodo</span>
-            <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px">
-              <button id="dmode-day"    onclick="commSetDateMode('day')"    class="dmode-btn dmode-active">Giorno</button>
-              <button id="dmode-range"  onclick="commSetDateMode('range')"  class="dmode-btn">Intervallo</button>
-              <button id="dmode-month"  onclick="commSetDateMode('month')"  class="dmode-btn">Mese</button>
-              <button id="dmode-year"   onclick="commSetDateMode('year')"   class="dmode-btn">Anno</button>
-              <button id="dmode-all"    onclick="commSetDateMode('all')"    class="dmode-btn">Tutto</button>
-            </div>
-            <button class="btn-comm btn-comm-secondary" style="margin-left:auto" onclick="commShowAll()">Reset</button>
-            <span class="comm-count" id="comm-count-label"></span>
+        <!-- COLONNA SINISTRA: upload + controlli -->
+        <div style="display:flex;flex-direction:column;gap:12px">
+
+          <!-- Upload zone -->
+          <div class="comm-upload-zone" id="comm-upload-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="commHandleDrop(event)">
+            <input type="file" accept=".xlsx,.xls" onchange="commLoadFile(this.files[0])">
+            <div class="comm-upload-icon">📂</div>
+            <div class="comm-upload-label">Carica file erogato Excel</div>
+            <div class="comm-upload-sub">Trascina qui il file XLSX oppure clicca per selezionarlo</div>
           </div>
-          <!-- Giorno singolo — calendario custom -->
-          <div id="dmode-panel-day" style="display:flex;flex-direction:column;gap:10px">
-            <div id="comm-cal-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:inline-block">
-              <!-- header mese -->
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px">
-                <button onclick="commCalMove(-1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese precedente">‹</button>
-                <span id="comm-cal-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap"></span>
-                <button onclick="commCalMove(+1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese successivo">›</button>
+
+          <!-- Controlli (visibili dopo caricamento) -->
+          <div id="comm-loaded-area" style="display:none">
+            <!-- Filtro date -->
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+                <span style="font-size:12px;font-weight:600;color:var(--ink2)">📅 Periodo</span>
+                <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px">
+                  <button id="dmode-day"    onclick="commSetDateMode('day')"    class="dmode-btn dmode-active">Giorno</button>
+                  <button id="dmode-range"  onclick="commSetDateMode('range')"  class="dmode-btn">Intervallo</button>
+                  <button id="dmode-month"  onclick="commSetDateMode('month')"  class="dmode-btn">Mese</button>
+                  <button id="dmode-year"   onclick="commSetDateMode('year')"   class="dmode-btn">Anno</button>
+                  <button id="dmode-all"    onclick="commSetDateMode('all')"    class="dmode-btn">Tutto</button>
+                </div>
+                <button class="btn-comm btn-comm-secondary" style="margin-left:auto" onclick="commShowAll()">Reset</button>
+                <span class="comm-count" id="comm-count-label"></span>
               </div>
-              <!-- griglia -->
-              <div id="comm-cal-grid" style="display:grid;grid-template-columns:repeat(7,32px);gap:3px;text-align:center"></div>
-              <!-- legenda -->
-              <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
-                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--green-l);border:1.5px solid var(--green);display:inline-block"></span>Tutte assegnate</span>
-                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--amber-l);border:1.5px solid var(--amber-m);display:inline-block"></span>Parziale</span>
-                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--red-l);border:1.5px solid var(--red);display:inline-block"></span>Nessuna</span>
-                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:inline-block"></span>S/D o nessuna pratica</span>
+              <!-- Intervallo personalizzato -->
+              <div id="dmode-panel-day" style="display:none"></div>
+              <div id="dmode-panel-range" style="display:none;align-items:center;gap:8px;flex-wrap:wrap">
+                <input type="date" id="comm-range-from" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
+                <span style="font-size:12px;color:var(--ink3)">→</span>
+                <input type="date" id="comm-range-to"   onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
+                <span style="font-size:11px;color:var(--ink3)">Seleziona data inizio e data fine</span>
+              </div>
+              <!-- Mese -->
+              <div id="dmode-panel-month" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
+                <input type="month" id="comm-month-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
+                <span style="font-size:11px;color:var(--ink3)">Seleziona un mese intero</span>
+              </div>
+              <!-- Anno -->
+              <div id="dmode-panel-year" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
+                <select id="comm-year-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
+                  <option value="">— seleziona anno —</option>
+                </select>
+                <span style="font-size:11px;color:var(--ink3)">Seleziona un anno intero</span>
+              </div>
+              <!-- Tutto -->
+              <div id="dmode-panel-all" style="display:none">
+                <span style="font-size:12px;color:var(--ink3)">Visualizzazione di tutte le pratiche nel file</span>
+              </div>
+              <!-- input nascosto per compatibilità con applyFilters -->
+              <input type="date" id="comm-date-filter" style="display:none" onchange="applyFilters()">
+              <!-- Financial filter -->
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                <span style="font-size:12px;font-weight:600;color:var(--ink2)">🏢 Financial</span>
+                <select id="comm-fin-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
+                  <option value="">Tutti</option>
+                  <option value="cagliari">FS Cagliari</option>
+                  <option value="firenze">FS Firenze</option>
+                  <option value="nuoro">FS Nuoro</option>
+                  <option value="sassari">FS Sassari</option>
+                  <option value="genova">FS Genova</option>
+                  <option value="olbia">FS Olbia</option>
+                </select>
               </div>
             </div>
-            <!-- input nascosto per compatibilità con applyFilters -->
-            <input type="date" id="comm-date-filter" style="display:none" onchange="applyFilters()">
+          </div><!-- /comm-loaded-area -->
+
+        </div><!-- /colonna sinistra -->
+
+        <!-- COLONNA DESTRA: calendario (visibile solo in modalità Giorno, dopo caricamento) -->
+        <div id="comm-cal-col" style="display:none">
+          <div id="comm-cal-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px">
+            <!-- header mese -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px">
+              <button onclick="commCalMove(-1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese precedente">‹</button>
+              <span id="comm-cal-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap"></span>
+              <button onclick="commCalMove(+1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese successivo">›</button>
+            </div>
+            <!-- griglia -->
+            <div id="comm-cal-grid" style="display:grid;grid-template-columns:repeat(7,32px);gap:3px;text-align:center"></div>
+            <!-- legenda -->
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--green-l);border:1.5px solid var(--green);display:inline-block"></span>Tutte assegnate</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--amber-l);border:1.5px solid var(--amber-m);display:inline-block"></span>Parziale</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--red-l);border:1.5px solid var(--red);display:inline-block"></span>Nessuna</span>
+              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:inline-block"></span>S/D o nessuna pratica</span>
+            </div>
           </div>
-          <!-- Intervallo personalizzato -->
-          <div id="dmode-panel-range" style="display:none;align-items:center;gap:8px;flex-wrap:wrap">
-            <input type="date" id="comm-range-from" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-            <span style="font-size:12px;color:var(--ink3)">→</span>
-            <input type="date" id="comm-range-to"   onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-            <span style="font-size:11px;color:var(--ink3)">Seleziona data inizio e data fine</span>
-          </div>
-          <!-- Mese -->
-          <div id="dmode-panel-month" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
-            <input type="month" id="comm-month-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-            <span style="font-size:11px;color:var(--ink3)">Seleziona un mese intero</span>
-          </div>
-          <!-- Anno -->
-          <div id="dmode-panel-year" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
-            <select id="comm-year-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-              <option value="">— seleziona anno —</option>
-            </select>
-            <span style="font-size:11px;color:var(--ink3)">Seleziona un anno intero</span>
-          </div>
-          <!-- Tutto -->
-          <div id="dmode-panel-all" style="display:none">
-            <span style="font-size:12px;color:var(--ink3)">Visualizzazione di tutte le pratiche nel file</span>
-          </div>
-          <!-- Financial filter (sempre visibile) -->
-          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-            <span style="font-size:12px;font-weight:600;color:var(--ink2)">🏢 Financial</span>
-            <select id="comm-fin-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
-              <option value="">Tutti</option>
-              <option value="cagliari">FS Cagliari</option>
-              <option value="firenze">FS Firenze</option>
-              <option value="nuoro">FS Nuoro</option>
-              <option value="sassari">FS Sassari</option>
-              <option value="genova">FS Genova</option>
-              <option value="olbia">FS Olbia</option>
-            </select>
-          </div>
-        </div>
+        </div><!-- /colonna destra -->
+
+      </div><!-- /grid layout -->
+
+      <!-- Spazio per assignment table (fuori dal grid, larghezza piena) -->
+      <div id="comm-loaded-area-table" style="display:none;margin-top:16px">
 
         <!-- Assignment table -->
         <div class="comm-assign-wrap" id="comm-assign-wrap">
@@ -2690,10 +2706,14 @@ calcCQS();
         const today=new Date().toISOString().slice(0,10);
         document.getElementById('comm-date-filter').value=today;
         ['day','range','month','year','all'].forEach(m=>{
-          document.getElementById('dmode-panel-'+m).style.display=(m==='day'?'flex':'none');
+          const panel=document.getElementById('dmode-panel-'+m);
+          if(panel) panel.style.display=(m==='day'||m==='all'?'none':'none');
           document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
         });
         document.getElementById('comm-loaded-area').style.display='';
+        document.getElementById('comm-loaded-area-table').style.display='';
+        const calCol=document.getElementById('comm-cal-col');
+        if(calCol) calCol.style.display='';
         // Inizializza/aggiorna calendario al mese corrente
         _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
         applyFilters();
@@ -2787,9 +2807,13 @@ calcCQS();
   window.commSetDateMode=function(mode){
     commDateMode=mode;
     ['day','range','month','year','all'].forEach(m=>{
-      document.getElementById('dmode-panel-'+m).style.display=(m===mode?'flex':'none');
+      const panel=document.getElementById('dmode-panel-'+m);
+      if(panel) panel.style.display=(m===mode&&m!=='day'?'flex':'none');
       document.getElementById('dmode-'+m).classList.toggle('dmode-active',m===mode);
     });
+    // Mostra/nascondi colonna calendario
+    const calCol=document.getElementById('comm-cal-col');
+    if(calCol) calCol.style.display=(mode==='day'?'':'none');
     if(mode==='day') commCalRender();
     applyFilters();
   };
@@ -3028,10 +3052,14 @@ calcCQS();
         const today=new Date().toISOString().slice(0,10);
         document.getElementById('comm-date-filter').value=today;
         ['day','range','month','year','all'].forEach(m=>{
-          document.getElementById('dmode-panel-'+m).style.display=(m==='day'?'flex':'none');
+          const panel=document.getElementById('dmode-panel-'+m);
+          if(panel) panel.style.display='none';
           document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
         });
         document.getElementById('comm-loaded-area').style.display='';
+        document.getElementById('comm-loaded-area-table').style.display='';
+        const calCol2=document.getElementById('comm-cal-col');
+        if(calCol2) calCol2.style.display='';
         const savedDate=pratichePayload.exportedAt?new Date(pratichePayload.exportedAt).toLocaleDateString('it-IT'):'—';
         document.querySelector('.comm-upload-label').textContent='☁️ '+commFileName+' (da GitHub)';
         document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche — backup del '+savedDate;
@@ -3112,6 +3140,9 @@ calcCQS();
     commPratiche=[];
     commFiltered=[];
     document.getElementById('comm-loaded-area').style.display='none';
+    document.getElementById('comm-loaded-area-table').style.display='none';
+    const calColClr=document.getElementById('comm-cal-col');
+    if(calColClr) calColClr.style.display='none';
     document.querySelector('.comm-upload-label').textContent='Carica file Excel (.xlsx)';
     document.querySelector('.comm-upload-sub').textContent='Trascina qui o clicca per selezionare';
     renderTable();
@@ -3421,10 +3452,14 @@ calcCQS();
     const today=new Date().toISOString().slice(0,10);
     document.getElementById('comm-date-filter').value=today;
     ['day','range','month','year','all'].forEach(m=>{
-      document.getElementById('dmode-panel-'+m).style.display=(m==='day'?'flex':'none');
+      const panel=document.getElementById('dmode-panel-'+m);
+      if(panel) panel.style.display='none';
       document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
     });
     document.getElementById('comm-loaded-area').style.display='';
+    document.getElementById('comm-loaded-area-table').style.display='';
+    const calCol3=document.getElementById('comm-cal-col');
+    if(calCol3) calCol3.style.display='';
     _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
     applyFilters();
     commCalRender();
