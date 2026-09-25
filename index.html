@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.2 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.3 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -883,7 +883,7 @@ tr:hover td{background:var(--surface3)}
             <button class="btn-comm btn-comm-secondary" onclick="commDebugLS()" title="Mostra contenuto localStorage" style="color:var(--ink2)">🔍 Debug LS</button>
             <button class="btn-comm btn-comm-secondary" onclick="commNukeAssign()" title="Cancella TUTTE le assegnazioni salvate (non i dati pratiche)" style="color:orange">🧹 Reset assegnazioni</button>
             <button class="btn-comm btn-comm-secondary" onclick="commClearAllData()" title="Cancella tutti i dati salvati nel browser" style="color:var(--red)">🗑 Azzera dati</button>
-            <button class="btn-comm btn-comm-secondary" onclick="commExportReport()" title="Visualizza report erogato per financial e commerciale">📊 Report Erogato</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commShowReportBuilder()" title="Genera report personalizzato">📊 Genera Report</button>
             <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi">Genera analisi →</button>
           </div>
         </div>
@@ -3607,86 +3607,168 @@ calcCQS();
     }
   })();
 
-  /* ---- Report Erogato (tabella pivot) ---- */
-  window.commExportReport=function(){
+  /* ---- Genera Report — step 1: selezione colonne ---- */
+  window.commShowReportBuilder=function(){
     if(!commPratiche.length){alert('Nessuna pratica caricata.');return;}
+    if(document.getElementById('report-builder-modal')) return;
+
+    const sel=document.getElementById('kpi-month-filter');
+    const month=sel?sel.value:'';
+    const periodLabel=month?(()=>{const [y,mo]=month.split('-');return new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});})():'Tutto il file';
+
+    const cols=[
+      {id:'erogato',   label:'Importo erogato',  checked:true,  color:'var(--blue)'},
+      {id:'pratiche',  label:'N° Pratiche',       checked:false, color:'var(--teal)'},
+      {id:'polizze',   label:'Polizze',            checked:false, color:'var(--purple)'},
+      {id:'premi',     label:'Premi polizza',      checked:false, color:'var(--amber)'},
+    ];
+
+    const checkboxes=cols.map(c=>`
+      <label style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;user-select:none;background:var(--surface2)" id="rb-lbl-${c.id}">
+        <input type="checkbox" id="rb-chk-${c.id}" ${c.checked?'checked':''} onchange="commRbToggle('${c.id}')"
+          style="width:16px;height:16px;accent-color:${c.color};cursor:pointer">
+        <span style="font-size:13px;font-weight:500;color:var(--ink)">${c.label}</span>
+      </label>`).join('');
+
+    const html=`
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;display:flex;align-items:center;justify-content:center" id="report-builder-modal" onclick="if(event.target.id==='report-builder-modal')document.getElementById('report-builder-modal').remove()">
+      <div style="background:var(--surface);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:380px;max-width:95%;overflow:hidden">
+        <div style="padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">📊 Genera Report</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:2px">Periodo: ${periodLabel}</div>
+          </div>
+          <button onclick="document.getElementById('report-builder-modal').remove()" style="border:none;background:none;font-size:20px;cursor:pointer;color:var(--ink3);padding:4px 8px">✕</button>
+        </div>
+        <div style="padding:16px 20px">
+          <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Seleziona i dati da includere</div>
+          <div style="display:flex;flex-direction:column;gap:8px">${checkboxes}</div>
+        </div>
+        <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn-comm btn-comm-secondary" onclick="document.getElementById('report-builder-modal').remove()">Annulla</button>
+          <button class="btn-comm btn-comm-primary" onclick="commBuildReport()">Genera →</button>
+        </div>
+      </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend',html);
+  };
+
+  window.commRbToggle=function(id){
+    // Almeno una colonna sempre selezionata
+    const checked=[...document.querySelectorAll('#report-builder-modal input[type=checkbox]')].filter(c=>c.checked);
+    if(checked.length===0) document.getElementById('rb-chk-'+id).checked=true;
+  };
+
+  /* ---- Genera Report — step 2: costruzione tabella ---- */
+  window.commBuildReport=function(){
+    const COLS_DEF=[
+      {id:'erogato',  label:'Importo erogato', color:'#2563eb'},
+      {id:'pratiche', label:'N° Pratiche',      color:'#0d9488'},
+      {id:'polizze',  label:'Polizze',           color:'#7c3aed'},
+      {id:'premi',    label:'Premi polizza',     color:'#d97706'},
+    ];
+    const activeCols=COLS_DEF.filter(c=>document.getElementById('rb-chk-'+c.id)?.checked);
+    if(!activeCols.length) return;
+
+    document.getElementById('report-builder-modal').remove();
 
     const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia'];
-    const pivot={};
-
-    // Usa filtro mese attivo se presente
     const sel=document.getElementById('kpi-month-filter');
     const month=sel?sel.value:'';
     const srcData=month?commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(month)):commPratiche;
+    const periodLabel=month?(()=>{const [y,mo]=month.split('-');return new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});})():'Tutto il file';
 
+    // Pivot: finKey → { label, color, agenti: { nome: {importo,n,polizze,premi} }, tot: {...} }
+    const pivot={};
     srcData.forEach(r=>{
       const finKey=r.finKey||'altro';
       const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:'Altro';
-      const agente=commAssign[r.__id];
+      const color=FINANCIAL_MAP[finKey]?.color||'#999';
+      const agente=commAssign[r.__id]||'—';
       const importo=r.importo||0;
-      if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',agenti:{},totFin:0};
+      const hasPolizza=r.polizza!=null;
+      const premioPolizza=r.polizza||0;
+
+      if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel,color,agenti:{},tot:{importo:0,n:0,polizze:0,premi:0}};
       const f=pivot[finKey];
-      f.totFin+=importo;
-      if(agente){
-        if(!f.agenti[agente]) f.agenti[agente]=0;
-        f.agenti[agente]+=importo;
-      }
+      f.tot.importo+=importo; f.tot.n++; if(hasPolizza){f.tot.polizze++;f.tot.premi+=premioPolizza;}
+
+      if(!f.agenti[agente]) f.agenti[agente]={importo:0,n:0,polizze:0,premi:0};
+      const a=f.agenti[agente];
+      a.importo+=importo; a.n++; if(hasPolizza){a.polizze++;a.premi+=premioPolizza;}
     });
 
-    let totGlobFin=0;
-    Object.values(pivot).forEach(f=>{totGlobFin+=f.totFin;});
-
     const fmtE=n=>n?fe(n)+' €':'—';
+    const fmtPol=(d)=>d.polizze?`${d.polizze}/${d.n} (${Math.round(d.polizze/d.n*100)}%)`:'—';
+    const valOf=(col,d)=>{
+      if(col.id==='erogato')   return fmtE(d.importo);
+      if(col.id==='pratiche')  return d.n+'';
+      if(col.id==='polizze')   return fmtPol(d);
+      if(col.id==='premi')     return d.premi?fmtE(d.premi):'—';
+      return '—';
+    };
+
+    const colSpan=activeCols.length+1;
+    const thCols=activeCols.map(c=>`<th style="padding:9px 14px;text-align:right;font-size:12px;font-weight:600;white-space:nowrap;color:${c.color}">${c.label}</th>`).join('');
+
     const finKeys=finOrder.filter(k=>pivot[k]);
     Object.keys(pivot).forEach(k=>{if(!finKeys.includes(k))finKeys.push(k);});
+
+    // Totali globali
+    const glob={importo:0,n:0,polizze:0,premi:0};
+    Object.values(pivot).forEach(f=>{glob.importo+=f.tot.importo;glob.n+=f.tot.n;glob.polizze+=f.tot.polizze;glob.premi+=f.tot.premi;});
 
     const rows=finKeys.map(finKey=>{
       const f=pivot[finKey];
       const color=f.color;
-      const agentRows=Object.entries(f.agenti).sort((a,b)=>b[1]-a[1]).map(([nome,imp])=>`
-        <tr style="border-top:1px solid var(--border)">
-          <td style="padding:6px 12px 6px 32px;font-size:12.5px;color:var(--ink2)">${esc(nome)}</td>
-          <td style="padding:6px 14px;text-align:right;font-size:12.5px;font-weight:600">${fmtE(imp)}</td>
+      const agenteSorted=Object.entries(f.agenti).sort((a,b)=>b[1].importo-a[1].importo);
+      const agentRows=agenteSorted.map(([nome,d])=>`
+        <tr style="border-top:1px solid #e5e7eb">
+          <td style="padding:6px 12px 6px 32px;font-size:12px;color:#374151">${esc(nome)}</td>
+          ${activeCols.map(c=>`<td style="padding:6px 14px;text-align:right;font-size:12px;font-weight:500;color:${c.color}">${valOf(c,d)}</td>`).join('')}
         </tr>`).join('');
+      const totCols=activeCols.map(c=>`<td style="padding:8px 14px;text-align:right;font-weight:700;font-size:13px;color:${c.color}">${valOf(c,f.tot)}</td>`).join('');
       return `
-        <tr style="background:${color}12;border-top:2px solid ${color}35">
+        <tr style="background:${color}14;border-top:2px solid ${color}40">
           <td style="padding:8px 12px;font-weight:700;font-size:13px;color:${color}">
             <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin-right:8px;vertical-align:middle"></span>${esc(f.label)}
-          </td>
-          <td style="padding:8px 14px;text-align:right;font-weight:700;font-size:13px;color:${color}">${fmtE(f.totFin)}</td>
+          </td>${totCols}
         </tr>${agentRows}`;
     }).join('');
 
-    const periodLabel=month?(()=>{const [y,mo]=month.split('-');return new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});})():'Tutto il file';
+    const globCols=activeCols.map(c=>`<td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:700;color:${c.color}">${valOf(c,glob)}</td>`).join('');
+
+    const colWidth=activeCols.length===1?'620px':activeCols.length===2?'700px':activeCols.length===3?'800px':'920px';
 
     const html=`
-    <div style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;display:flex;align-items:center;justify-content:center" id="report-modal" onclick="if(event.target.id==='report-modal')document.getElementById('report-modal').remove()">
-      <div style="background:var(--surface);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);max-width:620px;width:95%;display:flex;flex-direction:column;overflow:hidden" id="report-modal-inner">
-        <div style="padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px" id="report-modal" onclick="if(event.target.id==='report-modal')document.getElementById('report-modal').remove()">
+      <div style="background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:${colWidth};max-width:98%;overflow:hidden" id="report-modal-inner">
+        <div style="padding:18px 20px 14px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;background:#fff">
           <div>
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">📊 Report Erogato</div>
-            <div style="font-size:11px;color:var(--ink3);margin-top:2px">Importo erogato per financial e commerciale · ${periodLabel}</div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#111">📊 Report Erogato</div>
+            <div style="font-size:11px;color:#6b7280;margin-top:2px">Periodo: ${periodLabel} · ${activeCols.map(c=>c.label).join(', ')}</div>
           </div>
-          <button onclick="document.getElementById('report-modal').remove()" style="border:none;background:none;font-size:20px;cursor:pointer;color:var(--ink3);padding:4px 8px">✕</button>
+          <button onclick="document.getElementById('report-modal').remove()" style="border:none;background:none;font-size:20px;cursor:pointer;color:#9ca3af;padding:4px 8px">✕</button>
         </div>
-        <div>
+        <div style="overflow-x:auto">
           <table style="width:100%;border-collapse:collapse;font-family:'Outfit',sans-serif">
             <thead>
-              <tr style="background:var(--ink);color:#fff">
-                <th style="padding:9px 12px;text-align:left;font-size:12px;font-weight:600">Financial / Commerciale</th>
-                <th style="padding:9px 14px;text-align:right;font-size:12px;font-weight:600">Importo erogato</th>
+              <tr style="background:#111827;color:#fff">
+                <th style="padding:9px 12px;text-align:left;font-size:12px;font-weight:600">Financial / Agente</th>
+                ${thCols}
               </tr>
             </thead>
             <tbody>
               ${rows}
-              <tr style="background:var(--ink);color:#fff;font-weight:700;border-top:2px solid rgba(255,255,255,.15)">
-                <td style="padding:9px 12px;font-size:13px">Totale complessivo</td>
-                <td style="padding:9px 14px;text-align:right;font-size:13px">${fmtE(totGlobFin)}</td>
+              <tr style="background:#111827;color:#fff;border-top:2px solid rgba(255,255,255,.15)">
+                <td style="padding:9px 12px;font-size:13px;font-weight:700">Totale complessivo</td>
+                ${globCols}
               </tr>
             </tbody>
           </table>
         </div>
-        <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
+        <div style="padding:12px 20px;border-top:1px solid #e5e7eb;display:flex;gap:8px;justify-content:flex-end;background:#fff">
+          <button class="btn-comm btn-comm-secondary" onclick="commShowReportBuilder()">⚙️ Modifica colonne</button>
           <button class="btn-comm btn-comm-secondary" onclick="commSaveReportImage()">🖼 Salva immagine</button>
           <button class="btn-comm btn-comm-secondary" onclick="commCopyReport()">📋 Copia tabella</button>
           <button class="btn-comm btn-comm-primary" onclick="document.getElementById('report-modal').remove()">Chiudi</button>
