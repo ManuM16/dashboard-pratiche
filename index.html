@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.3 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.5 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3286,7 +3286,7 @@ calcCQS();
     const COLS=[
       {key:'erogato',  label:'Erogato',        color:'var(--blue)',   fmt:d=>'€ '+fe(d.importoTot),                         val:d=>d.importoTot},
       {key:'pratiche', label:'N° Pratiche',     color:'var(--teal)',   fmt:d=>d.n+'',                                        val:d=>d.n},
-      {key:'polizze',  label:'Polizze',         color:'var(--purple)', fmt:d=>d.conPolizza+' / '+d.n+' ('+Math.round(d.conPolizza/(d.n||1)*100)+'%)', val:d=>d.conPolizza},
+      {key:'polizze',  label:'Polizze / p.p.',  color:'var(--purple)', fmt:d=>d.conPolizza+' / '+(d.nPP||0)+' p.p. ('+(d.nPP?Math.round(d.conPolizza/(d.nPP)*100):0)+'%)', val:d=>d.conPolizza},
       {key:'premi',    label:'Premi polizza',   color:'var(--amber)',  fmt:d=>d.totPolizza>0?'€ '+fe(d.totPolizza):'—',      val:d=>d.totPolizza},
     ];
 
@@ -3404,19 +3404,23 @@ calcCQS();
       const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:finKey;
 
       // Totali financial: include TUTTE le pratiche, assegnate e non
-      if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0};
+      const isGarantito=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
+
+      if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0};
       const f=finStats[finKey];
       f.n++;f.importoTot+=r.importo||0;
       if(agent) f.nAssegnate++;
+      if(!isGarantito) f.nPP++;
       if(r.polizza!=null){f.conPolizza++;f.totPolizza+=r.polizza;}else f.senzaPolizza++;
 
       // Agenti: solo pratiche assegnate
       if(!agent) return;
       const agentFinKey=AGENT_TO_FIN[agent]||finKey;
       const agentFinLabel=FINANCIAL_MAP[agentFinKey]?FINANCIAL_MAP[agentFinKey].label:agentFinKey;
-      if(!agentStats[agent]) agentStats[agent]={name:agent,finKey:agentFinKey,finLabel:agentFinLabel,n:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,prodotti:{}};
+      if(!agentStats[agent]) agentStats[agent]={name:agent,finKey:agentFinKey,finLabel:agentFinLabel,n:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,prodotti:{}};
       const s=agentStats[agent];
       s.n++;s.importoTot+=r.importo||0;
+      if(!isGarantito) s.nPP++;
       if(r.polizza!=null){s.conPolizza++;s.totPolizza+=r.polizza;}else s.senzaPolizza++;
       s.prodotti[r.prodotto||'N/D']=(s.prodotti[r.prodotto||'N/D']||0)+1;
     });
@@ -3689,17 +3693,18 @@ calcCQS();
       const hasPolizza=r.polizza!=null;
       const premioPolizza=r.polizza||0;
 
-      if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel,color,agenti:{},tot:{importo:0,n:0,polizze:0,premi:0}};
+      const isGar=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
+      if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel,color,agenti:{},tot:{importo:0,n:0,polizze:0,premi:0,nPP:0}};
       const f=pivot[finKey];
-      f.tot.importo+=importo; f.tot.n++; if(hasPolizza){f.tot.polizze++;f.tot.premi+=premioPolizza;}
+      f.tot.importo+=importo; f.tot.n++; if(!isGar) f.tot.nPP++; if(hasPolizza){f.tot.polizze++;f.tot.premi+=premioPolizza;}
 
-      if(!f.agenti[agente]) f.agenti[agente]={importo:0,n:0,polizze:0,premi:0};
+      if(!f.agenti[agente]) f.agenti[agente]={importo:0,n:0,polizze:0,premi:0,nPP:0};
       const a=f.agenti[agente];
-      a.importo+=importo; a.n++; if(hasPolizza){a.polizze++;a.premi+=premioPolizza;}
+      a.importo+=importo; a.n++; if(!isGar) a.nPP++; if(hasPolizza){a.polizze++;a.premi+=premioPolizza;}
     });
 
     const fmtE=n=>n?fe(n)+' €':'—';
-    const fmtPol=(d)=>d.polizze?`${d.polizze}/${d.n} (${Math.round(d.polizze/d.n*100)}%)`:'—';
+    const fmtPol=(d)=>d.nPP?`${d.polizze}/${d.nPP} p.p. (${Math.round(d.polizze/d.nPP*100)}%)`:'—';
     const valOf=(col,d)=>{
       if(col.id==='erogato')   return fmtE(d.importo);
       if(col.id==='pratiche')  return d.n+'';
@@ -3715,8 +3720,8 @@ calcCQS();
     Object.keys(pivot).forEach(k=>{if(!finKeys.includes(k))finKeys.push(k);});
 
     // Totali globali
-    const glob={importo:0,n:0,polizze:0,premi:0};
-    Object.values(pivot).forEach(f=>{glob.importo+=f.tot.importo;glob.n+=f.tot.n;glob.polizze+=f.tot.polizze;glob.premi+=f.tot.premi;});
+    const glob={importo:0,n:0,polizze:0,premi:0,nPP:0};
+    Object.values(pivot).forEach(f=>{glob.importo+=f.tot.importo;glob.n+=f.tot.n;glob.nPP+=f.tot.nPP;glob.polizze+=f.tot.polizze;glob.premi+=f.tot.premi;});
 
     const rows=finKeys.map(finKey=>{
       const f=pivot[finKey];
@@ -3753,15 +3758,15 @@ calcCQS();
         <div style="overflow-x:auto">
           <table style="width:100%;border-collapse:collapse;font-family:'Outfit',sans-serif">
             <thead>
-              <tr style="background:#111827;color:#fff">
-                <th style="padding:9px 12px;text-align:left;font-size:12px;font-weight:600">Financial / Agente</th>
+              <tr style="background:#f3f4f6;border-bottom:2px solid #e5e7eb">
+                <th style="padding:9px 12px;text-align:left;font-size:12px;font-weight:600;color:#6b7280"></th>
                 ${thCols}
               </tr>
             </thead>
             <tbody>
               ${rows}
-              <tr style="background:#111827;color:#fff;border-top:2px solid rgba(255,255,255,.15)">
-                <td style="padding:9px 12px;font-size:13px;font-weight:700">Totale complessivo</td>
+              <tr style="background:#f3f4f6;border-top:2px solid #d1d5db">
+                <td style="padding:9px 12px;font-size:13px;font-weight:700;color:#111827">Totale complessivo</td>
                 ${globCols}
               </tr>
             </tbody>
