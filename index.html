@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.1 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.3 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3237,7 +3237,7 @@ calcCQS();
             <div style="width:10px;height:10px;border-radius:50%;background:${f.color};flex-shrink:0"></div>
             <div>
               <div style="font-weight:700;font-size:14px;font-family:'Syne',sans-serif;color:${f.color}">${esc(f.label)}</div>
-              <div class="comm-agent-sub">${f.n} pratiche CORTO assegnate</div>
+              <div class="comm-agent-sub">${f.n} pratiche CORTO totali · ${f.nAssegnate} assegnate</div>
             </div>
             <div style="text-align:right">
               <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:${f.color}">€ ${fe(f.importoTot)}</div>
@@ -3281,20 +3281,25 @@ calcCQS();
 
     commPratiche.forEach(r=>{
       const agent=commAssign[r.__id];
-      if(!agent) return;
-      const finKey=AGENT_TO_FIN[agent]||r.finKey||'altro';
+      const finKey=r.finKey||'altro';
       const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:finKey;
 
-      if(!agentStats[agent]) agentStats[agent]={name:agent,finKey,finLabel,n:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,prodotti:{}};
+      // Totali financial: include TUTTE le pratiche, assegnate e non
+      if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0};
+      const f=finStats[finKey];
+      f.n++;f.importoTot+=r.importo||0;
+      if(agent) f.nAssegnate++;
+      if(r.polizza!=null){f.conPolizza++;f.totPolizza+=r.polizza;}else f.senzaPolizza++;
+
+      // Agenti: solo pratiche assegnate
+      if(!agent) return;
+      const agentFinKey=AGENT_TO_FIN[agent]||finKey;
+      const agentFinLabel=FINANCIAL_MAP[agentFinKey]?FINANCIAL_MAP[agentFinKey].label:agentFinKey;
+      if(!agentStats[agent]) agentStats[agent]={name:agent,finKey:agentFinKey,finLabel:agentFinLabel,n:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,prodotti:{}};
       const s=agentStats[agent];
       s.n++;s.importoTot+=r.importo||0;
       if(r.polizza!=null){s.conPolizza++;s.totPolizza+=r.polizza;}else s.senzaPolizza++;
       s.prodotti[r.prodotto||'N/D']=(s.prodotti[r.prodotto||'N/D']||0)+1;
-
-      if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0};
-      const f=finStats[finKey];
-      f.n++;f.importoTot+=r.importo||0;
-      if(r.polizza!=null){f.conPolizza++;f.totPolizza+=r.polizza;}else f.senzaPolizza++;
     });
 
     const section=document.getElementById('comm-kpi-section');
@@ -3499,11 +3504,15 @@ calcCQS();
 
       if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel.replace('FS ','FS '),agenti:{},totFin:0,totConf:0};
       const f=pivot[finKey];
-      if(!f.agenti[agente]) f.agenti[agente]={finanziato:0,confermato:0};
-      f.agenti[agente].finanziato+=importo;
-      f.agenti[agente].confermato+=confermato;
+      // Somma sempre al totale filiale, anche se non assegnata
       f.totFin+=importo;
       f.totConf+=confermato;
+      // Aggiungi alla riga commerciale solo se assegnata
+      if(commAssign[r.__id]){
+        if(!f.agenti[agente]) f.agenti[agente]={finanziato:0,confermato:0};
+        f.agenti[agente].finanziato+=importo;
+        f.agenti[agente].confermato+=confermato;
+      }
     });
 
     let totGlobFin=0,totGlobConf=0;
