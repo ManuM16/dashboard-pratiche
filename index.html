@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.5 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.7 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -2701,8 +2701,18 @@ calcCQS();
         commAssign={};
         // Salva i dati parsati in cache per ripristino automatico
         savePraticheCache(file.name);
-        // Controlla se esistono assegnazioni salvate per questo periodo
+        // Carica assegnazioni salvate e filtra SOLO quelle con ID presenti in commPratiche (solo CORTO)
         const savedAssign=loadAssign();
+        if(savedAssign){
+          const currentIds=new Set(commPratiche.map(r=>r.__id));
+          let matched=0;
+          Object.entries(savedAssign).forEach(([id,agent])=>{
+            if(currentIds.has(id)){commAssign[id]=agent;matched++;}
+          });
+          // Risalva in localStorage già pulito (senza pratiche non-CORTO)
+          saveAssign();
+          console.log('[LOAD] Assegnazioni ripristinate automaticamente: '+matched+' su '+Object.keys(savedAssign).length+' salvate');
+        }
         // Popola anni disponibili
         populateYearSelect();
         // default filter = today (modalità giorno)
@@ -2722,8 +2732,6 @@ calcCQS();
         _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
         applyFilters();
         commCalRender();
-        // Mostra banner ripristino (dopo render tabella)
-        if(savedAssign) showRestoreBanner(savedAssign);
         // Update upload zone label
         document.querySelector('.comm-upload-label').textContent='✅ '+file.name;
         document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche caricate — '+[...new Set(commPratiche.map(r=>r.__dateStr))].length+' giornate';
@@ -3154,9 +3162,13 @@ calcCQS();
   };
 
   function updateAssignStatus(){
-    const tot=commFiltered.length;
-    const done=commFiltered.filter(r=>commAssign[r.__id]).length;
-    document.getElementById('comm-assign-status').textContent=done+' / '+tot+' assegnate';
+    // Mostra progresso globale su TUTTE le pratiche del file (non solo quelle filtrate)
+    const tot=commPratiche.length;
+    const done=commPratiche.filter(r=>commAssign[r.__id]).length;
+    const totFilt=commFiltered.length;
+    const doneFilt=commFiltered.filter(r=>commAssign[r.__id]).length;
+    // Mostra: assegnate nella vista corrente / assegnate totali / pratiche totali
+    document.getElementById('comm-assign-status').textContent=doneFilt+' / '+totFilt+' (vista) · '+done+' / '+tot+' (totale)';
     document.getElementById('comm-btn-kpi').disabled=done===0;
     document.getElementById('comm-assign-progress-label').textContent=tot?Math.round(done/tot*100)+'% completato':'';
   }
@@ -3273,9 +3285,8 @@ calcCQS();
 
   /* ---- KPI generation ---- */
   window.commGenerateKPI=function(){
-    console.log('[KPI] commAssign contiene', Object.keys(commAssign).length,'voci');
-    // KPI usa TUTTE le pratiche caricate (non solo quelle filtrate per data)
-    // Le assegnazioni sono globali su tutto il file, il filtro data serve solo per la tabella
+    console.log('[KPI] commAssign contiene', Object.keys(commAssign).length,'voci, commFiltered=',commFiltered.length,'commPratiche=',commPratiche.length);
+    // KPI usa SEMPRE tutte le pratiche del file (commPratiche), indipendente dal filtro data
     const kpiData=commPratiche;
 
     // Build stats per agente e per financial
@@ -3498,7 +3509,7 @@ calcCQS();
     const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia'];
     const pivot={};  // { finKey: { label, agenti: { nome: {finanziato, confermato} }, totFin, totConf } }
 
-    // Report usa TUTTE le pratiche caricate (non solo quelle filtrate per data)
+    // Report usa SEMPRE tutte le pratiche del file (commPratiche)
     commPratiche.forEach(r=>{
       const finKey=r.finKey||'altro';
       const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:'Altro';
