@@ -685,6 +685,19 @@ tr:hover td{background:var(--surface3)}
         /* Assignment table */
         .comm-assign-wrap{background:var(--surface);border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:20px}
         .comm-assign-wrap h3{padding:12px 16px;font-size:13px;font-weight:600;border-bottom:1px solid var(--border);color:var(--ink);display:flex;align-items:center;gap:8px}
+        /* ── Calendario custom ── */
+        .cal-dow{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.4px;padding:2px 0 4px;text-transform:uppercase}
+        .cal-day{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;border:1.5px solid transparent;transition:.12s;position:relative;font-weight:500}
+        .cal-day:hover:not(.cal-empty):not(.cal-weekend):not(.cal-no-pratiche){filter:brightness(.92)}
+        .cal-empty{cursor:default}
+        .cal-weekend{color:var(--ink3);font-size:11.5px;cursor:default;opacity:.55}
+        .cal-no-pratiche{color:var(--ink3);cursor:default;background:var(--surface2);border-color:var(--border)}
+        .cal-none{background:var(--red-l);border-color:var(--red);color:var(--red)}
+        .cal-partial{background:var(--amber-l);border-color:var(--amber-m);color:var(--amber)}
+        .cal-done{background:var(--green-l);border-color:var(--green);color:var(--green)}
+        .cal-selected{box-shadow:0 0 0 2.5px var(--blue);outline:none}
+        .cal-today::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.6}
+        /* ── / Calendario ── */
         .comm-assign-table{width:100%;border-collapse:collapse;font-size:12.5px}
         .comm-assign-table th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);background:var(--surface2);border-bottom:1px solid var(--border)}
         .comm-assign-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -757,10 +770,27 @@ tr:hover td{background:var(--surface3)}
             <button class="btn-comm btn-comm-secondary" style="margin-left:auto" onclick="commShowAll()">Reset</button>
             <span class="comm-count" id="comm-count-label"></span>
           </div>
-          <!-- Giorno singolo -->
-          <div id="dmode-panel-day" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-            <input type="date" id="comm-date-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-            <span style="font-size:11px;color:var(--ink3)">Seleziona una singola data</span>
+          <!-- Giorno singolo — calendario custom -->
+          <div id="dmode-panel-day" style="display:flex;flex-direction:column;gap:10px">
+            <div id="comm-cal-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:inline-block">
+              <!-- header mese -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px">
+                <button onclick="commCalMove(-1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese precedente">‹</button>
+                <span id="comm-cal-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap"></span>
+                <button onclick="commCalMove(+1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese successivo">›</button>
+              </div>
+              <!-- griglia -->
+              <div id="comm-cal-grid" style="display:grid;grid-template-columns:repeat(7,32px);gap:3px;text-align:center"></div>
+              <!-- legenda -->
+              <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--green-l);border:1.5px solid var(--green);display:inline-block"></span>Tutte assegnate</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--amber-l);border:1.5px solid var(--amber-m);display:inline-block"></span>Parziale</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--red-l);border:1.5px solid var(--red);display:inline-block"></span>Nessuna</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:inline-block"></span>S/D o nessuna pratica</span>
+              </div>
+            </div>
+            <!-- input nascosto per compatibilità con applyFilters -->
+            <input type="date" id="comm-date-filter" style="display:none" onchange="applyFilters()">
           </div>
           <!-- Intervallo personalizzato -->
           <div id="dmode-panel-range" style="display:none;align-items:center;gap:8px;flex-wrap:wrap">
@@ -2661,7 +2691,10 @@ calcCQS();
           document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
         });
         document.getElementById('comm-loaded-area').style.display='';
+        // Inizializza/aggiorna calendario al mese corrente
+        _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
         applyFilters();
+        commCalRender();
         // Mostra banner ripristino (dopo render tabella)
         if(savedAssign) showRestoreBanner(savedAssign);
         // Update upload zone label
@@ -2754,6 +2787,7 @@ calcCQS();
       document.getElementById('dmode-panel-'+m).style.display=(m===mode?'flex':'none');
       document.getElementById('dmode-'+m).classList.toggle('dmode-active',m===mode);
     });
+    if(mode==='day') commCalRender();
     applyFilters();
   };
 
@@ -2869,6 +2903,7 @@ calcCQS();
     else{delete commAssign[pid];sel.classList.remove('assigned');}
     saveAssign();
     updateAssignStatus();
+    commCalRefreshIfVisible();
   };
 
   window.commAssignAll=function(){
@@ -3008,7 +3043,9 @@ calcCQS();
         Object.entries(currentSaved).forEach(([id,agent])=>{if(currentIds.has(id)){commAssign[id]=agent;matchedPratiche++;}});
       }
       saveAssign();
+      _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
       applyFilters();
+      commCalRender();
 
       const exportDate=payload.exportedAt?new Date(payload.exportedAt).toLocaleDateString('it-IT'):'—';
       let msg=`✅ Dati caricati da GitHub!\n\nBackup del: ${exportDate}`;
@@ -3251,6 +3288,105 @@ calcCQS();
     section.scrollIntoView({behavior:'smooth',block:'start'});
   };
 
+  /* ---- Calendario custom per selezione giorno ---- */
+  let _calYear=null, _calMonth=null;
+
+  function commCalInit(){
+    const today=new Date();
+    _calYear=today.getFullYear();
+    _calMonth=today.getMonth();
+    commCalRender();
+  }
+
+  window.commCalMove=function(delta){
+    _calMonth+=delta;
+    if(_calMonth<0){_calMonth=11;_calYear--;}
+    if(_calMonth>11){_calMonth=0;_calYear++;}
+    commCalRender();
+  };
+
+  function commCalRender(){
+    const grid=document.getElementById('comm-cal-grid');
+    const title=document.getElementById('comm-cal-title');
+    if(!grid||!title) return;
+
+    const mesi=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+    title.textContent=mesi[_calMonth]+' '+_calYear;
+
+    // Calcola stato assegnazioni per ogni giorno con pratiche
+    // { 'YYYY-MM-DD': { tot, assigned } }
+    const dayStats={};
+    commPratiche.forEach(r=>{
+      const d=r.__dateStr;
+      if(!d) return;
+      if(!dayStats[d]) dayStats[d]={tot:0,assigned:0};
+      dayStats[d].tot++;
+      if(commAssign[r.__id]) dayStats[d].assigned++;
+    });
+
+    const today=new Date().toISOString().slice(0,10);
+    const selectedDate=document.getElementById('comm-date-filter').value;
+
+    // Prima cella = lunedì (0) … domenica (6)
+    const firstDay=new Date(_calYear,_calMonth,1).getDay(); // 0=dom
+    const startOffset=(firstDay+6)%7; // converti a lun=0
+    const daysInMonth=new Date(_calYear,_calMonth+1,0).getDate();
+
+    let html='';
+    // Intestazioni giorni
+    ['Lu','Ma','Me','Gi','Ve','Sa','Do'].forEach(d=>{
+      html+=`<div class="cal-dow">${d}</div>`;
+    });
+    // Celle vuote iniziali
+    for(let i=0;i<startOffset;i++) html+=`<div class="cal-empty"></div>`;
+    // Giorni
+    for(let d=1;d<=daysInMonth;d++){
+      const mm=String(_calMonth+1).padStart(2,'0');
+      const dd=String(d).padStart(2,'0');
+      const dateStr=`${_calYear}-${mm}-${dd}`;
+      const dow=new Date(_calYear,_calMonth,d).getDay(); // 0=dom,6=sab
+      const isWeekend=(dow===0||dow===6);
+      const isToday=dateStr===today;
+      const isSelected=dateStr===selectedDate;
+      const stats=dayStats[dateStr];
+
+      let cls='cal-day';
+      let title='';
+      let onclick='';
+      if(isWeekend){
+        cls+=' cal-weekend';
+        title='Sabato/Domenica';
+      } else if(!stats){
+        cls+=' cal-no-pratiche';
+        title='Nessuna pratica in questa data';
+      } else {
+        const {tot,assigned}=stats;
+        if(assigned===0) { cls+=' cal-none'; title=`${tot} pratiche — nessuna assegnata`; }
+        else if(assigned===tot) { cls+=' cal-done'; title=`${tot} pratiche — tutte assegnate ✓`; }
+        else { cls+=' cal-partial'; title=`${assigned}/${tot} pratiche assegnate`; }
+        onclick=`commCalSelect('${dateStr}')`;
+      }
+      if(isToday) cls+=' cal-today';
+      if(isSelected) cls+=' cal-selected';
+
+      html+=`<div class="${cls}" title="${title}" onclick="${onclick}">${d}</div>`;
+    }
+    grid.innerHTML=html;
+  }
+
+  window.commCalSelect=function(dateStr){
+    document.getElementById('comm-date-filter').value=dateStr;
+    applyFilters();
+    commCalRender(); // aggiorna selezione visiva
+  };
+
+  // Ricalcola calendario quando cambiano le assegnazioni
+  const _origSaveAssign=saveAssign;
+  // Intercetta aggiornamenti calendario dopo ogni assegnazione
+  function commCalRefreshIfVisible(){
+    if(commDateMode==='day') commCalRender();
+  }
+
   /* ---- Salvataggio/ripristino dati Excel in localStorage ---- */
   const PRATICHE_CACHE_KEY = 'comm_pratiche_cache';
 
@@ -3286,7 +3422,9 @@ calcCQS();
       document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
     });
     document.getElementById('comm-loaded-area').style.display='';
+    _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
     applyFilters();
+    commCalRender();
     if(savedAssign) showRestoreBanner(savedAssign);
     const savedDate=new Date(cache.savedAt).toLocaleDateString('it-IT');
     document.querySelector('.comm-upload-label').textContent='🔄 '+commFileName+' (ripristinato)';
