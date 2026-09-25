@@ -2887,6 +2887,7 @@ calcCQS();
   const GH_OWNER='ManuM16';
   const GH_REPO='dashboard-pratiche';
   const GH_FILE='dati-assegnazioni.json';
+  const GH_FILE_PRATICHE='dati-pratiche.json';
 
   function ghGetToken(){
     let t=localStorage.getItem('gh_pat');
@@ -2921,27 +2922,44 @@ calcCQS();
     return j.sha;
   }
 
-  window.commExportGitHub=async function(){
-    const token=ghGetToken(); if(!token) return;
-    const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+  async function ghPutFile(token, ghFile, jsonObj, message){
+    const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile}`;
     const putHeaders={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
-
-    // 1. Recupera SHA (null se file non esiste)
     let sha=null;
     try{ sha=await ghGetSha(token,apiUrl); }
-    catch(e){ alert('❌ Impossibile leggere lo stato del file su GitHub:\n'+e.message); return; }
-
-    // 2. Costruisce contenuto
-    const payload=ghBuildPayload();
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
-
-    // 3. PUT
-    const body={message:`Backup assegnazioni ${new Date().toISOString().slice(0,10)}`,content};
+    catch(e){ throw new Error('Impossibile leggere SHA per '+ghFile+': '+e.message); }
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(jsonObj,null,2))));
+    const body={message,content};
     if(sha) body.sha=sha;
+    const res=await fetch(apiUrl,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||res.status);}
+  }
+
+  async function ghGetFile(token, ghFile){
+    const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile}`;
+    const res=await fetch(apiUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+    if(res.status===404) return null;
+    if(!res.ok) throw new Error('Errore '+res.status+' nel leggere '+ghFile);
+    const j=await res.json();
+    return JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
+  }
+
+  window.commExportGitHub=async function(){
+    const token=ghGetToken(); if(!token) return;
+    const today=new Date().toISOString().slice(0,10);
     try{
-      const res=await fetch(apiUrl,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
-      if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||res.status);}
-      alert('✅ Dati salvati su GitHub con successo!');
+      // 1. Salva assegnazioni
+      const payload=ghBuildPayload();
+      await ghPutFile(token, GH_FILE, payload, `Backup assegnazioni ${today}`);
+
+      // 2. Salva dati pratiche (se presenti)
+      if(commPratiche.length){
+        const pratichePayload={version:1,exportedAt:new Date().toISOString(),fileName:commFileName,pratiche:commPratiche};
+        await ghPutFile(token, GH_FILE_PRATICHE, pratichePayload, `Backup pratiche ${today}`);
+        alert('✅ Dati salvati su GitHub con successo!\n\n• Assegnazioni: '+GH_FILE+'\n• Pratiche Excel: '+GH_FILE_PRATICHE+' ('+commPratiche.length+' righe)');
+      } else {
+        alert('✅ Assegnazioni salvate su GitHub!\n\n(Nessuna pratica Excel da salvare)');
+      }
     }catch(err){
       alert('❌ Errore nel salvataggio su GitHub:\n'+err.message);
     }
@@ -2949,23 +2967,54 @@ calcCQS();
 
   window.commImportGitHub=async function(){
     const token=ghGetToken(); if(!token) return;
-    const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
     try{
-      const res=await fetch(apiUrl,{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
-      if(!res.ok) throw new Error(res.status===404?'Nessun backup trovato su GitHub.':'Errore '+res.status);
-      const j=await res.json();
-      const payload=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
-      if(!payload.version||!payload.assignments) throw new Error('Formato non valido');
-      let totalKeys=0, matchedPratiche=0;
-      Object.entries(payload.assignments).forEach(([k,v])=>{localStorage.setItem(k,JSON.stringify(v));totalKeys++;});
+      // 1. Carica assegnazioni
+      const payload=await ghGetFile(token, GH_FILE);
+      if(!payload) throw new Error('Nessun backup assegnazioni trovato su GitHub.');
+      if(!payload.version||!payload.assignments) throw new Error('Formato assegnazioni non valido');
+      Object.entries(payload.assignments).forEach(([k,v])=>localStorage.setItem(k,JSON.stringify(v)));
+
+      // 2. Carica pratiche Excel (se presenti)
+      let praticheRipristinate=0;
+      const pratichePayload=await ghGetFile(token, GH_FILE_PRATICHE);
+      if(pratichePayload && pratichePayload.pratiche && pratichePayload.pratiche.length){
+        commPratiche=pratichePayload.pratiche;
+        commFileName=pratichePayload.fileName||'';
+        praticheRipristinate=commPratiche.length;
+        // Salva anche in cache locale
+        localStorage.setItem(PRATICHE_CACHE_KEY, JSON.stringify({
+          fileName:commFileName, savedAt:new Date().toISOString(), pratiche:commPratiche
+        }));
+        populateYearSelect();
+        commDateMode='day';
+        const today=new Date().toISOString().slice(0,10);
+        document.getElementById('comm-date-filter').value=today;
+        ['day','range','month','year','all'].forEach(m=>{
+          document.getElementById('dmode-panel-'+m).style.display=(m==='day'?'flex':'none');
+          document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
+        });
+        document.getElementById('comm-loaded-area').style.display='';
+        const savedDate=pratichePayload.exportedAt?new Date(pratichePayload.exportedAt).toLocaleDateString('it-IT'):'—';
+        document.querySelector('.comm-upload-label').textContent='☁️ '+commFileName+' (da GitHub)';
+        document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche — backup del '+savedDate;
+      }
+
+      // 3. Applica assegnazioni alle pratiche caricate
+      commAssign={};
       const currentSaved=loadAssign();
-      if(currentSaved){
+      let matchedPratiche=0;
+      if(currentSaved && commPratiche.length){
         const currentIds=new Set(commPratiche.map(r=>r.__id));
         Object.entries(currentSaved).forEach(([id,agent])=>{if(currentIds.has(id)){commAssign[id]=agent;matchedPratiche++;}});
-        saveAssign(); renderTable();
       }
+      saveAssign();
+      applyFilters();
+
       const exportDate=payload.exportedAt?new Date(payload.exportedAt).toLocaleDateString('it-IT'):'—';
-      alert(`✅ Dati caricati da GitHub!\n\nBackup del: ${exportDate}\nPeriodi ripristinati: ${totalKeys}\nPratiche caricate: ${matchedPratiche}`);
+      let msg=`✅ Dati caricati da GitHub!\n\nBackup del: ${exportDate}`;
+      if(praticheRipristinate) msg+=`\nPratiche Excel: ${praticheRipristinate} righe`;
+      msg+=`\nAssegnazioni applicate: ${matchedPratiche}`;
+      alert(msg);
     }catch(err){
       alert('❌ Errore nel caricamento da GitHub:\n'+err.message);
     }
