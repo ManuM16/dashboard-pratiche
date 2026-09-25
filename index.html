@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.0 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.1 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -901,28 +901,17 @@ tr:hover td{background:var(--surface3)}
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
             <h3 style="margin:0">📈 Analisi Erogato</h3>
           </div>
-          <!-- Toolbar: metrica + filiale -->
-          <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;padding:10px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border2)">
-            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-              <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px">Metrica:</span>
-              <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px" id="kpi-metric-tabs">
-                <button class="dmode-btn dmode-active" onclick="commSetKpiMetric('erogato')"  id="kmtab-erogato">💰 Erogato</button>
-                <button class="dmode-btn"              onclick="commSetKpiMetric('pratiche')" id="kmtab-pratiche">📋 N° Pratiche</button>
-                <button class="dmode-btn"              onclick="commSetKpiMetric('polizze')"  id="kmtab-polizze">🛡 Polizze</button>
-                <button class="dmode-btn"              onclick="commSetKpiMetric('premi')"    id="kmtab-premi">💎 Premi</button>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-left:auto">
-              <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px">Filiale:</span>
-              <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px" id="kpi-view-tabs">
-                <button class="dmode-btn dmode-active" onclick="commSetKpiView('all')"       id="kvtab-all">Tutte</button>
-                <button class="dmode-btn"              onclick="commSetKpiView('cagliari')"   id="kvtab-cagliari">Cagliari</button>
-                <button class="dmode-btn"              onclick="commSetKpiView('firenze')"    id="kvtab-firenze">Firenze</button>
-                <button class="dmode-btn"              onclick="commSetKpiView('nuoro')"      id="kvtab-nuoro">Nuoro</button>
-                <button class="dmode-btn"              onclick="commSetKpiView('sassari')"    id="kvtab-sassari">Sassari</button>
-                <button class="dmode-btn"              onclick="commSetKpiView('genova')"     id="kvtab-genova">Genova</button>
-                <button class="dmode-btn"              onclick="commSetKpiView('olbia')"      id="kvtab-olbia">Olbia</button>
-              </div>
+          <!-- Toolbar: solo filtro filiale (metriche sempre tutte visibili) -->
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:16px;padding:10px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border2)">
+            <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px">Filiale:</span>
+            <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px" id="kpi-view-tabs">
+              <button class="dmode-btn dmode-active" onclick="commSetKpiView('all')"       id="kvtab-all">Tutte</button>
+              <button class="dmode-btn"              onclick="commSetKpiView('cagliari')"   id="kvtab-cagliari">Cagliari</button>
+              <button class="dmode-btn"              onclick="commSetKpiView('firenze')"    id="kvtab-firenze">Firenze</button>
+              <button class="dmode-btn"              onclick="commSetKpiView('nuoro')"      id="kvtab-nuoro">Nuoro</button>
+              <button class="dmode-btn"              onclick="commSetKpiView('sassari')"    id="kvtab-sassari">Sassari</button>
+              <button class="dmode-btn"              onclick="commSetKpiView('genova')"     id="kvtab-genova">Genova</button>
+              <button class="dmode-btn"              onclick="commSetKpiView('olbia')"      id="kvtab-olbia">Olbia</button>
             </div>
           </div>
           <div id="comm-kpi-cards"></div>
@@ -3281,7 +3270,6 @@ calcCQS();
   };
   function renderKpiCards(){
     const container=document.getElementById('comm-kpi-cards');
-    const m=commKpiMetric||'erogato';
     const finsToShow = commKpiView==='all'
       ? Object.keys(_lastFinStats)
       : Object.keys(_lastFinStats).filter(k=>k===commKpiView);
@@ -3294,76 +3282,62 @@ calcCQS();
     const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia'];
     finsToShow.sort((a,b)=>finOrder.indexOf(a)-finOrder.indexOf(b));
 
-    // Helper valore+formattazione per la metrica corrente
-    const getVal=(d,metric)=>{
-      if(metric==='erogato')  return {v:d.importoTot, fmt:'€ '+fe(d.importoTot)};
-      if(metric==='pratiche') return {v:d.n, fmt:d.n+' pratiche'};
-      if(metric==='polizze')  return {v:d.conPolizza, fmt:d.conPolizza+' / '+d.n+' ('+Math.round(d.conPolizza/(d.n||1)*100)+'%)'};
-      if(metric==='premi')    return {v:d.totPolizza, fmt:d.totPolizza>0?'€ '+fe(d.totPolizza):'—'};
-      return {v:0,fmt:'—'};
-    };
-
-    const metricColor={erogato:'var(--blue)',pratiche:'var(--teal)',polizze:'var(--purple)',premi:'var(--amber)'};
-    const mc=metricColor[m]||'var(--ink)';
-
-    // Calcola max globale per le barre
-    const allVals=[
-      ...finsToShow.map(k=>getVal(_lastFinStats[k],m).v||0),
-      ...Object.values(_lastAgentStats).map(s=>getVal(s,m).v||0)
+    // Intestazioni colonne metriche
+    const COLS=[
+      {key:'erogato',  label:'Erogato',        color:'var(--blue)',   fmt:d=>'€ '+fe(d.importoTot),                         val:d=>d.importoTot},
+      {key:'pratiche', label:'N° Pratiche',     color:'var(--teal)',   fmt:d=>d.n+'',                                        val:d=>d.n},
+      {key:'polizze',  label:'Polizze',         color:'var(--purple)', fmt:d=>d.conPolizza+' / '+d.n+' ('+Math.round(d.conPolizza/(d.n||1)*100)+'%)', val:d=>d.conPolizza},
+      {key:'premi',    label:'Premi polizza',   color:'var(--amber)',  fmt:d=>d.totPolizza>0?'€ '+fe(d.totPolizza):'—',      val:d=>d.totPolizza},
     ];
-    const globalMax=Math.max(...allVals,1);
+
+    const thead=`<thead>
+      <tr style="background:var(--surface2);border-bottom:1px solid var(--border)">
+        <th style="padding:7px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--ink2);white-space:nowrap">Commerciale</th>
+        ${COLS.map(c=>`<th style="padding:7px 14px;text-align:right;font-size:11px;font-weight:600;color:${c.color};white-space:nowrap">${c.label}</th>`).join('')}
+      </tr>
+    </thead>`;
 
     container.innerHTML=finsToShow.map(finKey=>{
       const f=_lastFinStats[finKey];
       const agents=Object.values(_lastAgentStats).filter(s=>s.finKey===finKey);
-      agents.sort((a,b)=>(getVal(b,m).v||0)-(getVal(a,m).v||0));
-
-      const fVal=getVal(f,m);
-      const fBarPct=Math.round((fVal.v||0)/globalMax*100);
+      // Ordina per erogato
+      agents.sort((a,b)=>b.importoTot-a.importoTot);
 
       const agentRows=agents.map((s,idx)=>{
-        const sVal=getVal(s,m);
-        const barPct=Math.round((sVal.v||0)/globalMax*100);
         const initials=s.name.split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
         const col=AVATAR_COLORS[ALL_AGENTS.indexOf(s.name)%AVATAR_COLORS.length]||'#999';
         const zebra=idx%2===1?'background:var(--surface3)':'background:var(--surface)';
-        return `<tr style="${zebra}">
-          <td style="padding:8px 14px 8px 22px;width:38%">
+        return `<tr style="${zebra};border-top:1px solid var(--border)">
+          <td style="padding:7px 14px 7px 20px">
             <div style="display:flex;align-items:center;gap:8px">
               <div style="width:24px;height:24px;border-radius:50%;background:${col};color:#fff;font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif">${initials}</div>
               <span style="font-size:12.5px;font-weight:500">${esc(s.name)}</span>
             </div>
           </td>
-          <td style="padding:8px 16px 8px 8px">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div style="flex:1;height:6px;background:var(--surface2);border-radius:3px;overflow:hidden">
-                <div style="height:100%;width:${barPct}%;background:${col};border-radius:3px;transition:width .4s"></div>
-              </div>
-              <span style="font-size:12.5px;font-weight:700;color:${mc};min-width:90px;text-align:right">${sVal.fmt}</span>
-            </div>
-          </td>
+          ${COLS.map(c=>`<td style="padding:7px 14px;text-align:right;font-size:12.5px;font-weight:600;color:${c.color}">${c.fmt(s)}</td>`).join('')}
         </tr>`;
       }).join('');
 
-      return `<div style="margin-bottom:18px;background:var(--surface);border-radius:12px;border:2px solid ${f.color};overflow:hidden;box-shadow:var(--shadow)">
-        <!-- Financial header -->
-        <div style="background:${f.color}15;padding:10px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid ${f.color}25">
-          <div style="width:10px;height:10px;border-radius:50%;background:${f.color};flex-shrink:0"></div>
-          <div>
-            <div style="font-weight:700;font-size:13.5px;font-family:'Syne',sans-serif;color:${f.color}">${esc(f.label)}</div>
-            <div style="font-size:11px;color:var(--ink3);margin-top:1px">${f.n} pratiche totali · ${f.nAssegnate} assegnate</div>
+      // Riga totale filiale
+      const totRow=`<tr style="background:${f.color}10;border-top:2px solid ${f.color}30">
+        <td style="padding:8px 14px 8px 16px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:10px;height:10px;border-radius:50%;background:${f.color};flex-shrink:0"></div>
+            <span style="font-weight:700;font-size:13px;font-family:'Syne',sans-serif;color:${f.color}">${esc(f.label)}</span>
+            <span style="font-size:11px;color:var(--ink3)">${f.n} tot. · ${f.nAssegnate} assegnate</span>
           </div>
-          <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
-            <div style="height:8px;width:130px;background:var(--surface2);border-radius:4px;overflow:hidden">
-              <div style="height:100%;width:${fBarPct}%;background:${f.color};border-radius:4px;transition:width .4s"></div>
-            </div>
-            <span style="font-size:14px;font-weight:700;color:${f.color};font-family:'Syne',sans-serif;min-width:100px;text-align:right">${fVal.fmt}</span>
-          </div>
-        </div>
-        <!-- Righe commerciali -->
-        ${agents.length
-          ? `<table style="width:100%;border-collapse:collapse">${agentRows}</table>`
-          : '<div style="padding:12px 20px;font-size:12px;color:var(--ink3);font-style:italic">Nessuna pratica assegnata per questa filiale nel periodo.</div>'}
+        </td>
+        ${COLS.map(c=>`<td style="padding:8px 14px;text-align:right;font-size:13px;font-weight:700;color:${c.color};font-family:'Syne',sans-serif">${c.fmt(f)}</td>`).join('')}
+      </tr>`;
+
+      return `<div style="margin-bottom:16px;background:var(--surface);border-radius:12px;border:2px solid ${f.color};overflow:hidden;box-shadow:var(--shadow)">
+        <table style="width:100%;border-collapse:collapse">
+          ${thead}
+          <tbody>
+            ${totRow}
+            ${agents.length ? agentRows : '<tr><td colspan="5" style="padding:10px 20px;font-size:12px;color:var(--ink3);font-style:italic">Nessuna pratica assegnata nel periodo.</td></tr>'}
+          </tbody>
+        </table>
       </div>`;
     }).join('');
   }
@@ -3687,20 +3661,20 @@ calcCQS();
 
     const html=`
     <div style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;display:flex;align-items:center;justify-content:center" id="report-modal" onclick="if(event.target.id==='report-modal')document.getElementById('report-modal').remove()">
-      <div style="background:var(--surface);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);max-width:580px;width:95%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden">
+      <div style="background:var(--surface);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);max-width:620px;width:95%;display:flex;flex-direction:column;overflow:hidden" id="report-modal-inner">
         <div style="padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
           <div>
             <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px">📊 Report Erogato</div>
-            <div style="font-size:11px;color:var(--ink3);margin-top:2px">Importo finanziato per financial e commerciale · ${periodLabel}</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:2px">Importo erogato per financial e commerciale · ${periodLabel}</div>
           </div>
           <button onclick="document.getElementById('report-modal').remove()" style="border:none;background:none;font-size:20px;cursor:pointer;color:var(--ink3);padding:4px 8px">✕</button>
         </div>
-        <div style="overflow-y:auto;flex:1">
+        <div>
           <table style="width:100%;border-collapse:collapse;font-family:'Outfit',sans-serif">
             <thead>
-              <tr style="background:var(--ink);color:#fff;position:sticky;top:0">
+              <tr style="background:var(--ink);color:#fff">
                 <th style="padding:9px 12px;text-align:left;font-size:12px;font-weight:600">Financial / Commerciale</th>
-                <th style="padding:9px 14px;text-align:right;font-size:12px;font-weight:600">Importo finanziato</th>
+                <th style="padding:9px 14px;text-align:right;font-size:12px;font-weight:600">Importo erogato</th>
               </tr>
             </thead>
             <tbody>
@@ -3713,6 +3687,7 @@ calcCQS();
           </table>
         </div>
         <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn-comm btn-comm-secondary" onclick="commSaveReportImage()">🖼 Salva immagine</button>
           <button class="btn-comm btn-comm-secondary" onclick="commCopyReport()">📋 Copia tabella</button>
           <button class="btn-comm btn-comm-primary" onclick="document.getElementById('report-modal').remove()">Chiudi</button>
         </div>
@@ -3724,10 +3699,36 @@ calcCQS();
   window.commCopyReport=function(){
     const table=document.querySelector('#report-modal table');
     if(!table) return;
-    // Copia come testo tab-separated per incollare su Excel
     const rows=[...table.querySelectorAll('tr')];
     const tsv=rows.map(tr=>[...tr.querySelectorAll('th,td')].map(c=>c.textContent.trim()).join('\t')).join('\n');
     navigator.clipboard.writeText(tsv).then(()=>alert('✅ Tabella copiata negli appunti — incollala su Excel!')).catch(()=>alert('❌ Impossibile copiare. Seleziona la tabella manualmente.'));
+  };
+
+  window.commSaveReportImage=function(){
+    const inner=document.getElementById('report-modal-inner');
+    if(!inner){alert('Report non trovato.');return;}
+    // Load html2canvas on demand
+    function doCapture(){
+      html2canvas(inner,{
+        backgroundColor:null,
+        scale:2,
+        useCORS:true,
+        logging:false
+      }).then(canvas=>{
+        const link=document.createElement('a');
+        link.download='report-erogato.png';
+        link.href=canvas.toDataURL('image/png');
+        link.click();
+      }).catch(()=>alert('❌ Errore durante la generazione dell\'immagine.'));
+    }
+    if(window.html2canvas){doCapture();}
+    else{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      s.onload=doCapture;
+      s.onerror=()=>alert('❌ Impossibile caricare html2canvas. Controlla la connessione.');
+      document.head.appendChild(s);
+    }
   };
 
 })();
