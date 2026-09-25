@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.5 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.2.6 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3411,7 +3411,7 @@ calcCQS();
       f.n++;f.importoTot+=r.importo||0;
       if(agent) f.nAssegnate++;
       if(!isGarantito) f.nPP++;
-      if(r.polizza!=null){f.conPolizza++;f.totPolizza+=r.polizza;}else f.senzaPolizza++;
+      if(r.polizza!=null&&!isGarantito){f.conPolizza++;f.totPolizza+=r.polizza;}else f.senzaPolizza++;
 
       // Agenti: solo pratiche assegnate
       if(!agent) return;
@@ -3421,7 +3421,7 @@ calcCQS();
       const s=agentStats[agent];
       s.n++;s.importoTot+=r.importo||0;
       if(!isGarantito) s.nPP++;
-      if(r.polizza!=null){s.conPolizza++;s.totPolizza+=r.polizza;}else s.senzaPolizza++;
+      if(r.polizza!=null&&!isGarantito){s.conPolizza++;s.totPolizza+=r.polizza;}else s.senzaPolizza++;
       s.prodotti[r.prodotto||'N/D']=(s.prodotti[r.prodotto||'N/D']||0)+1;
     });
 
@@ -3696,11 +3696,11 @@ calcCQS();
       const isGar=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
       if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel,color,agenti:{},tot:{importo:0,n:0,polizze:0,premi:0,nPP:0}};
       const f=pivot[finKey];
-      f.tot.importo+=importo; f.tot.n++; if(!isGar) f.tot.nPP++; if(hasPolizza){f.tot.polizze++;f.tot.premi+=premioPolizza;}
+      f.tot.importo+=importo; f.tot.n++; if(!isGar) f.tot.nPP++; if(hasPolizza&&!isGar){f.tot.polizze++;f.tot.premi+=premioPolizza;}
 
       if(!f.agenti[agente]) f.agenti[agente]={importo:0,n:0,polizze:0,premi:0,nPP:0};
       const a=f.agenti[agente];
-      a.importo+=importo; a.n++; if(!isGar) a.nPP++; if(hasPolizza){a.polizze++;a.premi+=premioPolizza;}
+      a.importo+=importo; a.n++; if(!isGar) a.nPP++; if(hasPolizza&&!isGar){a.polizze++;a.premi+=premioPolizza;}
     });
 
     const fmtE=n=>n?fe(n)+' €':'—';
