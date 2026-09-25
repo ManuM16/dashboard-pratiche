@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.4 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.5 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3274,12 +3274,15 @@ calcCQS();
   /* ---- KPI generation ---- */
   window.commGenerateKPI=function(){
     console.log('[KPI] commAssign contiene', Object.keys(commAssign).length,'voci');
+    // KPI usa TUTTE le pratiche caricate (non solo quelle filtrate per data)
+    // Le assegnazioni sono globali su tutto il file, il filtro data serve solo per la tabella
+    const kpiData=commPratiche;
 
     // Build stats per agente e per financial
     const agentStats={};
     const finStats={};
 
-    commFiltered.forEach(r=>{
+    kpiData.forEach(r=>{
       const agent=commAssign[r.__id];
       const finKey=r.finKey||'altro';
       const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:finKey;
@@ -3495,7 +3498,8 @@ calcCQS();
     const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia'];
     const pivot={};  // { finKey: { label, agenti: { nome: {finanziato, confermato} }, totFin, totConf } }
 
-    commFiltered.forEach(r=>{
+    // Report usa TUTTE le pratiche caricate (non solo quelle filtrate per data)
+    commPratiche.forEach(r=>{
       const finKey=r.finKey||'altro';
       const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:'Altro';
       const agente=commAssign[r.__id]||'(non assegnato)';
