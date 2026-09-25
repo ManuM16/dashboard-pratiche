@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.7 · 25/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.0.8 · 25/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3469,7 +3469,16 @@ calcCQS();
     commPratiche=cache.pratiche;
     commFileName=cache.fileName||'';
     commAssign={};
+    // Carica assegnazioni e filtra SOLO quelle con ID presenti in commPratiche (solo CORTO)
     const savedAssign=loadAssign();
+    if(savedAssign){
+      const currentIds=new Set(commPratiche.map(r=>r.__id));
+      Object.entries(savedAssign).forEach(([id,agent])=>{
+        if(currentIds.has(id)) commAssign[id]=agent;
+      });
+      // Risalva già pulito nel localStorage
+      saveAssign();
+    }
     populateYearSelect();
     commDateMode='day';
     const today=new Date().toISOString().slice(0,10);
@@ -3486,7 +3495,7 @@ calcCQS();
     _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
     applyFilters();
     commCalRender();
-    if(savedAssign) showRestoreBanner(savedAssign);
+    // Non mostrare più il banner — le assegnazioni valide sono già caricate in automatico
     const savedDate=new Date(cache.savedAt).toLocaleDateString('it-IT');
     document.querySelector('.comm-upload-label').textContent='🔄 '+commFileName+' (ripristinato)';
     document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche — salvate il '+savedDate;
