@@ -870,7 +870,7 @@ tr:hover td{background:var(--surface3)}
                   <th style="width:180px;text-align:left">Cliente</th>
                   <th style="width:120px;text-align:left">Prodotto</th>
                   <th style="width:100px;text-align:right">Importo €</th>
-                  <th style="width:65px;text-align:center">TAN</th>
+                  <th style="width:80px;text-align:center" title="Solo prestiti personali — Cessioni del Quinto escluse (dati non disponibili nel file)">TAN <span style="font-size:9px;font-weight:400;color:var(--ink3)">(escl. CQ)</span></th>
                   <th style="width:70px;text-align:center">Polizza</th>
                   <th style="width:100px;text-align:left">Financial</th>
                   <th style="width:160px;text-align:left">Commerciale</th>
@@ -3012,9 +3012,11 @@ calcCQS();
       const financial=finKey?FINANCIAL_MAP[finKey].label:(cittaRaw||'—');
       // ID univoco: numero pratica + cliente + importo + dateStr (stringa pulita, non oggetto Date)
       const id=`${numPratica}|${cliente||''}|${importo}|${dateStr}`;
-      // Calcola TAN solo per prestiti personali (NN GARANTITO); per CQS non ha senso (struttura diversa)
-      const isGarantitoForTan=(prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
-      const tan=(!isGarantitoForTan && importo && rata && nRate) ? calcolaTAN(importo, rata, nRate) : null;
+      // Calcola TAN solo per prestiti personali (NN GARANTITO + prod.6); CQS escluse (rata/rate non nel file)
+      const codProdotto=parseInt(get(['PRODOTTO'])||0)||0;
+      const CQS_PRODS=new Set([13,14,15,16,17,18,34,37]);
+      const isCQS=CQS_PRODS.has(codProdotto);
+      const tan=(!isCQS && importo && rata && nRate) ? calcolaTAN(importo, rata, nRate) : null;
       parsed.push({__id:id,__num:numPratica,__idx:i,__dateStr:dateStr,cliente,prodotto,tipo,importo,netto,nRate,rata,polizza,tan,financial,finKey,cittaRaw});
     });
     return parsed;
@@ -3467,7 +3469,7 @@ calcCQS();
       {key:'pratiche', label:'N° Pratiche',     color:'var(--teal)',   fmt:d=>d.n+'',                                        val:d=>d.n},
       {key:'polizze',  label:'Polizze / p.p.',  color:'var(--purple)', fmt:d=>d.conPolizza+' / '+(d.nPP||0)+' p.p. ('+(d.nPP?Math.round(d.conPolizza/(d.nPP)*100):0)+'%)', val:d=>d.conPolizza},
       {key:'premi',    label:'Premi polizza',   color:'var(--amber)',  fmt:d=>d.totPolizza>0?'€ '+fe(d.totPolizza):'—',      val:d=>d.totPolizza},
-      {key:'tan',      label:'TAN medio p.p.',  color:'var(--blue-m)', fmt:d=>d.tanCount?(Math.round(d.tanSum/d.tanCount*100)/100).toFixed(2)+'%':'—', val:d=>d.tanCount?d.tanSum/d.tanCount:0},
+      {key:'tan',      label:'TAN medio p.p. (escl. CQ)',  color:'var(--blue-m)', fmt:d=>d.tanCount?(Math.round(d.tanSum/d.tanCount*100)/100).toFixed(2)+'%':'—', val:d=>d.tanCount?d.tanSum/d.tanCount:0},
     ];
 
     const thead=`<thead>
@@ -3807,7 +3809,7 @@ calcCQS();
       {id:'pratiche',  label:'N° Pratiche',       checked:false, color:'var(--teal)'},
       {id:'polizze',   label:'Polizze',            checked:false, color:'var(--purple)'},
       {id:'premi',     label:'Premi polizza',      checked:false, color:'var(--amber)'},
-      {id:'tan',       label:'TAN medio p.p.',     checked:false, color:'var(--blue-m)'},
+      {id:'tan',       label:'TAN medio p.p. (escl. CQ)',     checked:false, color:'var(--blue-m)'},
     ];
 
     const checkboxes=cols.map(c=>`
@@ -3853,7 +3855,7 @@ calcCQS();
       {id:'pratiche', label:'N° Pratiche',      color:'#0d9488'},
       {id:'polizze',  label:'Polizze',           color:'#7c3aed'},
       {id:'premi',    label:'Premi polizza',     color:'#d97706'},
-      {id:'tan',      label:'TAN medio p.p.',   color:'#3B72F6'},
+      {id:'tan',      label:'TAN medio p.p. (escl. CQ)',   color:'#3B72F6'},
     ];
     const activeCols=COLS_DEF.filter(c=>document.getElementById('rb-chk-'+c.id)?.checked);
     if(!activeCols.length) return;
