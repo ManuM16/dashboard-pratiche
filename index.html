@@ -1161,48 +1161,27 @@ tr:hover td{background:var(--surface3)}
               <span class="hint">Solo per estinzione parziale: premio lordo ricalcolato sulla durata e capitale residui</span>
             </div>
           </div>
-          <!-- Riepilogo componenti calcolati automaticamente -->
-          <div id="pl-comp-box" style="display:none;margin-top:14px;padding:12px 16px;background:var(--surface2);border-radius:8px;font-size:12px;color:var(--ink2);display:flex;gap:24px;flex-wrap:wrap">
-            <span>Caricamenti (C): <strong id="pl-c-val">—</strong></span>
-            <span>Premio puro (P): <strong id="pl-p-val">—</strong></span>
-            <span>Spese di emissione: <strong>€ 15,00</strong></span>
-          </div>
-          <div style="margin-top:12px;padding:10px 14px;background:var(--amber-l);border-radius:8px;font-size:12px;color:var(--amber)">
-            <strong>Spese amministrative: € 40,00</strong> (detratte automaticamente dalla formula). Se il rimborso calcolato risulta ≤ € 40,00 la Compagnia non procede ad alcun rimborso.
-          </div>
         </div>
 
         <div class="calc-results" id="pl-results" style="display:none">
-          <div class="calc-sec-title">Risultati rimborso</div>
           <div class="calc-kpi-row">
-            <div class="calc-kpi">
-              <div class="calc-kpi-l">Premio rimborsato (PR)</div>
-              <div class="calc-kpi-v accent" id="pl-r-pr">—</div>
-              <div class="calc-kpi-sub">al netto di € 40 spese amministrative</div>
-            </div>
-            <div class="calc-kpi">
-              <div class="calc-kpi-l">Quota premio puro restituita</div>
-              <div class="calc-kpi-v" id="pl-r-qp">—</div>
-              <div class="calc-kpi-sub">P·(U−E)·DR / [(U−I)·DI]</div>
-            </div>
-            <div class="calc-kpi">
-              <div class="calc-kpi-l">Quota caricamenti restituita</div>
-              <div class="calc-kpi-v" id="pl-r-qc">—</div>
-              <div class="calc-kpi-sub">C·(U−E) / (U−I)</div>
-            </div>
-            <div class="calc-kpi">
-              <div class="calc-kpi-l">Periodo residuo</div>
-              <div class="calc-kpi-v" id="pl-r-periodo">—</div>
-              <div class="calc-kpi-sub">giorni U − E</div>
+            <div class="calc-kpi" style="grid-column:1/-1">
+              <div class="calc-kpi-l">Rimborso premio MetLife</div>
+              <div class="calc-kpi-v accent" id="pl-r-pr" style="font-size:32px">—</div>
+              <div class="calc-kpi-sub" id="pl-r-sub">al netto di € 40,00 spese amministrative</div>
             </div>
           </div>
           <div id="pl-warning" style="display:none;margin-top:12px;padding:10px 14px;background:var(--red-l);border-radius:8px;font-size:12px;color:var(--red)">
-            ⚠️ Il rimborso calcolato (al lordo delle spese) è inferiore o pari a € 40,00 — la Compagnia non procede ad alcun rimborso.
+            ⚠️ Il rimborso lordo è inferiore o pari a € 40,00 — la Compagnia non procede ad alcun rimborso.
           </div>
-          <div style="margin-top:20px">
-            <div class="calc-sec-title">Dettaglio calcolo</div>
-            <div style="font-size:12px;color:var(--ink2);background:var(--surface2);border-radius:8px;padding:14px;font-family:monospace;line-height:1.8" id="pl-formula-detail"></div>
-          </div>
+          <!-- valori nascosti mantenuti per compatibilità JS -->
+          <span id="pl-r-qp" style="display:none"></span>
+          <span id="pl-r-qc" style="display:none"></span>
+          <span id="pl-r-periodo" style="display:none"></span>
+          <span id="pl-formula-detail" style="display:none"></span>
+          <span id="pl-c-val" style="display:none"></span>
+          <span id="pl-p-val" style="display:none"></span>
+          <div id="pl-comp-box" style="display:none"></div>
         </div>
       </div>
     </div>
@@ -2759,10 +2738,12 @@ function calcPolizza(){
   const P = premioLordo - C - SPESE_EMISSIONE;
 
   // Mostra riepilogo componenti
-  if(premioLordo > 0 && DI > 0 && durata > 0){
+  if(DI > 0 && durata > 0){
     document.getElementById('pl-c-val').textContent = `€ ${fe2(C)}`;
-    document.getElementById('pl-p-val').textContent = P >= 0 ? `€ ${fe2(P)}` : `⚠ negativo (verifica dati)`;
-    document.getElementById('pl-comp-box').style.display = 'flex';
+    document.getElementById('pl-p-val').textContent = premioLordo > 0
+      ? (P >= 0 ? `€ ${fe2(P)}` : `⚠ negativo (verifica dati)`)
+      : '—';
+    document.getElementById('pl-comp-box').style.cssText += ';display:flex';
   }
 
   const vI = document.getElementById('pl-inizio').value;
