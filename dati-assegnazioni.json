@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-28T15:24:44.193Z",
+  "exportedAt": "2026-09-28T15:26:13.888Z",
   "assignments": {
-    "comm_assign_range_2023-01-05__2026-09-25": {
+    "comm_assign_range_2023-01-05__2026-09-28": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
       "5015495301|VARGIU ROBERTO|14000|2026-09-24": "Valeria Muscas",
@@ -143,10 +143,11 @@
       "4970479301|PASQUALONE CLAUDIO|8907.7|2026-09-01": "Maria Teresa Meloni",
       "4969432301|CIOT SILVIU AURELIAN|29594|2026-09-01": "Jonathan Zampa",
       "4965515301|CROCI SONIA|7500|2026-09-01": "Jonathan Zampa",
-      "4942675301|BARONE FRANCESCO|40000|2026-09-01": "Jonathan Zampa"
+      "4942675301|BARONE FRANCESCO|40000|2026-09-01": "Jonathan Zampa",
+      "5019167301|DERIU TONINO|15974|2026-09-25": "Giada Boccia"
     }
   },
-  "currentKey": "comm_assign_range_2023-01-05__2026-09-25",
+  "currentKey": "comm_assign_range_2023-01-05__2026-09-28",
   "currentAssign": {
     "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
     "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -288,6 +289,7 @@
     "4970479301|PASQUALONE CLAUDIO|8907.7|2026-09-01": "Maria Teresa Meloni",
     "4969432301|CIOT SILVIU AURELIAN|29594|2026-09-01": "Jonathan Zampa",
     "4965515301|CROCI SONIA|7500|2026-09-01": "Jonathan Zampa",
-    "4942675301|BARONE FRANCESCO|40000|2026-09-01": "Jonathan Zampa"
+    "4942675301|BARONE FRANCESCO|40000|2026-09-01": "Jonathan Zampa",
+    "5019167301|DERIU TONINO|15974|2026-09-25": "Giada Boccia"
   }
 }
