@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-28T15:26:36.469Z",
+  "exportedAt": "2026-09-28T15:26:43.730Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-09-28": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
@@ -147,7 +147,8 @@
       "5019167301|DERIU TONINO|15974|2026-09-25": "Giada Boccia",
       "5018593301|DITTAMO ENRICO|7000|2026-09-25": "Eleonora Lupi",
       "5018497301|GUARINO COSIMO|3000|2026-09-25": "Stefania Preiata",
-      "5017898301|IBBA CORRADO|8648.6|2026-09-25": "Monica Caocci"
+      "5017898301|IBBA CORRADO|8648.6|2026-09-25": "Monica Caocci",
+      "5016970301|PIRAS LUCIANO|21096.76|2026-09-25": "Carlo Zamuner"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-09-28",
@@ -296,6 +297,7 @@
     "5019167301|DERIU TONINO|15974|2026-09-25": "Giada Boccia",
     "5018593301|DITTAMO ENRICO|7000|2026-09-25": "Eleonora Lupi",
     "5018497301|GUARINO COSIMO|3000|2026-09-25": "Stefania Preiata",
-    "5017898301|IBBA CORRADO|8648.6|2026-09-25": "Monica Caocci"
+    "5017898301|IBBA CORRADO|8648.6|2026-09-25": "Monica Caocci",
+    "5016970301|PIRAS LUCIANO|21096.76|2026-09-25": "Carlo Zamuner"
   }
 }
