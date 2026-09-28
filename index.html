@@ -870,6 +870,7 @@ tr:hover td{background:var(--surface3)}
                   <th style="width:180px;text-align:left">Cliente</th>
                   <th style="width:120px;text-align:left">Prodotto</th>
                   <th style="width:100px;text-align:right">Importo €</th>
+                  <th style="width:65px;text-align:center">TAN</th>
                   <th style="width:70px;text-align:center">Polizza</th>
                   <th style="width:100px;text-align:left">Financial</th>
                   <th style="width:160px;text-align:left">Commerciale</th>
@@ -2929,6 +2930,21 @@ calcCQS();
     reader.readAsArrayBuffer(file);
   };
 
+  // Calcola TAN (%) da PV, rata mensile, n rate — bisezione numerica
+  function calcolaTAN(pv, rata, n){
+    if(!pv||!rata||!n||pv<=0||rata<=0||n<=0) return null;
+    // Caso tasso zero: rata*n == pv
+    if(Math.abs(rata*n - pv) < 0.01) return 0;
+    let lo=1e-8, hi=0.08; // r mensile: 0 → 96% annuo
+    for(let i=0;i<120;i++){
+      const mid=(lo+hi)/2;
+      const pvCalc=rata*(1-Math.pow(1+mid,-n))/mid;
+      if(pvCalc>pv) lo=mid; else hi=mid;
+      if(hi-lo<1e-10) break;
+    }
+    return Math.round(((lo+hi)/2)*12*10000)/100; // TAN % con 2 decimali
+  }
+
   function parsePratiche(rows){
     const parsed=[];
     rows.forEach((r,i)=>{
@@ -2996,7 +3012,10 @@ calcCQS();
       const financial=finKey?FINANCIAL_MAP[finKey].label:(cittaRaw||'—');
       // ID univoco: numero pratica + cliente + importo + dateStr (stringa pulita, non oggetto Date)
       const id=`${numPratica}|${cliente||''}|${importo}|${dateStr}`;
-      parsed.push({__id:id,__num:numPratica,__idx:i,__dateStr:dateStr,cliente,prodotto,tipo,importo,netto,nRate,rata,polizza,financial,finKey,cittaRaw});
+      // Calcola TAN solo per prestiti personali (NN GARANTITO); per CQS non ha senso (struttura diversa)
+      const isGarantitoForTan=(prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
+      const tan=(!isGarantitoForTan && importo && rata && nRate) ? calcolaTAN(importo, rata, nRate) : null;
+      parsed.push({__id:id,__num:numPratica,__idx:i,__dateStr:dateStr,cliente,prodotto,tipo,importo,netto,nRate,rata,polizza,tan,financial,finKey,cittaRaw});
     });
     return parsed;
   }
@@ -3098,16 +3117,20 @@ calcCQS();
     const tbody=document.getElementById('comm-tbody');
     const n=commFiltered.length;
     document.getElementById('comm-count-label').textContent=n+' pratiche CORTO';
-    if(!n){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--ink3)">Nessuna pratica CORTO per i filtri selezionati</td></tr>';updateAssignStatus();return;}
+    if(!n){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--ink3)">Nessuna pratica CORTO per i filtri selezionati</td></tr>';updateAssignStatus();return;}
     tbody.innerHTML=commFiltered.map(r=>{
       const cur=commAssign[r.__id]||'';
       const polBadge=r.polizza!=null?`<span class="comm-badge-polizza">€ ${fe(r.polizza)}</span>`:'<span class="comm-badge-nopol">—</span>';
       const finColor=r.finKey?FINANCIAL_MAP[r.finKey].color:'var(--ink3)';
+      const tanBadge=r.tan!=null
+        ?`<span style="display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;font-weight:600;background:#EBF0FD;color:#1A56DB">${r.tan.toFixed(2)}%</span>`
+        :'<span style="font-size:11px;color:var(--ink3)">—</span>';
       return `<tr>
         <td style="font-family:monospace;font-size:11px;color:var(--ink3)">${r.__num||'—'}</td>
         <td style="font-weight:500">${esc(r.cliente||'—')}</td>
         <td style="font-size:11.5px;color:var(--ink2)">${esc(r.prodotto||'—')}</td>
         <td style="text-align:right;font-weight:600">${r.importo?fe(r.importo):'—'}</td>
+        <td style="text-align:center">${tanBadge}</td>
         <td style="text-align:center">${polBadge}</td>
         <td><span style="font-size:11px;font-weight:600;color:${finColor};white-space:nowrap">${esc(r.financial)}</span></td>
         <td><select class="comm-sel${cur?' assigned':''}" data-pid="${r.__id}" onchange="commAssignOne(this)">
@@ -3444,6 +3467,7 @@ calcCQS();
       {key:'pratiche', label:'N° Pratiche',     color:'var(--teal)',   fmt:d=>d.n+'',                                        val:d=>d.n},
       {key:'polizze',  label:'Polizze / p.p.',  color:'var(--purple)', fmt:d=>d.conPolizza+' / '+(d.nPP||0)+' p.p. ('+(d.nPP?Math.round(d.conPolizza/(d.nPP)*100):0)+'%)', val:d=>d.conPolizza},
       {key:'premi',    label:'Premi polizza',   color:'var(--amber)',  fmt:d=>d.totPolizza>0?'€ '+fe(d.totPolizza):'—',      val:d=>d.totPolizza},
+      {key:'tan',      label:'TAN medio p.p.',  color:'var(--blue-m)', fmt:d=>d.tanCount?(Math.round(d.tanSum/d.tanCount*100)/100).toFixed(2)+'%':'—', val:d=>d.tanCount?d.tanSum/d.tanCount:0},
     ];
 
     const thead=`<thead>
@@ -3562,23 +3586,25 @@ calcCQS();
       // Totali financial: include TUTTE le pratiche, assegnate e non
       const isGarantito=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
 
-      if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0};
+      if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,tanSum:0,tanCount:0};
       const f=finStats[finKey];
       f.n++;f.importoTot+=r.importo||0;
       if(agent) f.nAssegnate++;
       if(!isGarantito) f.nPP++;
       if(r.polizza!=null&&!isGarantito){f.conPolizza++;f.totPolizza+=r.polizza;}else f.senzaPolizza++;
+      if(r.tan!=null){f.tanSum+=r.tan;f.tanCount++;}
 
       // Agenti: solo pratiche assegnate
       if(!agent) return;
       const agentFinKey=AGENT_TO_FIN[agent]||finKey;
       const agentFinLabel=FINANCIAL_MAP[agentFinKey]?FINANCIAL_MAP[agentFinKey].label:agentFinKey;
-      if(!agentStats[agent]) agentStats[agent]={name:agent,finKey:agentFinKey,finLabel:agentFinLabel,n:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,prodotti:{}};
+      if(!agentStats[agent]) agentStats[agent]={name:agent,finKey:agentFinKey,finLabel:agentFinLabel,n:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,prodotti:{},tanSum:0,tanCount:0};
       const s=agentStats[agent];
       s.n++;s.importoTot+=r.importo||0;
       if(!isGarantito) s.nPP++;
       if(r.polizza!=null&&!isGarantito){s.conPolizza++;s.totPolizza+=r.polizza;}else s.senzaPolizza++;
       s.prodotti[r.prodotto||'N/D']=(s.prodotti[r.prodotto||'N/D']||0)+1;
+      if(r.tan!=null){s.tanSum+=r.tan;s.tanCount++;}
     });
 
     const section=document.getElementById('comm-kpi-section');
@@ -3781,6 +3807,7 @@ calcCQS();
       {id:'pratiche',  label:'N° Pratiche',       checked:false, color:'var(--teal)'},
       {id:'polizze',   label:'Polizze',            checked:false, color:'var(--purple)'},
       {id:'premi',     label:'Premi polizza',      checked:false, color:'var(--amber)'},
+      {id:'tan',       label:'TAN medio p.p.',     checked:false, color:'var(--blue-m)'},
     ];
 
     const checkboxes=cols.map(c=>`
@@ -3826,6 +3853,7 @@ calcCQS();
       {id:'pratiche', label:'N° Pratiche',      color:'#0d9488'},
       {id:'polizze',  label:'Polizze',           color:'#7c3aed'},
       {id:'premi',    label:'Premi polizza',     color:'#d97706'},
+      {id:'tan',      label:'TAN medio p.p.',   color:'#3B72F6'},
     ];
     const activeCols=COLS_DEF.filter(c=>document.getElementById('rb-chk-'+c.id)?.checked);
     if(!activeCols.length) return;
@@ -3850,22 +3878,26 @@ calcCQS();
       const premioPolizza=r.polizza||0;
 
       const isGar=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
-      if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel,color,agenti:{},tot:{importo:0,n:0,polizze:0,premi:0,nPP:0}};
+      if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel,color,agenti:{},tot:{importo:0,n:0,polizze:0,premi:0,nPP:0,tanSum:0,tanCount:0}};
       const f=pivot[finKey];
       f.tot.importo+=importo; f.tot.n++; if(!isGar) f.tot.nPP++; if(hasPolizza&&!isGar){f.tot.polizze++;f.tot.premi+=premioPolizza;}
+      if(r.tan!=null){f.tot.tanSum+=r.tan;f.tot.tanCount++;}
 
-      if(!f.agenti[agente]) f.agenti[agente]={importo:0,n:0,polizze:0,premi:0,nPP:0};
+      if(!f.agenti[agente]) f.agenti[agente]={importo:0,n:0,polizze:0,premi:0,nPP:0,tanSum:0,tanCount:0};
       const a=f.agenti[agente];
       a.importo+=importo; a.n++; if(!isGar) a.nPP++; if(hasPolizza&&!isGar){a.polizze++;a.premi+=premioPolizza;}
+      if(r.tan!=null){a.tanSum+=r.tan;a.tanCount++;}
     });
 
     const fmtE=n=>n?fe(n)+' €':'—';
     const fmtPol=(d)=>d.nPP?`${d.polizze}/${d.nPP} p.p. (${Math.round(d.polizze/d.nPP*100)}%)`:'—';
+    const fmtTan=(d)=>d.tanCount?(Math.round(d.tanSum/d.tanCount*100)/100).toFixed(2)+'%':'—';
     const valOf=(col,d)=>{
       if(col.id==='erogato')   return fmtE(d.importo);
       if(col.id==='pratiche')  return d.n+'';
       if(col.id==='polizze')   return fmtPol(d);
       if(col.id==='premi')     return d.premi?fmtE(d.premi):'—';
+      if(col.id==='tan')       return fmtTan(d);
       return '—';
     };
 
@@ -3876,8 +3908,8 @@ calcCQS();
     Object.keys(pivot).forEach(k=>{if(!finKeys.includes(k))finKeys.push(k);});
 
     // Totali globali
-    const glob={importo:0,n:0,polizze:0,premi:0,nPP:0};
-    Object.values(pivot).forEach(f=>{glob.importo+=f.tot.importo;glob.n+=f.tot.n;glob.nPP+=f.tot.nPP;glob.polizze+=f.tot.polizze;glob.premi+=f.tot.premi;});
+    const glob={importo:0,n:0,polizze:0,premi:0,nPP:0,tanSum:0,tanCount:0};
+    Object.values(pivot).forEach(f=>{glob.importo+=f.tot.importo;glob.n+=f.tot.n;glob.nPP+=f.tot.nPP;glob.polizze+=f.tot.polizze;glob.premi+=f.tot.premi;glob.tanSum+=f.tot.tanSum;glob.tanCount+=f.tot.tanCount;});
 
     const rows=finKeys.map(finKey=>{
       const f=pivot[finKey];
