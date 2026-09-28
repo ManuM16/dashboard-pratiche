@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-28T15:27:05.861Z",
+  "exportedAt": "2026-09-28T15:27:14.419Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-09-28": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
@@ -151,7 +151,9 @@
       "5016970301|PIRAS LUCIANO|21096.76|2026-09-25": "Carlo Zamuner",
       "5016898301|CAZZANIGA MARCO|7468.6|2026-09-25": "Daria Danzini",
       "5014918301|LOCCI MICHELE|15400|2026-09-25": "Carlo Zamuner",
-      "5014783301|MIHAI DANIELA|3507.48|2026-09-25": "Laura Balestrino"
+      "5014783301|MIHAI DANIELA|3507.48|2026-09-25": "Laura Balestrino",
+      "5011237301|POSATA ALBA|14000|2026-09-25": "Carlo Zamuner",
+      "5003177301|ANGIONI TOMASO|43500|2026-09-25": "Carlo Zamuner"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-09-28",
@@ -304,6 +306,8 @@
     "5016970301|PIRAS LUCIANO|21096.76|2026-09-25": "Carlo Zamuner",
     "5016898301|CAZZANIGA MARCO|7468.6|2026-09-25": "Daria Danzini",
     "5014918301|LOCCI MICHELE|15400|2026-09-25": "Carlo Zamuner",
-    "5014783301|MIHAI DANIELA|3507.48|2026-09-25": "Laura Balestrino"
+    "5014783301|MIHAI DANIELA|3507.48|2026-09-25": "Laura Balestrino",
+    "5011237301|POSATA ALBA|14000|2026-09-25": "Carlo Zamuner",
+    "5003177301|ANGIONI TOMASO|43500|2026-09-25": "Carlo Zamuner"
   }
 }
