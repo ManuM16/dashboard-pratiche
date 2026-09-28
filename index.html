@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.3.0 · 28/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.4.0 · 28/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -356,6 +356,9 @@ tr:hover td{background:var(--surface3)}
     </button>
     <button class="sb-item" onclick="nav('calc-cqs',this)">
       <span class="sb-icon">⊟</span> Cessione del Quinto
+    </button>
+    <button class="sb-item" onclick="nav('calc-polizza',this)">
+      <span class="sb-icon">🛡</span> Rimborso Polizza
     </button>
   </nav>
   <div class="sb-footer">
@@ -1093,6 +1096,109 @@ tr:hover td{background:var(--surface3)}
       </div>
     </div>
 
+    <!-- ═══ CALCOLATORE RIMBORSO POLIZZA METLIFE ═══ -->
+    <div class="section" id="s-calc-polizza">
+      <div class="calc-wrap">
+        <div class="card">
+          <div class="card-title">Parametri polizza MetLife</div>
+          <p style="font-size:12px;color:var(--ink3);margin-bottom:16px">
+            Calcolo rimborso premio in caso di estinzione anticipata (Art. 2.4 Condizioni di Assicurazione).<br>
+            Convenzione <strong>CL/25/802</strong> per finanziamenti fino a 84 mesi · <strong>CL/25/801</strong> per finanziamenti 85–120 mesi.
+          </p>
+          <div class="calc-grid">
+            <div class="calc-field">
+              <label>Tipo estinzione</label>
+              <select id="pl-tipo" onchange="calcPolizza()">
+                <option value="totale">Totale / trasferimento</option>
+                <option value="parziale">Parziale</option>
+              </select>
+            </div>
+            <div class="calc-field">
+              <label>Premio lordo pagato (€)</label>
+              <input type="number" id="pl-premio" value="1000" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Premio totale versato all'inizio (incluse le spese di emissione € 15,00)</span>
+            </div>
+            <div class="calc-field">
+              <label>Premio puro (P, €)</label>
+              <input type="number" id="pl-puro" value="300" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Premio puro al netto di imposte e spese di emissione (da prospetto MetLife)</span>
+            </div>
+            <div class="calc-field">
+              <label>Caricamenti (C, €)</label>
+              <input type="number" id="pl-caricamenti" value="700" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Premio lordo − Premio puro = Caricamenti. Riquadro: C = Premio − P</span>
+            </div>
+            <div class="calc-field">
+              <label>Data inizio polizza (I)</label>
+              <input type="date" id="pl-inizio" oninput="calcPolizza()">
+              <span class="hint">Data decorrenza programma assicurativo</span>
+            </div>
+            <div class="calc-field">
+              <label>Data termine polizza (U)</label>
+              <input type="date" id="pl-fine" oninput="calcPolizza()">
+              <span class="hint">Data scadenza piano di rimborso del finanziamento</span>
+            </div>
+            <div class="calc-field">
+              <label>Data estinzione anticipata (E)</label>
+              <input type="date" id="pl-estinzione" oninput="calcPolizza()">
+              <span class="hint">Data effettiva dell'estinzione</span>
+            </div>
+            <div class="calc-field">
+              <label>Capitale iniziale (DI, €)</label>
+              <input type="number" id="pl-cap-iniz" value="10000" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Importo finanziato originario</span>
+            </div>
+            <div class="calc-field">
+              <label>Capitale residuo alla data di estinzione (DR, €)</label>
+              <input type="number" id="pl-cap-res" value="7224" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Debito residuo al momento dell'estinzione (dal piano di ammortamento)</span>
+            </div>
+            <div class="calc-field" id="pl-pl-wrap" style="display:none">
+              <label>Premio lordo nuovo piano (PL, €)</label>
+              <input type="number" id="pl-pl" value="500" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Solo per estinzione parziale: premio lordo calcolato sulla durata residua e capitale residuo</span>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding:10px 14px;background:var(--amber-l);border-radius:8px;font-size:12px;color:var(--amber)">
+            <strong>Spese amministrative: € 40,00</strong> (detratte automaticamente dalla formula). Se il rimborso calcolato risulta ≤ € 40,00 la Compagnia non procede ad alcun rimborso.
+          </div>
+        </div>
+
+        <div class="calc-results" id="pl-results" style="display:none">
+          <div class="calc-sec-title">Risultati rimborso</div>
+          <div class="calc-kpi-row">
+            <div class="calc-kpi">
+              <div class="calc-kpi-l">Premio rimborsato (PR)</div>
+              <div class="calc-kpi-v accent" id="pl-r-pr">—</div>
+              <div class="calc-kpi-sub">al netto di € 40 spese amministrative</div>
+            </div>
+            <div class="calc-kpi">
+              <div class="calc-kpi-l">Quota premio puro restituita</div>
+              <div class="calc-kpi-v" id="pl-r-qp">—</div>
+              <div class="calc-kpi-sub">P·(U−E)·DR / [(U−I)·DI]</div>
+            </div>
+            <div class="calc-kpi">
+              <div class="calc-kpi-l">Quota caricamenti restituita</div>
+              <div class="calc-kpi-v" id="pl-r-qc">—</div>
+              <div class="calc-kpi-sub">C·(U−E) / (U−I)</div>
+            </div>
+            <div class="calc-kpi">
+              <div class="calc-kpi-l">Periodo residuo</div>
+              <div class="calc-kpi-v" id="pl-r-periodo">—</div>
+              <div class="calc-kpi-sub">giorni U − E</div>
+            </div>
+          </div>
+          <div id="pl-warning" style="display:none;margin-top:12px;padding:10px 14px;background:var(--red-l);border-radius:8px;font-size:12px;color:var(--red)">
+            ⚠️ Il rimborso calcolato (al lordo delle spese) è inferiore o pari a € 40,00 — la Compagnia non procede ad alcun rimborso.
+          </div>
+          <div style="margin-top:20px">
+            <div class="calc-sec-title">Dettaglio calcolo</div>
+            <div style="font-size:12px;color:var(--ink2);background:var(--surface2);border-radius:8px;padding:14px;font-family:monospace;line-height:1.8" id="pl-formula-detail"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="scheda-wrap" id="s-scheda">
       <button class="scheda-back" onclick="closeScheda()">← Torna all'elenco</button>
 
@@ -1221,6 +1327,7 @@ const TITLES = {
   pratiche:'Elenco pratiche',
   'calc-prestito':'Calcolatore Prestito — Ammortamento alla Francese',
   'calc-cqs':'Calcolatore Cessione del Quinto (CQS / CQP)',
+  'calc-polizza':'Calcolatore Rimborso Polizza MetLife (estinzione anticipata)',
   'commerciali':'Monitoraggio Commerciali'
 };
 function nav(id, btn){
@@ -1229,7 +1336,7 @@ function nav(id, btn){
   document.getElementById('s-'+id).classList.add('active');
   btn.classList.add('active');
   document.getElementById('tb-title').textContent = TITLES[id];
-  const noYS = ['mensile','confronto','funnel','assegnaz','canali','pratiche','calc-prestito','calc-cqs','commerciali'];
+  const noYS = ['mensile','confronto','funnel','assegnaz','canali','pratiche','calc-prestito','calc-cqs','calc-polizza','commerciali'];
   document.getElementById('global-ys').style.display = noYS.includes(id) ? 'none' : 'flex';
   // Mostra/nascondi albero mesi nella sidebar
   const sbTree = document.getElementById('sb-mo-tree');
@@ -2604,6 +2711,80 @@ function calcCQS(){
   document.getElementById('piano-q-body').innerHTML=rows;
 }
 calcCQS();
+
+// ── CALCOLATORE RIMBORSO POLIZZA METLIFE ─────────────────────────────────────
+// Formula Art. 2.4 Condizioni di Assicurazione (CL/25/801 e CL/25/802)
+// PR = [P*(U-E)*DR / ((U-I)*DI)] + [C*(U-E) / (U-I)] − 40   [estinzione totale]
+// PR = [P*(U-E)*DR / ((U-I)*DI)] + [C*(U-E) / (U-I)] − 40 − PL [estinzione parziale]
+// Tutte le differenze temporali sono in giorni
+(function(){
+  // Imposta default date utili al caricamento
+  const today = new Date();
+  const fmtDate = d => d.toISOString().slice(0,10);
+  const addMonths = (d,m) => { const r=new Date(d); r.setMonth(r.getMonth()+m); return r; };
+  document.getElementById('pl-inizio').value = fmtDate(addMonths(today,-24));
+  document.getElementById('pl-fine').value   = fmtDate(addMonths(today,36));
+  document.getElementById('pl-estinzione').value = fmtDate(today);
+})();
+
+function calcPolizza(){
+  const tipo = document.getElementById('pl-tipo').value;
+  // Mostra/nascondi campo PL
+  document.getElementById('pl-pl-wrap').style.display = tipo==='parziale' ? 'block' : 'none';
+
+  const P  = parseFloat(document.getElementById('pl-puro').value) || 0;
+  const C  = parseFloat(document.getElementById('pl-caricamenti').value) || 0;
+  const DI = parseFloat(document.getElementById('pl-cap-iniz').value) || 0;
+  const DR = parseFloat(document.getElementById('pl-cap-res').value) || 0;
+  const PL = tipo==='parziale' ? (parseFloat(document.getElementById('pl-pl').value) || 0) : 0;
+
+  const vI = document.getElementById('pl-inizio').value;
+  const vU = document.getElementById('pl-fine').value;
+  const vE = document.getElementById('pl-estinzione').value;
+  if(!vI || !vU || !vE) return;
+
+  const I = new Date(vI), U = new Date(vU), E = new Date(vE);
+  const msDay = 86400000;
+  const UminI = Math.round((U - I) / msDay); // U−I giorni
+  const UminE = Math.round((U - E) / msDay); // U−E giorni
+
+  if(UminI <= 0 || UminE < 0 || DI <= 0) return;
+
+  // Quota premio puro: P*(U-E)*DR / ((U-I)*DI)
+  const qPuro = (P * UminE * DR) / (UminI * DI);
+  // Quota caricamenti: C*(U-E) / (U-I)
+  const qCaric = (C * UminE) / UminI;
+
+  const lordo = qPuro + qCaric;
+  const SPESE_AMM = 40;
+  let PR = lordo - SPESE_AMM - (tipo==='parziale' ? PL : 0);
+
+  const rimborso = Math.max(0, PR);
+  const nessunRimborso = lordo <= SPESE_AMM;
+
+  const fe2 = v => v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  document.getElementById('pl-r-pr').textContent    = nessunRimborso ? '€ 0,00' : `€ ${fe2(rimborso)}`;
+  document.getElementById('pl-r-qp').textContent    = `€ ${fe2(qPuro)}`;
+  document.getElementById('pl-r-qc').textContent    = `€ ${fe2(qCaric)}`;
+  document.getElementById('pl-r-periodo').textContent = `${UminE} giorni`;
+  document.getElementById('pl-warning').style.display = nessunRimborso ? 'block' : 'none';
+
+  // Dettaglio formula
+  const det = tipo === 'totale'
+    ? `PR = [P×(U−E)×DR / ((U−I)×DI)] + [C×(U−E) / (U−I)] − 40\n` +
+      `   = [${fe2(P)}×${UminE}×${fe2(DR)} / (${UminI}×${fe2(DI)})] + [${fe2(C)}×${UminE} / ${UminI}] − 40\n` +
+      `   = ${fe2(qPuro)} + ${fe2(qCaric)} − 40\n` +
+      `   = ${fe2(lordo)} − 40 = ${nessunRimborso ? '⚠ ≤ 40 → rimborso € 0,00' : '€ '+fe2(rimborso)}`
+    : `PR = [P×(U−E)×DR / ((U−I)×DI)] + [C×(U−E) / (U−I)] − 40 − PL\n` +
+      `   = [${fe2(P)}×${UminE}×${fe2(DR)} / (${UminI}×${fe2(DI)})] + [${fe2(C)}×${UminE} / ${UminI}] − 40 − ${fe2(PL)}\n` +
+      `   = ${fe2(qPuro)} + ${fe2(qCaric)} − 40 − ${fe2(PL)}\n` +
+      `   = ${fe2(lordo)} − 40 − ${fe2(PL)} = ${nessunRimborso ? '⚠ ≤ 0 → rimborso € 0,00' : '€ '+fe2(rimborso)}`;
+
+  document.getElementById('pl-formula-detail').textContent = det;
+  document.getElementById('pl-results').style.display = 'block';
+}
+calcPolizza();
 </script>
 
 <script>
