@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-28T15:28:48.020Z",
+  "exportedAt": "2026-09-28T15:28:54.202Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-09-28": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
@@ -160,7 +160,8 @@
       "5022247301|CASU JESSICA|35787|2026-09-28": "Annamaria Esposito",
       "5022008301|RICCIARDI ADAMO|3112.2|2026-09-28": "Valentina Corsini",
       "5019455301|FANCELLO FRANCESCO|5438|2026-09-28": "Antonella Sanna",
-      "5017259301|USCIDDA UGO|24947|2026-09-28": "Francesca Pipia"
+      "5017259301|USCIDDA UGO|24947|2026-09-28": "Francesca Pipia",
+      "5012765301|DREI PASQUALE|17000|2026-09-28": "Carlo Zamuner"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-09-28",
@@ -322,6 +323,7 @@
     "5022247301|CASU JESSICA|35787|2026-09-28": "Annamaria Esposito",
     "5022008301|RICCIARDI ADAMO|3112.2|2026-09-28": "Valentina Corsini",
     "5019455301|FANCELLO FRANCESCO|5438|2026-09-28": "Antonella Sanna",
-    "5017259301|USCIDDA UGO|24947|2026-09-28": "Francesca Pipia"
+    "5017259301|USCIDDA UGO|24947|2026-09-28": "Francesca Pipia",
+    "5012765301|DREI PASQUALE|17000|2026-09-28": "Carlo Zamuner"
   }
 }
