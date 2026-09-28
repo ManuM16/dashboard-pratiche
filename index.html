@@ -1107,6 +1107,13 @@ tr:hover td{background:var(--surface3)}
           </p>
           <div class="calc-grid">
             <div class="calc-field">
+              <label>Convenzione</label>
+              <select id="pl-conv" onchange="calcPolizza()">
+                <option value="802">CL/25/802 — fino a 84 mesi (tasso 0,11%)</option>
+                <option value="801">CL/25/801 — 85 a 120 mesi (tasso 0,07%)</option>
+              </select>
+            </div>
+            <div class="calc-field">
               <label>Tipo estinzione</label>
               <select id="pl-tipo" onchange="calcPolizza()">
                 <option value="totale">Totale / trasferimento</option>
@@ -1114,19 +1121,19 @@ tr:hover td{background:var(--surface3)}
               </select>
             </div>
             <div class="calc-field">
+              <label>Capitale iniziale (DI, €)</label>
+              <input type="number" id="pl-cap-iniz" value="10000" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Importo finanziato originario</span>
+            </div>
+            <div class="calc-field">
+              <label>Durata finanziamento (mesi)</label>
+              <input type="number" id="pl-durata" value="60" min="1" max="120" step="1" oninput="calcPolizza()">
+              <span class="hint">Durata totale del piano di rimborso</span>
+            </div>
+            <div class="calc-field">
               <label>Premio lordo pagato (€)</label>
-              <input type="number" id="pl-premio" value="1000" min="0" step="0.01" oninput="calcPolizza()">
-              <span class="hint">Premio totale versato all'inizio (incluse le spese di emissione € 15,00)</span>
-            </div>
-            <div class="calc-field">
-              <label>Premio puro (P, €)</label>
-              <input type="number" id="pl-puro" value="300" min="0" step="0.01" oninput="calcPolizza()">
-              <span class="hint">Premio puro al netto di imposte e spese di emissione (da prospetto MetLife)</span>
-            </div>
-            <div class="calc-field">
-              <label>Caricamenti (C, €)</label>
-              <input type="number" id="pl-caricamenti" value="700" min="0" step="0.01" oninput="calcPolizza()">
-              <span class="hint">Premio lordo − Premio puro = Caricamenti. Riquadro: C = Premio − P</span>
+              <input type="number" id="pl-premio" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Premio totale versato all'inizio — incluse spese di emissione € 15,00 (inserire manualmente)</span>
             </div>
             <div class="calc-field">
               <label>Data inizio polizza (I)</label>
@@ -1144,20 +1151,21 @@ tr:hover td{background:var(--surface3)}
               <span class="hint">Data effettiva dell'estinzione</span>
             </div>
             <div class="calc-field">
-              <label>Capitale iniziale (DI, €)</label>
-              <input type="number" id="pl-cap-iniz" value="10000" min="0" step="0.01" oninput="calcPolizza()">
-              <span class="hint">Importo finanziato originario</span>
-            </div>
-            <div class="calc-field">
               <label>Capitale residuo alla data di estinzione (DR, €)</label>
               <input type="number" id="pl-cap-res" value="7224" min="0" step="0.01" oninput="calcPolizza()">
               <span class="hint">Debito residuo al momento dell'estinzione (dal piano di ammortamento)</span>
             </div>
             <div class="calc-field" id="pl-pl-wrap" style="display:none">
               <label>Premio lordo nuovo piano (PL, €)</label>
-              <input type="number" id="pl-pl" value="500" min="0" step="0.01" oninput="calcPolizza()">
-              <span class="hint">Solo per estinzione parziale: premio lordo calcolato sulla durata residua e capitale residuo</span>
+              <input type="number" id="pl-pl" value="0" min="0" step="0.01" oninput="calcPolizza()">
+              <span class="hint">Solo per estinzione parziale: premio lordo ricalcolato sulla durata e capitale residui</span>
             </div>
+          </div>
+          <!-- Riepilogo componenti calcolati automaticamente -->
+          <div id="pl-comp-box" style="display:none;margin-top:14px;padding:12px 16px;background:var(--surface2);border-radius:8px;font-size:12px;color:var(--ink2);display:flex;gap:24px;flex-wrap:wrap">
+            <span>Caricamenti (C): <strong id="pl-c-val">—</strong></span>
+            <span>Premio puro (P): <strong id="pl-p-val">—</strong></span>
+            <span>Spese di emissione: <strong>€ 15,00</strong></span>
           </div>
           <div style="margin-top:12px;padding:10px 14px;background:var(--amber-l);border-radius:8px;font-size:12px;color:var(--amber)">
             <strong>Spese amministrative: € 40,00</strong> (detratte automaticamente dalla formula). Se il rimborso calcolato risulta ≤ € 40,00 la Compagnia non procede ad alcun rimborso.
@@ -2728,58 +2736,77 @@ calcCQS();
 })();
 
 function calcPolizza(){
+  const conv = document.getElementById('pl-conv').value;
   const tipo = document.getElementById('pl-tipo').value;
-  // Mostra/nascondi campo PL
   document.getElementById('pl-pl-wrap').style.display = tipo==='parziale' ? 'block' : 'none';
 
-  const P  = parseFloat(document.getElementById('pl-puro').value) || 0;
-  const C  = parseFloat(document.getElementById('pl-caricamenti').value) || 0;
-  const DI = parseFloat(document.getElementById('pl-cap-iniz').value) || 0;
-  const DR = parseFloat(document.getElementById('pl-cap-res').value) || 0;
-  const PL = tipo==='parziale' ? (parseFloat(document.getElementById('pl-pl').value) || 0) : 0;
+  const fe2 = v => v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  const DI     = parseFloat(document.getElementById('pl-cap-iniz').value) || 0;
+  const durata = parseFloat(document.getElementById('pl-durata').value) || 0;
+  const premioLordo = parseFloat(document.getElementById('pl-premio').value) || 0;
+  const DR     = parseFloat(document.getElementById('pl-cap-res').value) || 0;
+  const PL     = tipo==='parziale' ? (parseFloat(document.getElementById('pl-pl').value) || 0) : 0;
+
+  // Tasso per convenzione: 0,11% per CL/25/802, 0,07% per CL/25/801
+  const tasso = conv === '802' ? 0.0011 : 0.0007;
+  const SPESE_EMISSIONE = 15;
+  const SPESE_AMM = 40;
+
+  // C = tasso × DI × durata_mesi
+  const C = tasso * DI * durata;
+  // P = premio lordo − C − spese emissione
+  const P = premioLordo - C - SPESE_EMISSIONE;
+
+  // Mostra riepilogo componenti
+  if(premioLordo > 0 && DI > 0 && durata > 0){
+    document.getElementById('pl-c-val').textContent = `€ ${fe2(C)}`;
+    document.getElementById('pl-p-val').textContent = P >= 0 ? `€ ${fe2(P)}` : `⚠ negativo (verifica dati)`;
+    document.getElementById('pl-comp-box').style.display = 'flex';
+  }
 
   const vI = document.getElementById('pl-inizio').value;
   const vU = document.getElementById('pl-fine').value;
   const vE = document.getElementById('pl-estinzione').value;
-  if(!vI || !vU || !vE) return;
+  if(!vI || !vU || !vE || premioLordo <= 0 || DI <= 0 || durata <= 0) return;
+  if(P < 0) return; // premio puro negativo = dati incoerenti
 
   const I = new Date(vI), U = new Date(vU), E = new Date(vE);
   const msDay = 86400000;
-  const UminI = Math.round((U - I) / msDay); // U−I giorni
-  const UminE = Math.round((U - E) / msDay); // U−E giorni
+  const UminI = Math.round((U - I) / msDay);
+  const UminE = Math.round((U - E) / msDay);
 
-  if(UminI <= 0 || UminE < 0 || DI <= 0) return;
+  if(UminI <= 0 || UminE < 0) return;
 
   // Quota premio puro: P*(U-E)*DR / ((U-I)*DI)
-  const qPuro = (P * UminE * DR) / (UminI * DI);
+  const qPuro  = (P * UminE * DR) / (UminI * DI);
   // Quota caricamenti: C*(U-E) / (U-I)
   const qCaric = (C * UminE) / UminI;
 
-  const lordo = qPuro + qCaric;
-  const SPESE_AMM = 40;
-  let PR = lordo - SPESE_AMM - (tipo==='parziale' ? PL : 0);
-
+  const lordoRimb = qPuro + qCaric;
+  const PR = lordoRimb - SPESE_AMM - (tipo==='parziale' ? PL : 0);
   const rimborso = Math.max(0, PR);
-  const nessunRimborso = lordo <= SPESE_AMM;
+  const nessunRimborso = lordoRimb <= SPESE_AMM;
 
-  const fe2 = v => v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('pl-r-pr').textContent       = nessunRimborso ? '€ 0,00' : `€ ${fe2(rimborso)}`;
+  document.getElementById('pl-r-qp').textContent       = `€ ${fe2(qPuro)}`;
+  document.getElementById('pl-r-qc').textContent       = `€ ${fe2(qCaric)}`;
+  document.getElementById('pl-r-periodo').textContent  = `${UminE} giorni`;
+  document.getElementById('pl-warning').style.display  = nessunRimborso ? 'block' : 'none';
 
-  document.getElementById('pl-r-pr').textContent    = nessunRimborso ? '€ 0,00' : `€ ${fe2(rimborso)}`;
-  document.getElementById('pl-r-qp').textContent    = `€ ${fe2(qPuro)}`;
-  document.getElementById('pl-r-qc').textContent    = `€ ${fe2(qCaric)}`;
-  document.getElementById('pl-r-periodo').textContent = `${UminE} giorni`;
-  document.getElementById('pl-warning').style.display = nessunRimborso ? 'block' : 'none';
-
-  // Dettaglio formula
   const det = tipo === 'totale'
-    ? `PR = [P×(U−E)×DR / ((U−I)×DI)] + [C×(U−E) / (U−I)] − 40\n` +
+    ? `Caricamenti C = ${(tasso*100).toFixed(2)}% × ${fe2(DI)} × ${durata} mesi = € ${fe2(C)}\n` +
+      `Premio puro P = ${fe2(premioLordo)} − ${fe2(C)} − 15,00 = € ${fe2(P)}\n\n` +
+      `PR = [P×(U−E)×DR / ((U−I)×DI)] + [C×(U−E) / (U−I)] − 40\n` +
       `   = [${fe2(P)}×${UminE}×${fe2(DR)} / (${UminI}×${fe2(DI)})] + [${fe2(C)}×${UminE} / ${UminI}] − 40\n` +
       `   = ${fe2(qPuro)} + ${fe2(qCaric)} − 40\n` +
-      `   = ${fe2(lordo)} − 40 = ${nessunRimborso ? '⚠ ≤ 40 → rimborso € 0,00' : '€ '+fe2(rimborso)}`
-    : `PR = [P×(U−E)×DR / ((U−I)×DI)] + [C×(U−E) / (U−I)] − 40 − PL\n` +
+      `   = ${fe2(lordoRimb)} − 40 = ${nessunRimborso ? '⚠ ≤ 40 → rimborso € 0,00' : '€ '+fe2(rimborso)}`
+    : `Caricamenti C = ${(tasso*100).toFixed(2)}% × ${fe2(DI)} × ${durata} mesi = € ${fe2(C)}\n` +
+      `Premio puro P = ${fe2(premioLordo)} − ${fe2(C)} − 15,00 = € ${fe2(P)}\n\n` +
+      `PR = [P×(U−E)×DR / ((U−I)×DI)] + [C×(U−E) / (U−I)] − 40 − PL\n` +
       `   = [${fe2(P)}×${UminE}×${fe2(DR)} / (${UminI}×${fe2(DI)})] + [${fe2(C)}×${UminE} / ${UminI}] − 40 − ${fe2(PL)}\n` +
       `   = ${fe2(qPuro)} + ${fe2(qCaric)} − 40 − ${fe2(PL)}\n` +
-      `   = ${fe2(lordo)} − 40 − ${fe2(PL)} = ${nessunRimborso ? '⚠ ≤ 0 → rimborso € 0,00' : '€ '+fe2(rimborso)}`;
+      `   = ${fe2(lordoRimb)} − 40 − ${fe2(PL)} = ${nessunRimborso ? '⚠ ≤ 0 → rimborso € 0,00' : '€ '+fe2(rimborso)}`;
 
   document.getElementById('pl-formula-detail').textContent = det;
   document.getElementById('pl-results').style.display = 'block';
