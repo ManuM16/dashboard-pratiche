@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-28T15:27:39.236Z",
+  "exportedAt": "2026-09-28T15:27:46.516Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-09-28": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
@@ -156,7 +156,8 @@
       "5003177301|ANGIONI TOMASO|43500|2026-09-25": "Carlo Zamuner",
       "ALIFIN S.R.L. - FS CAGLIARI|GARBO SALVATORE|43105.66|2026-09-28": "Carlo Zamuner",
       "ALIFIN S.R.L. - FS CAGLIARI|SERRA CORRADO|23462.07|2026-09-28": "Martina Mascia",
-      "5023306301|LICHERI FRANCESCO|7408.24|2026-09-28": "Carlo Zamuner"
+      "5023306301|LICHERI FRANCESCO|7408.24|2026-09-28": "Carlo Zamuner",
+      "5022247301|CASU JESSICA|35787|2026-09-28": "Annamaria Esposito"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-09-28",
@@ -314,6 +315,7 @@
     "5003177301|ANGIONI TOMASO|43500|2026-09-25": "Carlo Zamuner",
     "ALIFIN S.R.L. - FS CAGLIARI|GARBO SALVATORE|43105.66|2026-09-28": "Carlo Zamuner",
     "ALIFIN S.R.L. - FS CAGLIARI|SERRA CORRADO|23462.07|2026-09-28": "Martina Mascia",
-    "5023306301|LICHERI FRANCESCO|7408.24|2026-09-28": "Carlo Zamuner"
+    "5023306301|LICHERI FRANCESCO|7408.24|2026-09-28": "Carlo Zamuner",
+    "5022247301|CASU JESSICA|35787|2026-09-28": "Annamaria Esposito"
   }
 }
