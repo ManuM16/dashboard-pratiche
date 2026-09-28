@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-25T11:11:43.395Z",
+  "exportedAt": "2026-09-28T15:24:44.193Z",
   "assignments": {
-    "comm_assign_range_2023-01-05__2026-09-24": {
+    "comm_assign_range_2023-01-05__2026-09-25": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
       "5015495301|VARGIU ROBERTO|14000|2026-09-24": "Valeria Muscas",
@@ -144,13 +144,9 @@
       "4969432301|CIOT SILVIU AURELIAN|29594|2026-09-01": "Jonathan Zampa",
       "4965515301|CROCI SONIA|7500|2026-09-01": "Jonathan Zampa",
       "4942675301|BARONE FRANCESCO|40000|2026-09-01": "Jonathan Zampa"
-    },
-    "comm_assign_range_2023-01-05__2026-09-23": {
-      "null|LORIGA ROBERTO ANTONIO FRANCES|18630.8|Wed Sep 23 2026 00:00:00 GMT+0200 (Ora legale dell’Europa centrale)": "Francesca Pipia",
-      "null|PORCU VANESSA|21144.91|Wed Sep 23 2026 00:00:00 GMT+0200 (Ora legale dell’Europa centrale)": "Francesca Pipia"
     }
   },
-  "currentKey": "comm_assign_range_2023-01-05__2026-09-24",
+  "currentKey": "comm_assign_range_2023-01-05__2026-09-25",
   "currentAssign": {
     "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
     "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
