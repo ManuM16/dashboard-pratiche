@@ -3012,10 +3012,13 @@ calcCQS();
       const financial=finKey?FINANCIAL_MAP[finKey].label:(cittaRaw||'—');
       // ID univoco: numero pratica + cliente + importo + dateStr (stringa pulita, non oggetto Date)
       const id=`${numPratica}|${cliente||''}|${importo}|${dateStr}`;
-      // Calcola TAN solo per prestiti personali (NN GARANTITO + prod.6); CQS escluse (rata/rate non nel file)
-      const codProdotto=parseInt(get(['PRODOTTO'])||0)||0;
+      // Calcola TAN solo per prestiti personali; CQS escluse (rata/rate non disponibili nel file)
+      // CQS identificate da codice prodotto 13-18,34,37
+      const codProdottoRaw=get(['PRODOTTO','prodotto','Prodotto']);
+      const codProdotto=codProdottoRaw!=null?parseInt(codProdottoRaw)||0:0;
       const CQS_PRODS=new Set([13,14,15,16,17,18,34,37]);
-      const isCQS=CQS_PRODS.has(codProdotto);
+      // Se leggiamo il codice prodotto, usiamo quello; altrimenti mai escludere (meglio calcolare che perdere dati)
+      const isCQS=codProdotto>0 && CQS_PRODS.has(codProdotto);
       const tan=(!isCQS && importo && rata && nRate) ? calcolaTAN(importo, rata, nRate) : null;
       parsed.push({__id:id,__num:numPratica,__idx:i,__dateStr:dateStr,cliente,prodotto,tipo,importo,netto,nRate,rata,polizza,tan,financial,finKey,cittaRaw});
     });
