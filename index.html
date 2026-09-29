@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.10.0 · 29/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.13.0 · 29/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -819,7 +819,6 @@ tr:hover td{background:var(--surface3)}
       <!-- Layout upload + controlli + calendario -->
       <div id="comm-main-grid">
 
-        <!-- Colonna unica: upload + controlli + calendario -->
         <div style="display:flex;flex-direction:column;gap:12px">
 
           <!-- Upload zone -->
@@ -836,86 +835,92 @@ tr:hover td{background:var(--surface3)}
             <span id="comm-upload-filename" style="display:none;font-size:12px;color:var(--ink2);background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:5px 10px;font-weight:500"></span>
           </div>
 
-          <!-- Controlli (visibili dopo caricamento) -->
+          <!-- Riga filtri + calendario affiancati -->
           <div id="comm-loaded-area" style="display:none">
-            <!-- Filtro date -->
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-                <span style="font-size:12px;font-weight:600;color:var(--ink2)">📅 Periodo</span>
-                <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px">
-                  <button id="dmode-day"    onclick="commSetDateMode('day')"    class="dmode-btn dmode-active">Giorno</button>
-                  <button id="dmode-range"  onclick="commSetDateMode('range')"  class="dmode-btn">Intervallo</button>
-                  <button id="dmode-month"  onclick="commSetDateMode('month')"  class="dmode-btn">Mese</button>
-                  <button id="dmode-year"   onclick="commSetDateMode('year')"   class="dmode-btn">Anno</button>
-                  <button id="dmode-all"    onclick="commSetDateMode('all')"    class="dmode-btn">Tutto</button>
+            <div style="display:flex;gap:12px;align-items:flex-start">
+
+              <!-- Colonna sinistra: calendario (solo in modalità Giorno) -->
+              <div id="comm-cal-col" style="display:none;flex-shrink:0">
+                <div id="comm-cal-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px">
+                  <!-- header mese -->
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px">
+                    <button onclick="commCalMove(-1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese precedente">‹</button>
+                    <span id="comm-cal-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap"></span>
+                    <button onclick="commCalMove(+1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese successivo">›</button>
+                  </div>
+                  <!-- griglia -->
+                  <div id="comm-cal-grid" style="display:grid;grid-template-columns:repeat(7,32px);gap:3px;text-align:center"></div>
+                  <!-- legenda -->
+                  <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+                    <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--green-l);border:1.5px solid var(--green);display:inline-block"></span>Tutte assegnate</span>
+                    <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--amber-l);border:1.5px solid var(--amber-m);display:inline-block"></span>Parziale</span>
+                    <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--red-l);border:1.5px solid var(--red);display:inline-block"></span>Nessuna</span>
+                    <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:inline-block"></span>S/D o nessuna pratica</span>
+                  </div>
                 </div>
-                <button class="btn-comm btn-comm-secondary" style="margin-left:auto" onclick="commShowAll()">Reset</button>
-                <span class="comm-count" id="comm-count-label"></span>
-              </div>
-              <!-- Intervallo personalizzato -->
-              <div id="dmode-panel-day" style="display:none"></div>
-              <div id="dmode-panel-range" style="display:none;align-items:center;gap:8px;flex-wrap:wrap">
-                <input type="date" id="comm-range-from" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-                <span style="font-size:12px;color:var(--ink3)">→</span>
-                <input type="date" id="comm-range-to"   onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-                <span style="font-size:11px;color:var(--ink3)">Seleziona data inizio e data fine</span>
-              </div>
-              <!-- Mese -->
-              <div id="dmode-panel-month" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
-                <input type="month" id="comm-month-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-                <span style="font-size:11px;color:var(--ink3)">Seleziona un mese intero</span>
-              </div>
-              <!-- Anno -->
-              <div id="dmode-panel-year" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
-                <select id="comm-year-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
-                  <option value="">— seleziona anno —</option>
-                </select>
-                <span style="font-size:11px;color:var(--ink3)">Seleziona un anno intero</span>
-              </div>
-              <!-- Tutto -->
-              <div id="dmode-panel-all" style="display:none">
-                <span style="font-size:12px;color:var(--ink3)">Visualizzazione di tutte le pratiche nel file</span>
-              </div>
-              <!-- input nascosto per compatibilità con applyFilters -->
-              <input type="date" id="comm-date-filter" style="display:none" onchange="applyFilters()">
-              <!-- Financial filter -->
-              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-                <span style="font-size:12px;font-weight:600;color:var(--ink2)">🏢 Financial</span>
-                <select id="comm-fin-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
-                  <option value="">Tutti</option>
-                  <option value="cagliari">FS Cagliari</option>
-                  <option value="firenze">FS Firenze</option>
-                  <option value="nuoro">FS Nuoro</option>
-                  <option value="sassari">FS Sassari</option>
-                  <option value="genova">FS Genova</option>
-                  <option value="olbia">FS Olbia</option>
-                </select>
-              </div>
+              </div><!-- /calendario -->
+
+              <!-- Colonna destra: filtri periodo + filiale -->
+              <div style="flex:1;min-width:0">
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+                    <span style="font-size:12px;font-weight:600;color:var(--ink2)">📅 Periodo</span>
+                    <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px">
+                      <button id="dmode-day"    onclick="commSetDateMode('day')"    class="dmode-btn dmode-active">Giorno</button>
+                      <button id="dmode-range"  onclick="commSetDateMode('range')"  class="dmode-btn">Intervallo</button>
+                      <button id="dmode-month"  onclick="commSetDateMode('month')"  class="dmode-btn">Mese</button>
+                      <button id="dmode-year"   onclick="commSetDateMode('year')"   class="dmode-btn">Anno</button>
+                      <button id="dmode-all"    onclick="commSetDateMode('all')"    class="dmode-btn">Tutto</button>
+                    </div>
+                    <button class="btn-comm btn-comm-secondary" style="margin-left:auto" onclick="commShowAll()">Reset</button>
+                    <span class="comm-count" id="comm-count-label"></span>
+                  </div>
+                  <!-- Intervallo personalizzato -->
+                  <div id="dmode-panel-day" style="display:none"></div>
+                  <div id="dmode-panel-range" style="display:none;align-items:center;gap:8px;flex-wrap:wrap">
+                    <input type="date" id="comm-range-from" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
+                    <span style="font-size:12px;color:var(--ink3)">→</span>
+                    <input type="date" id="comm-range-to"   onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
+                    <span style="font-size:11px;color:var(--ink3)">Seleziona data inizio e data fine</span>
+                  </div>
+                  <!-- Mese -->
+                  <div id="dmode-panel-month" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
+                    <input type="month" id="comm-month-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
+                    <span style="font-size:11px;color:var(--ink3)">Seleziona un mese intero</span>
+                  </div>
+                  <!-- Anno -->
+                  <div id="dmode-panel-year" style="display:none;align-items:center;gap:10px;flex-wrap:wrap">
+                    <select id="comm-year-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink)">
+                      <option value="">— seleziona anno —</option>
+                    </select>
+                    <span style="font-size:11px;color:var(--ink3)">Seleziona un anno intero</span>
+                  </div>
+                  <!-- Tutto -->
+                  <div id="dmode-panel-all" style="display:none">
+                    <span style="font-size:12px;color:var(--ink3)">Visualizzazione di tutte le pratiche nel file</span>
+                  </div>
+                  <!-- input nascosto per compatibilità con applyFilters -->
+                  <input type="date" id="comm-date-filter" style="display:none" onchange="applyFilters()">
+                  <!-- Financial filter -->
+                  <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                    <span style="font-size:12px;font-weight:600;color:var(--ink2)">🏢 Financial</span>
+                    <select id="comm-fin-filter" onchange="applyFilters()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
+                      <option value="">Tutti</option>
+                      <option value="cagliari">FS Cagliari</option>
+                      <option value="firenze">FS Firenze</option>
+                      <option value="nuoro">FS Nuoro</option>
+                      <option value="sassari">FS Sassari</option>
+                      <option value="genova">FS Genova</option>
+                      <option value="olbia">FS Olbia</option>
+                    </select>
+                  </div>
+                </div>
+              </div><!-- /filtri -->
+
             </div>
           </div><!-- /comm-loaded-area -->
 
-          <!-- Calendario (visibile solo in modalità Giorno, dopo caricamento) -->
-          <div id="comm-cal-col" style="display:none">
-            <div id="comm-cal-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:inline-block">
-              <!-- header mese -->
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px">
-                <button onclick="commCalMove(-1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese precedente">‹</button>
-                <span id="comm-cal-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap"></span>
-                <button onclick="commCalMove(+1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese successivo">›</button>
-              </div>
-              <!-- griglia -->
-              <div id="comm-cal-grid" style="display:grid;grid-template-columns:repeat(7,32px);gap:3px;text-align:center"></div>
-              <!-- legenda -->
-              <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--green-l);border:1.5px solid var(--green);display:inline-block"></span>Tutte assegnate</span>
-                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--amber-l);border:1.5px solid var(--amber-m);display:inline-block"></span>Parziale</span>
-                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--red-l);border:1.5px solid var(--red);display:inline-block"></span>Nessuna</span>
-                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:inline-block"></span>S/D o nessuna pratica</span>
-              </div>
-            </div>
-          </div><!-- /calendario -->
-
-        </div><!-- /colonna unica -->
+        </div>
 
       </div><!-- /layout -->
 
@@ -1001,13 +1006,30 @@ tr:hover td{background:var(--surface3)}
                   <button class="obj-qtab" onclick="objSetQ('Q4',this)">Q4</button>
                 </div>
               </div>
-              <!-- Sub-tabs: Tutte / Per Filiale -->
-              <div id="obj-view-tabs" style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:11.5px;margin-bottom:10px">
-                <button class="dmode-btn dmode-active" id="obj-vtab-all" onclick="objSetView('all',this)">Tutte le filiali</button>
-                <button class="dmode-btn" id="obj-vtab-fil" onclick="objSetView('filiale',this)">Per filiale</button>
+              <!-- Livello 1: obiettivo trimestrale totale -->
+              <div style="margin-bottom:10px">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:4px">Obiettivo trimestrale totale (€)</div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <input type="text" inputmode="decimal" id="obj-q-total"
+                    class="obj-month-input" style="max-width:160px;font-size:14px;font-weight:700"
+                    placeholder="es. 2.000.000"
+                    oninput="objSetQTotal(this.value)">
+                  <button onclick="objRipartisciMesi()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:7px;background:var(--surface2);font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);white-space:nowrap;font-family:'Outfit',sans-serif" title="Ripartisci equamente sui 3 mesi">÷ Ripartisci mesi</button>
+                </div>
               </div>
-              <!-- Input section rendered by JS -->
-              <div id="obj-inputs"></div>
+              <!-- Livello 2: obiettivo per mese -->
+              <div style="margin-bottom:10px" id="obj-mesi-section">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:4px">Per mese</div>
+                <div id="obj-inputs" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px"></div>
+              </div>
+              <!-- Livello 3: obiettivo per filiale per mese -->
+              <div id="obj-filiale-section">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)">Per filiale</div>
+                  <button onclick="objRipartisciFiliali()" style="padding:3px 8px;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);font-size:10px;font-weight:600;cursor:pointer;color:var(--teal);font-family:'Outfit',sans-serif" title="Ripartisci equamente per filiale">÷ Ripartisci</button>
+                </div>
+                <div id="obj-fil-inputs"></div>
+              </div>
               <!-- Results section rendered by JS -->
               <div id="obj-results" style="margin-top:10px"></div>
             </div>
@@ -2942,19 +2964,20 @@ calcPolizza();
   let _currentView = 'all'; // 'all' | 'filiale'
 
   // Persistent storage: obiettivi tutte le filiali [Q][monthIdx]
-  const _objData = {};   // _objData['Q3'][7] = 500000
-  // Persistent storage: obiettivi per filiale [Q][finKey][monthIdx]
-  const _objDataFil = {}; // _objDataFil['Q3']['cagliari'][7] = 80000
+  // _objQTotal['Q3'] = 2000000  — obiettivo trimestrale totale
+  const _objQTotal = {};
+  // _objData['Q3'][7] = 500000  — obiettivo per mese (idx 0-based)
+  const _objData = {};
+  // _objDataFil['Q3']['cagliari'][7] = 80000  — obiettivo per filiale per mese
+  const _objDataFil = {};
 
   const pf = s => parseFloat((s||'').toString().replace(/\./g,'').replace(',','.')) || 0;
   const fe  = v => v.toLocaleString('it-IT',{minimumFractionDigits:0,maximumFractionDigits:0});
   const fe2 = v => v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
 
-  // Imposta Q attivo dal markup all'avvio
   function _initQTabs(){
     document.querySelectorAll('.obj-qtab').forEach(b=>{
-      const isActive = b.textContent.trim() === _currentQ;
-      b.classList.toggle('obj-qtab-active', isActive);
+      b.classList.toggle('obj-qtab-active', b.textContent.trim() === _currentQ);
     });
   }
 
@@ -2966,15 +2989,46 @@ calcPolizza();
     objCalc();
   };
 
-  window.objSetView = function(view, btn){
-    _currentView = view;
-    document.querySelectorAll('#obj-view-tabs .dmode-btn').forEach(b=>b.classList.remove('dmode-active'));
-    btn.classList.add('dmode-active');
+  // Aggiorna obiettivo trimestrale totale
+  window.objSetQTotal = function(val){
+    _objQTotal[_currentQ] = pf(val);
+    objCalc();
+  };
+
+  // Ripartisci obiettivo trimestrale equamente sui 3 mesi
+  window.objRipartisciMesi = function(){
+    const tot = _objQTotal[_currentQ] || 0;
+    if(!tot) return;
+    const months = Q_MONTHS[_currentQ];
+    const perMese = Math.round(tot / months.length);
+    if(!_objData[_currentQ]) _objData[_currentQ] = {};
+    months.forEach((mi, i) => {
+      // Ultimo mese prende il resto per evitare arrotondamenti
+      _objData[_currentQ][mi] = (i === months.length - 1) ? tot - perMese * (months.length - 1) : perMese;
+    });
     objRenderInputs();
     objCalc();
   };
 
-  // Salva valore nell'oggetto persistente
+  // Ripartisci ogni mese equamente sulle filiali
+  window.objRipartisciFiliali = function(){
+    const months = Q_MONTHS[_currentQ];
+    if(!_objDataFil[_currentQ]) _objDataFil[_currentQ] = {};
+    for(const mi of months){
+      const mObi = (_objData[_currentQ]||{})[mi] || 0;
+      if(!mObi) continue;
+      const perFil = Math.round(mObi / FILIALI.length);
+      for(let i = 0; i < FILIALI.length; i++){
+        const fk = FILIALI[i];
+        if(!_objDataFil[_currentQ][fk]) _objDataFil[_currentQ][fk] = {};
+        _objDataFil[_currentQ][fk][mi] = (i === FILIALI.length - 1) ? mObi - perFil * (FILIALI.length - 1) : perFil;
+      }
+    }
+    objRenderInputs();
+    objCalc();
+  };
+
+  // Salva input mensile
   function objSaveInput(q, monthIdx, finKey, val){
     if(finKey){
       if(!_objDataFil[q]) _objDataFil[q]={};
@@ -2987,8 +3041,6 @@ calcPolizza();
     objCalc();
   }
 
-  // Recupera erogato per uno specifico mese/anno e finKey
-  // finKey: null=tutte, stringa=filiale specifica
   function getErogato(finKey, refY, refM){
     const rows = window._commPraticheRef ? window._commPraticheRef() : [];
     if(!rows.length) return 0;
@@ -3002,48 +3054,44 @@ calcPolizza();
     return tot;
   }
 
-  // Recupera anno dal filtro periodo (o anno corrente)
   function _getRefYear(){
     const selMonth = document.getElementById('kpi-month-filter')?.value || '';
     return selMonth ? parseInt(selMonth.split('-')[0]) : new Date().getFullYear();
   }
 
-  // Mese di riferimento per i risultati mensili (dal filtro periodo)
-  function _getRefMonth(){
-    const selMonth = document.getElementById('kpi-month-filter')?.value || '';
-    if(selMonth){
-      return parseInt(selMonth.split('-')[1]) - 1; // 0-based
-    }
-    return new Date().getMonth();
-  }
-
-  // Render inputs per il Q e la view correnti
+  // Render: obiettivo trimestrale + mesi + filiali
   window.objRenderInputs = function(){
-    const container = document.getElementById('obj-inputs');
-    if(!container) return;
-    const months = Q_MONTHS[_currentQ]; // es. [6,7,8]
+    const months = Q_MONTHS[_currentQ];
 
-    if(_currentView === 'all'){
-      // 3 input fields, uno per mese
-      let html = `<div class="obj-input-label">Obiettivo mensile (€) — Tutte le filiali</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">`;
+    // Livello 1: campo Q totale
+    const qtInput = document.getElementById('obj-q-total');
+    if(qtInput){
+      const stored = _objQTotal[_currentQ] || '';
+      qtInput.value = stored ? stored.toLocaleString('it-IT') : '';
+    }
+
+    // Livello 2: input per mese
+    const mesiContainer = document.getElementById('obj-inputs');
+    if(mesiContainer){
+      let html = '';
       for(const mi of months){
         const stored = (_objData[_currentQ]||{})[mi] || '';
         const storedStr = stored ? stored.toLocaleString('it-IT') : '';
         html += `<div>
-          <div style="font-size:10px;color:var(--ink3);margin-bottom:3px">${MONTH_LABELS[mi]}</div>
+          <div style="font-size:10px;color:var(--ink3);margin-bottom:3px;font-weight:600">${MONTH_LABELS[mi]}</div>
           <input type="text" inputmode="decimal" class="obj-month-input"
             data-q="${_currentQ}" data-mi="${mi}"
             placeholder="0"
             value="${storedStr}"
-            oninput="objSaveInput(this.dataset.q,+this.dataset.mi,null,this.value)"
-          >
+            oninput="objSaveInput(this.dataset.q,+this.dataset.mi,null,this.value)">
         </div>`;
       }
-      html += `</div>`;
-      container.innerHTML = html;
-    } else {
-      // Grid: filiali come righe, mesi come colonne
+      mesiContainer.innerHTML = html;
+    }
+
+    // Livello 3: grid filiali × mesi
+    const filContainer = document.getElementById('obj-fil-inputs');
+    if(filContainer){
       let html = `<div class="obj-fil-grid">
         <div class="obj-fil-grid-head"></div>`;
       for(const mi of months){
@@ -3056,18 +3104,15 @@ calcPolizza();
           const storedStr = stored ? stored.toLocaleString('it-IT') : '';
           html += `<input type="text" inputmode="decimal" class="obj-fil-input"
             data-q="${_currentQ}" data-mi="${mi}" data-fk="${fk}"
-            placeholder="0"
-            value="${storedStr}"
-            oninput="objSaveInput(this.dataset.q,+this.dataset.mi,this.dataset.fk,this.value)"
-          >`;
+            placeholder="0" value="${storedStr}"
+            oninput="objSaveInput(this.dataset.q,+this.dataset.mi,this.dataset.fk,this.value)">`;
         }
       }
       html += `</div>`;
-      container.innerHTML = html;
+      filContainer.innerHTML = html;
     }
   };
 
-  // Calcola e renderizza i risultati
   window.objCalc = function(){
     const res = document.getElementById('obj-results');
     if(!res) return;
@@ -3075,58 +3120,29 @@ calcPolizza();
 
     const months = Q_MONTHS[_currentQ];
     const refY = _getRefYear();
-    const refM = _getRefMonth();
-    const qYear = _getRefYear();
+    const qYear = refY;
 
-    if(_currentView === 'all'){
-      // Controlla se ci sono obiettivi inseriti
-      const hasAny = months.some(mi => ((_objData[_currentQ]||{})[mi]||0) > 0);
-      if(!hasAny){ res.innerHTML = '<div style="font-size:11px;color:var(--ink3);text-align:center;padding:8px 0">Inserisci gli obiettivi mensili sopra per vedere i risultati.</div>'; return; }
+    const hasAny = months.some(mi => ((_objData[_currentQ]||{})[mi]||0) > 0);
+    if(!hasAny && !_objQTotal[_currentQ]){ return; }
 
-      const grid = document.createElement('div');
-      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px';
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px';
 
-      let qObiettivo = 0, qErogato = 0;
-      for(const mi of months){
-        const obi = ((_objData[_currentQ]||{})[mi]||0);
-        const era = getErogato(null, refY, mi);
-        qObiettivo += obi; qErogato += era;
-        // Mostra card per ogni mese
-        renderCardIntoEl(grid, {label:`${MONTH_LABELS[mi]}`, period:`${refY}`, raggiunto:era, obiettivo:obi, isTeal:false});
-      }
-      // Quarter summary
-      renderCardIntoEl(grid, {label:`Totale ${_currentQ}`, period:`${qYear}`, raggiunto:qErogato, obiettivo:qObiettivo, isTeal:false});
-      res.appendChild(grid);
-
-    } else {
-      // Vista per filiale: mostra filiale attiva dal tab kpi-view-tabs
-      const activeKvTab = document.querySelector('#kpi-view-tabs .dmode-active');
-      const selFinKey = activeKvTab ? activeKvTab.id.replace('kvtab-','') : 'all';
-
-      if(selFinKey === 'all'){
-        res.innerHTML = '<div style="font-size:11px;color:var(--ink3);text-align:center;padding:8px 0">Seleziona una filiale nel filtro sopra per vedere i risultati.</div>';
-        return;
-      }
-
-      const hasAny = months.some(mi => (((_objDataFil[_currentQ]||{})[selFinKey]||{})[mi]||0) > 0);
-      if(!hasAny){ res.innerHTML = `<div style="font-size:11px;color:var(--ink3);text-align:center;padding:8px 0">Inserisci gli obiettivi per ${FIL_LABELS[selFinKey]} sopra.</div>`; return; }
-
-      const grid = document.createElement('div');
-      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px';
-
-      let qObiettivo = 0, qErogato = 0;
-      for(const mi of months){
-        const obi = (((_objDataFil[_currentQ]||{})[selFinKey]||{})[mi]||0);
-        const era = getErogato(selFinKey, refY, mi);
-        qObiettivo += obi; qErogato += era;
-        renderCardIntoEl(grid, {label:`${FIL_LABELS[selFinKey]} · ${MONTH_LABELS[mi]}`, period:`${refY}`, raggiunto:era, obiettivo:obi, isTeal:true});
-      }
-      renderCardIntoEl(grid, {label:`${FIL_LABELS[selFinKey]} · ${_currentQ}`, period:`${qYear}`, raggiunto:qErogato, obiettivo:qObiettivo, isTeal:true});
-      res.appendChild(grid);
+    let qObiettivo = 0, qErogato = 0;
+    for(const mi of months){
+      const obi = ((_objData[_currentQ]||{})[mi]||0);
+      const era = getErogato(null, refY, mi);
+      qObiettivo += obi; qErogato += era;
+      if(obi > 0) renderCardIntoEl(grid, {label:`${MONTH_LABELS[mi]}`, period:`${refY}`, raggiunto:era, obiettivo:obi, isTeal:false});
     }
+    // Usa il totale trimestrale se non ci sono mesi
+    const qObj = qObiettivo || _objQTotal[_currentQ] || 0;
+    if(qObj > 0){
+      renderCardIntoEl(grid, {label:`Totale ${_currentQ}`, period:`${qYear}`, raggiunto:qErogato, obiettivo:qObj, isTeal:false});
+    }
+    if(grid.children.length) res.appendChild(grid);
   };
 
-  // Helper: appende una card a un elemento DOM
   function renderCardIntoEl(parent, opts){
     const {label, period, raggiunto, obiettivo, isTeal} = opts;
     const el = document.createElement('div');
@@ -3147,18 +3163,13 @@ calcPolizza();
     parent.appendChild(el);
   }
 
-  // Esponi objSaveInput globalmente (usato dagli oninput inline)
   window.objSaveInput = objSaveInput;
 
-  // commRegenKPI hook: verrà applicato dopo il caricamento del modulo commerciali
-
-  // Inizializzazione al caricamento
   document.addEventListener('DOMContentLoaded', function(){
     _initQTabs();
     objRenderInputs();
     objCalc();
   });
-  // Fallback se DOMContentLoaded già fired
   if(document.readyState !== 'loading'){
     _initQTabs();
     objRenderInputs();
@@ -3337,7 +3348,7 @@ calcPolizza();
       document.getElementById('comm-loaded-area').style.display='';
       document.getElementById('comm-loaded-area-table').style.display='';
       const calCol=document.getElementById('comm-cal-col');
-      if(calCol) calCol.style.display='';
+      if(calCol) calCol.style.display='flex';
 
       const savedDate=pratichePayload.exportedAt
         ?new Date(pratichePayload.exportedAt).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})
@@ -3478,7 +3489,7 @@ calcPolizza();
         document.getElementById('comm-loaded-area').style.display='';
         document.getElementById('comm-loaded-area-table').style.display='';
         const calCol=document.getElementById('comm-cal-col');
-        if(calCol) calCol.style.display='';
+        if(calCol) calCol.style.display='flex';
         // Inizializza/aggiorna calendario al mese corrente
         _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
         applyFilters();
@@ -3603,7 +3614,7 @@ calcPolizza();
     });
     // Mostra/nascondi colonna calendario
     const calCol=document.getElementById('comm-cal-col');
-    if(calCol) calCol.style.display=(mode==='day'?'':'none');
+    if(calCol) calCol.style.display=(mode==='day'?'flex':'none');
     if(mode==='day') commCalRender();
     applyFilters();
   };
@@ -3856,7 +3867,7 @@ calcPolizza();
         document.getElementById('comm-loaded-area').style.display='';
         document.getElementById('comm-loaded-area-table').style.display='';
         const calCol2=document.getElementById('comm-cal-col');
-        if(calCol2) calCol2.style.display='';
+        if(calCol2) calCol2.style.display='flex';
         const savedDate=pratichePayload.exportedAt?new Date(pratichePayload.exportedAt).toLocaleDateString('it-IT'):'—';
         document.querySelector('.comm-upload-label').textContent='☁️ '+commFileName+' (da GitHub)';
         document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche — backup del '+savedDate;
@@ -4435,7 +4446,7 @@ calcPolizza();
     document.getElementById('comm-loaded-area').style.display='';
     document.getElementById('comm-loaded-area-table').style.display='';
     const calCol3=document.getElementById('comm-cal-col');
-    if(calCol3) calCol3.style.display='';
+    if(calCol3) calCol3.style.display='flex';
     _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
     applyFilters();
     commCalRender();
