@@ -1122,7 +1122,7 @@ tr:hover td{background:var(--surface3)}
             </div>
             <div class="calc-field">
               <label>Capitale iniziale (DI, €)</label>
-              <input type="number" id="pl-cap-iniz" value="10000" min="0" step="0.01" oninput="calcPolizza()">
+              <input type="text" inputmode="decimal" id="pl-cap-iniz" value="10000" oninput="calcPolizza()">
               <span class="hint">Importo finanziato originario</span>
             </div>
             <div class="calc-field">
@@ -1132,7 +1132,7 @@ tr:hover td{background:var(--surface3)}
             </div>
             <div class="calc-field">
               <label>Premio lordo pagato (€)</label>
-              <input type="number" id="pl-premio" min="0" step="0.01" oninput="calcPolizza()">
+              <input type="text" inputmode="decimal" id="pl-premio" placeholder="es. 2.457,60" oninput="calcPolizza()">
               <span class="hint">Premio totale versato all'inizio — incluse spese di emissione € 15,00 (inserire manualmente)</span>
             </div>
             <div class="calc-field">
@@ -1152,12 +1152,12 @@ tr:hover td{background:var(--surface3)}
             </div>
             <div class="calc-field">
               <label>Capitale residuo alla data di estinzione (DR, €)</label>
-              <input type="number" id="pl-cap-res" value="7224" min="0" step="0.01" oninput="calcPolizza()">
+              <input type="text" inputmode="decimal" id="pl-cap-res" placeholder="es. 25.492,21" oninput="calcPolizza()">
               <span class="hint">Debito residuo al momento dell'estinzione (dal piano di ammortamento)</span>
             </div>
             <div class="calc-field" id="pl-pl-wrap" style="display:none">
               <label>Premio lordo nuovo piano (PL, €)</label>
-              <input type="number" id="pl-pl" value="0" min="0" step="0.01" oninput="calcPolizza()">
+              <input type="text" inputmode="decimal" id="pl-pl" placeholder="es. 1.200,00" oninput="calcPolizza()">
               <span class="hint">Solo per estinzione parziale: premio lordo ricalcolato sulla durata e capitale residui</span>
             </div>
           </div>
@@ -2720,12 +2720,14 @@ function calcPolizza(){
   document.getElementById('pl-pl-wrap').style.display = tipo==='parziale' ? 'block' : 'none';
 
   const fe2 = v => v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+  // Normalizza sia formato IT (1.234,56) sia EN (1234.56)
+  const pf = s => parseFloat((s||'').replace(/\./g,'').replace(',','.')) || 0;
 
-  const DI     = parseFloat(document.getElementById('pl-cap-iniz').value) || 0;
+  const DI     = pf(document.getElementById('pl-cap-iniz').value);
   const durata = parseFloat(document.getElementById('pl-durata').value) || 0;
-  const premioLordo = parseFloat(document.getElementById('pl-premio').value) || 0;
-  const DR     = parseFloat(document.getElementById('pl-cap-res').value) || 0;
-  const PL     = tipo==='parziale' ? (parseFloat(document.getElementById('pl-pl').value) || 0) : 0;
+  const premioLordo = pf(document.getElementById('pl-premio').value);
+  const DR     = pf(document.getElementById('pl-cap-res').value);
+  const PL     = tipo==='parziale' ? pf(document.getElementById('pl-pl').value) : 0;
 
   // Tasso per convenzione: 0,11% per CL/25/802, 0,07% per CL/25/801
   const tasso = conv === '802' ? 0.0011 : 0.0007;
