@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.7.0 · 29/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.8.0 · 29/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -680,6 +680,12 @@ tr:hover td{background:var(--surface3)}
         .comm-upload-icon{font-size:32px;margin-bottom:8px}
         .comm-upload-label{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px}
         .comm-upload-sub{font-size:12px;color:var(--ink3)}
+        .comm-upload-compact{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1.5px dashed var(--border2);border-radius:9px;background:var(--surface);cursor:pointer;transition:.2s;position:relative;font-size:13px}
+        .comm-upload-compact:hover,.comm-upload-compact.drag{border-color:var(--blue-m);background:var(--blue-l)}
+        .comm-upload-compact input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+        .comm-upload-compact-icon{font-size:16px;line-height:1}
+        .comm-upload-compact-label{font-weight:600;color:var(--ink);font-size:13px}
+        .comm-upload-compact-hint{font-size:11px;color:var(--ink3)}
         .comm-date-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
         .comm-date-bar label{font-size:12px;color:var(--ink2);font-weight:500}
         .comm-date-bar input[type=date]{padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer}
@@ -725,7 +731,7 @@ tr:hover td{background:var(--surface3)}
         .comm-manage-agents{font-size:11.5px;color:var(--blue);cursor:pointer;margin-left:auto;text-decoration:underline}
 
         /* KPI grid per commerciale */
-        .comm-kpi-section{margin-top:24px}
+        .comm-kpi-section{margin-top:16px}
         .comm-kpi-section h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;color:var(--ink)}
         /* Obiettivi widget */
         .obj-qtab{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--ink2);font-family:'Outfit',sans-serif;transition:.15s}
@@ -796,11 +802,14 @@ tr:hover td{background:var(--surface3)}
         <div style="display:flex;flex-direction:column;gap:12px">
 
           <!-- Upload zone -->
-          <div class="comm-upload-zone" id="comm-upload-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="commHandleDrop(event)">
+          <div id="comm-upload-zone" class="comm-upload-compact"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="commHandleDrop(event)">
             <input type="file" accept=".xlsx,.xls" onchange="commLoadFile(this.files[0])">
-            <div class="comm-upload-icon">📂</div>
-            <div class="comm-upload-label">Carica file erogato Excel</div>
-            <div class="comm-upload-sub">Trascina qui il file XLSX oppure clicca per selezionarlo</div>
+            <span class="comm-upload-compact-icon">📂</span>
+            <span class="comm-upload-compact-label">Carica file Excel erogato</span>
+            <span class="comm-upload-compact-hint">(.xlsx — trascina o clicca)</span>
           </div>
 
           <!-- Controlli (visibili dopo caricamento) -->
@@ -927,35 +936,37 @@ tr:hover td{background:var(--surface3)}
         </div>
 
         <!-- KPI section -->
-        <div class="comm-kpi-section" id="comm-kpi-section" style="display:none">
-          <!-- Filtro periodo KPI + Obiettivi -->
-          <div style="display:flex;align-items:stretch;gap:14px;margin-bottom:12px;flex-wrap:wrap">
-            <!-- Colonna sinistra: periodo + filiale -->
-            <div style="display:flex;flex-direction:column;gap:8px;flex:0 0 auto">
-              <!-- Filtro periodo -->
-              <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border2);flex-wrap:wrap">
-                <span style="font-size:12.5px;font-weight:600;color:var(--ink2)">📅 Periodo analisi:</span>
-                <select id="kpi-month-filter" onchange="commRegenKPI()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
-                  <option value="">Tutto il file</option>
-                </select>
-                <span id="kpi-period-info" style="font-size:11.5px;color:var(--ink3)"></span>
-              </div>
-              <!-- Filtro filiale -->
-              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border2)">
-                <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px">Filiale:</span>
-                <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px" id="kpi-view-tabs">
-                  <button class="dmode-btn dmode-active" onclick="commSetKpiView('all')"       id="kvtab-all">Tutte</button>
-                  <button class="dmode-btn"              onclick="commSetKpiView('cagliari')"   id="kvtab-cagliari">Cagliari</button>
-                  <button class="dmode-btn"              onclick="commSetKpiView('firenze')"    id="kvtab-firenze">Firenze</button>
-                  <button class="dmode-btn"              onclick="commSetKpiView('nuoro')"      id="kvtab-nuoro">Nuoro</button>
-                  <button class="dmode-btn"              onclick="commSetKpiView('sassari')"    id="kvtab-sassari">Sassari</button>
-                  <button class="dmode-btn"              onclick="commSetKpiView('genova')"     id="kvtab-genova">Genova</button>
-                  <button class="dmode-btn"              onclick="commSetKpiView('olbia')"      id="kvtab-olbia">Olbia</button>
-                </div>
+        <div class="comm-kpi-section" id="comm-kpi-section" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+          <!-- Top control bar (full width) -->
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border)">
+            <!-- Periodo -->
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:12px;font-weight:600;color:var(--ink2)">📅 Periodo:</span>
+              <select id="kpi-month-filter" onchange="commRegenKPI()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
+                <option value="">Tutto il file</option>
+              </select>
+              <span id="kpi-period-info" style="font-size:11px;color:var(--ink3)"></span>
+            </div>
+            <!-- Separator -->
+            <div style="width:1px;height:20px;background:var(--border2)"></div>
+            <!-- Filiale tabs -->
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px">Filiale:</span>
+              <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:12px" id="kpi-view-tabs">
+                <button class="dmode-btn dmode-active" onclick="commSetKpiView('all')"       id="kvtab-all">Tutte</button>
+                <button class="dmode-btn"              onclick="commSetKpiView('cagliari')"   id="kvtab-cagliari">Cagliari</button>
+                <button class="dmode-btn"              onclick="commSetKpiView('firenze')"    id="kvtab-firenze">Firenze</button>
+                <button class="dmode-btn"              onclick="commSetKpiView('nuoro')"      id="kvtab-nuoro">Nuoro</button>
+                <button class="dmode-btn"              onclick="commSetKpiView('sassari')"    id="kvtab-sassari">Sassari</button>
+                <button class="dmode-btn"              onclick="commSetKpiView('genova')"     id="kvtab-genova">Genova</button>
+                <button class="dmode-btn"              onclick="commSetKpiView('olbia')"      id="kvtab-olbia">Olbia</button>
               </div>
             </div>
-            <!-- Widget Obiettivi (destra, stessa altezza colonna sinistra) -->
-            <div id="obj-widget" style="flex:1;min-width:320px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;align-self:stretch;box-sizing:border-box">
+          </div>
+          <!-- Body: two-column grid -->
+          <div style="display:grid;grid-template-columns:340px 1fr;min-height:300px">
+            <!-- Left: obiettivi widget -->
+            <div id="obj-widget" style="border-right:1px solid var(--border);padding:14px 16px;box-sizing:border-box">
               <!-- Header con Q tabs -->
               <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
                 <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3)">🎯 Obiettivi erogato</span>
@@ -976,11 +987,12 @@ tr:hover td{background:var(--surface3)}
               <!-- Results section rendered by JS -->
               <div id="obj-results" style="margin-top:10px"></div>
             </div>
+            <!-- Right: KPI cards -->
+            <div style="padding:14px 16px;box-sizing:border-box">
+              <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 12px;color:var(--ink)">📈 Analisi Erogato</h3>
+              <div id="comm-kpi-cards"></div>
+            </div>
           </div>
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
-            <h3 style="margin:0">📈 Analisi Erogato</h3>
-          </div>
-          <div id="comm-kpi-cards"></div>
         </div>
       </div>
 
