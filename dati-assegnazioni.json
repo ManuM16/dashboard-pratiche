@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-29T15:39:04.186Z",
+  "exportedAt": "2026-09-29T15:39:13.192Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-09-29": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
@@ -170,7 +170,8 @@
       "5018026301|LIKAJ REZART|30000|2026-09-29": "Lorenzo Fontanelli",
       "5015480301|SECHI PAOLETTO|23500|2026-09-29": "Antonella Sanna",
       "5012968301|BARCELLONA SAMANTHA|12922.2|2026-09-29": "Alessio Dicati",
-      "ALIFIN S.R.L. - FS SASSARI|CATUOGNO ANTONIO|39416.27|2026-09-29": "Francesca Pipia"
+      "ALIFIN S.R.L. - FS SASSARI|CATUOGNO ANTONIO|39416.27|2026-09-29": "Francesca Pipia",
+      "ALIFIN SRL - FS GENOVA|VERRILLO RAFFAELE|25086.62|2026-09-29": "Alessio Dicati"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-09-29",
@@ -342,6 +343,7 @@
     "5018026301|LIKAJ REZART|30000|2026-09-29": "Lorenzo Fontanelli",
     "5015480301|SECHI PAOLETTO|23500|2026-09-29": "Antonella Sanna",
     "5012968301|BARCELLONA SAMANTHA|12922.2|2026-09-29": "Alessio Dicati",
-    "ALIFIN S.R.L. - FS SASSARI|CATUOGNO ANTONIO|39416.27|2026-09-29": "Francesca Pipia"
+    "ALIFIN S.R.L. - FS SASSARI|CATUOGNO ANTONIO|39416.27|2026-09-29": "Francesca Pipia",
+    "ALIFIN SRL - FS GENOVA|VERRILLO RAFFAELE|25086.62|2026-09-29": "Alessio Dicati"
   }
 }
