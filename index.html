@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.14.0 · 29/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.15.0 · 29/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3328,15 +3328,19 @@ calcPolizza();
         if(btn) btn.classList.toggle('dmode-active',m==='day');
       });
       document.getElementById('comm-loaded-area').style.display='flex';
-      document.getElementById('comm-loaded-area-table').style.display='';
+      document.getElementById('comm-loaded-area-table').style.display='block';
       const calCol=document.getElementById('comm-cal-col');
       if(calCol) calCol.style.display='flex';
 
       const savedDate=pratichePayload.exportedAt
         ?new Date(pratichePayload.exportedAt).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})
         :'—';
-      document.querySelector('.comm-upload-label').textContent='☁️ '+commFileName+' (ripristinato da GitHub)';
-      document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche — backup del '+savedDate;
+      const _ul1=document.querySelector('.comm-upload-compact-label');
+      const _uh1=document.querySelector('.comm-upload-compact-hint');
+      const _uf1=document.getElementById('comm-upload-filename');
+      if(_ul1) _ul1.textContent='☁️ '+commFileName+' (ripristinato da GitHub)';
+      if(_uh1) _uh1.textContent=commPratiche.length+' pratiche';
+      if(_uf1){ _uf1.textContent='📄 '+commFileName; _uf1.style.display=''; }
 
       applyFilters();
       commCalRender();
@@ -3469,7 +3473,7 @@ calcPolizza();
           document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
         });
         document.getElementById('comm-loaded-area').style.display='flex';
-        document.getElementById('comm-loaded-area-table').style.display='';
+        document.getElementById('comm-loaded-area-table').style.display='block';
         const calCol=document.getElementById('comm-cal-col');
         if(calCol) calCol.style.display='flex';
         // Inizializza/aggiorna calendario al mese corrente
@@ -3847,12 +3851,16 @@ calcPolizza();
           document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
         });
         document.getElementById('comm-loaded-area').style.display='flex';
-        document.getElementById('comm-loaded-area-table').style.display='';
+        document.getElementById('comm-loaded-area-table').style.display='block';
         const calCol2=document.getElementById('comm-cal-col');
         if(calCol2) calCol2.style.display='flex';
         const savedDate=pratichePayload.exportedAt?new Date(pratichePayload.exportedAt).toLocaleDateString('it-IT'):'—';
-        document.querySelector('.comm-upload-label').textContent='☁️ '+commFileName+' (da GitHub)';
-        document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche — backup del '+savedDate;
+        const _ul2=document.querySelector('.comm-upload-compact-label');
+        const _uh2=document.querySelector('.comm-upload-compact-hint');
+        const _uf2=document.getElementById('comm-upload-filename');
+        if(_ul2) _ul2.textContent='☁️ '+commFileName+' (da GitHub)';
+        if(_uh2) _uh2.textContent=commPratiche.length+' pratiche — backup del '+savedDate;
+        if(_uf2){ _uf2.textContent='📄 '+commFileName; _uf2.style.display=''; }
       }
 
       // 3. Applica assegnazioni alle pratiche caricate
@@ -3976,8 +3984,12 @@ calcPolizza();
     document.getElementById('comm-loaded-area-table').style.display='none';
     const calColClr=document.getElementById('comm-cal-col');
     if(calColClr) calColClr.style.display='none';
-    document.querySelector('.comm-upload-label').textContent='Carica file Excel (.xlsx)';
-    document.querySelector('.comm-upload-sub').textContent='Trascina qui o clicca per selezionare';
+    const _ul3=document.querySelector('.comm-upload-compact-label');
+    const _uh3=document.querySelector('.comm-upload-compact-hint');
+    const _uf3=document.getElementById('comm-upload-filename');
+    if(_ul3) _ul3.textContent='Carica file Excel erogato';
+    if(_uh3) _uh3.textContent='(.xlsx — trascina o clicca)';
+    if(_uf3) _uf3.style.display='none';
     renderTable();
     alert('✅ Tutti i dati sono stati cancellati (assegnazioni + dati Excel).');
   };
@@ -4426,7 +4438,7 @@ calcPolizza();
       document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
     });
     document.getElementById('comm-loaded-area').style.display='flex';
-    document.getElementById('comm-loaded-area-table').style.display='';
+    document.getElementById('comm-loaded-area-table').style.display='block';
     const calCol3=document.getElementById('comm-cal-col');
     if(calCol3) calCol3.style.display='flex';
     _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
@@ -4434,8 +4446,12 @@ calcPolizza();
     commCalRender();
     // Non mostrare più il banner — le assegnazioni valide sono già caricate in automatico
     const savedDate=new Date(cache.savedAt).toLocaleDateString('it-IT');
-    document.querySelector('.comm-upload-label').textContent='🔄 '+commFileName+' (ripristinato)';
-    document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche — salvate il '+savedDate;
+    const _ul4=document.querySelector('.comm-upload-compact-label');
+    const _uh4=document.querySelector('.comm-upload-compact-hint');
+    const _uf4=document.getElementById('comm-upload-filename');
+    if(_ul4) _ul4.textContent='🔄 '+commFileName+' (ripristinato)';
+    if(_uh4) _uh4.textContent=commPratiche.length+' pratiche — salvate il '+savedDate;
+    if(_uf4){ _uf4.textContent='📄 '+commFileName; _uf4.style.display=''; }
   }
 
   // Ripristino automatico all'apertura della sezione commerciali
