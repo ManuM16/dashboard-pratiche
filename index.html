@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.4.0 · 28/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.5.0 · 29/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -727,6 +727,23 @@ tr:hover td{background:var(--surface3)}
         /* KPI grid per commerciale */
         .comm-kpi-section{margin-top:24px}
         .comm-kpi-section h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;color:var(--ink)}
+        /* Obiettivi widget */
+        .obj-qtab{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--ink2);font-family:'Outfit',sans-serif;transition:.15s}
+        .obj-qtab:hover{background:var(--surface);color:var(--ink)}
+        .obj-qtab-active{background:var(--ink)!important;color:#fff!important;font-weight:600}
+        .obj-card{background:var(--blue-l);border:1px solid #c5d5f8;border-radius:8px;padding:8px 11px}
+        .obj-card-teal{background:var(--teal-l);border-color:#a7dece}
+        .obj-card-label{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:2px}
+        .obj-card-period{font-size:10px;color:var(--ink3);margin-bottom:4px}
+        .obj-card-main{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--blue);line-height:1.1}
+        .obj-card-teal .obj-card-main{color:var(--teal)}
+        .obj-card-sub{font-size:10px;color:var(--ink3);margin-top:2px}
+        .obj-bar-wrap{margin-top:5px;height:5px;background:rgba(0,0,0,.08);border-radius:3px;overflow:hidden}
+        .obj-bar{height:100%;border-radius:3px;transition:width .4s ease;background:var(--blue-m)}
+        .obj-card-teal .obj-bar{background:var(--teal-m)}
+        .obj-ok{color:var(--green)!important}
+        .obj-warn{color:var(--amber)!important}
+        .obj-bad{color:var(--red)!important}
         .comm-agent-card{background:var(--surface);border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px}
         .comm-agent-header{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:var(--surface2)}
         .comm-agent-avatar{width:34px;height:34px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif}
@@ -898,13 +915,61 @@ tr:hover td{background:var(--surface3)}
 
         <!-- KPI section -->
         <div class="comm-kpi-section" id="comm-kpi-section" style="display:none">
-          <!-- Filtro periodo KPI -->
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:10px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border2);flex-wrap:wrap">
-            <span style="font-size:12.5px;font-weight:600;color:var(--ink2)">📅 Periodo analisi:</span>
-            <select id="kpi-month-filter" onchange="commRegenKPI()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
-              <option value="">Tutto il file</option>
-            </select>
-            <span id="kpi-period-info" style="font-size:11.5px;color:var(--ink3)"></span>
+          <!-- Filtro periodo KPI + Obiettivi -->
+          <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+            <!-- Filtro periodo (sinistra) -->
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border2);flex-wrap:wrap;flex:0 0 auto">
+              <span style="font-size:12.5px;font-weight:600;color:var(--ink2)">📅 Periodo analisi:</span>
+              <select id="kpi-month-filter" onchange="commRegenKPI()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
+                <option value="">Tutto il file</option>
+              </select>
+              <span id="kpi-period-info" style="font-size:11.5px;color:var(--ink3)"></span>
+            </div>
+            <!-- Widget Obiettivi (destra) -->
+            <div id="obj-widget" style="flex:1;min-width:320px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+                <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3)">🎯 Obiettivi erogato</span>
+                <!-- Selettore Q -->
+                <div style="display:flex;gap:3px;background:var(--surface2);border-radius:7px;padding:2px" id="obj-q-tabs">
+                  <button class="obj-qtab obj-qtab-active" onclick="objSetQ('Q1',this)">Q1</button>
+                  <button class="obj-qtab" onclick="objSetQ('Q2',this)">Q2</button>
+                  <button class="obj-qtab" onclick="objSetQ('Q3',this)">Q3</button>
+                  <button class="obj-qtab" onclick="objSetQ('Q4',this)">Q4</button>
+                </div>
+              </div>
+              <!-- Riga input obiettivi -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+                <div>
+                  <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Obiettivo Mensile (€)</div>
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <input type="text" inputmode="decimal" id="obj-m-all" placeholder="Tutte le filiali" oninput="objCalc()"
+                      style="padding:7px 10px;border:1.5px solid var(--border2);border-radius:7px;font-size:13px;font-family:'Outfit',sans-serif;color:var(--blue);background:var(--blue-l);outline:none;width:100%">
+                    <input type="text" inputmode="decimal" id="obj-m-fin" placeholder="Financial" oninput="objCalc()"
+                      style="padding:7px 10px;border:1.5px solid var(--teal-m);border-radius:7px;font-size:13px;font-family:'Outfit',sans-serif;color:var(--teal);background:var(--teal-l);outline:none;width:100%">
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Obiettivo Quarter (€)</div>
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <input type="text" inputmode="decimal" id="obj-q-all" placeholder="Tutte le filiali" oninput="objCalc()"
+                      style="padding:7px 10px;border:1.5px solid var(--border2);border-radius:7px;font-size:13px;font-family:'Outfit',sans-serif;color:var(--blue);background:var(--blue-l);outline:none;width:100%">
+                    <input type="text" inputmode="decimal" id="obj-q-fin" placeholder="Financial" oninput="objCalc()"
+                      style="padding:7px 10px;border:1.5px solid var(--teal-m);border-radius:7px;font-size:13px;font-family:'Outfit',sans-serif;color:var(--teal);background:var(--teal-l);outline:none;width:100%">
+                  </div>
+                </div>
+              </div>
+              <!-- Risultati -->
+              <div id="obj-results" style="display:none;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <!-- Mensile Tutte -->
+                <div class="obj-card" id="obj-c-m-all"></div>
+                <!-- Mensile Financial -->
+                <div class="obj-card obj-card-teal" id="obj-c-m-fin"></div>
+                <!-- Quarter Tutte -->
+                <div class="obj-card" id="obj-c-q-all"></div>
+                <!-- Quarter Financial -->
+                <div class="obj-card obj-card-teal" id="obj-c-q-fin"></div>
+              </div>
+            </div>
           </div>
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
             <h3 style="margin:0">📈 Analisi Erogato</h3>
@@ -2799,6 +2864,120 @@ calcPolizza();
 
 <script>
 /* ══════════════════════════════════════════════
+   OBIETTIVI EROGATO — widget monitoraggio
+   ══════════════════════════════════════════════ */
+(function(){
+  // Quarter → mesi (indici 0-based)
+  const Q_MONTHS = {Q1:[0,1,2],Q2:[3,4,5],Q3:[6,7,8],Q4:[9,10,11]};
+  let _currentQ = 'Q3'; // default Q3 (luglio-settembre)
+
+  const pf = s => parseFloat((s||'').replace(/\./g,'').replace(',','.')) || 0;
+  const fe  = v => v.toLocaleString('it-IT',{minimumFractionDigits:0,maximumFractionDigits:0});
+  const fe2 = v => v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  window.objSetQ = function(q, btn){
+    _currentQ = q;
+    document.querySelectorAll('.obj-qtab').forEach(b=>b.classList.remove('obj-qtab-active'));
+    btn.classList.add('obj-qtab-active');
+    objCalc();
+  };
+
+  // Recupera erogato dalle pratiche caricate. finKey: null=tutte, stringa=filiale specifica
+  function getErogato(finKey){
+    const rows = window._commPraticheRef ? window._commPraticheRef() : [];
+    if(!rows.length) return {mese: 0, quarter: 0};
+
+    const selMonth = document.getElementById('kpi-month-filter')?.value || '';
+    let refY, refM;
+    if(selMonth){
+      const [y,m] = selMonth.split('-').map(Number);
+      refY = y; refM = m - 1;
+    } else {
+      const now = new Date();
+      refY = now.getFullYear(); refM = now.getMonth();
+    }
+
+    const qMesi = Q_MONTHS[_currentQ];
+    let mese = 0, quarter = 0;
+    for(const r of rows){
+      if(!r.__dateStr) continue;
+      if(finKey && r.finKey !== finKey) continue;
+      const d = new Date(r.__dateStr);
+      const rY = d.getFullYear(), rM = d.getMonth();
+      if(rY === refY && rM === refM) mese += (r.importo||0);
+      if(rY === refY && qMesi.includes(rM)) quarter += (r.importo||0);
+    }
+    return {mese, quarter};
+  }
+
+  function renderCard(id, opts){
+    const el = document.getElementById(id);
+    if(!el) return;
+    const {label, period, raggiunto, obiettivo, isTeal} = opts;
+    if(!obiettivo){
+      el.innerHTML = `<div class="obj-card-label">${label}</div><div class="obj-card-period">${period}</div><div class="obj-card-main" style="opacity:.35">—</div>`;
+      return;
+    }
+    const perc = Math.min(obiettivo > 0 ? (raggiunto/obiettivo)*100 : 0, 100);
+    const mancante = Math.max(obiettivo - raggiunto, 0);
+    const percClass = perc >= 100 ? 'obj-ok' : perc >= 70 ? 'obj-warn' : 'obj-bad';
+    el.innerHTML = `
+      <div class="obj-card-label">${label}</div>
+      <div class="obj-card-period">${period}</div>
+      <div class="obj-card-main ${percClass}">€ ${fe(raggiunto)} <span style="font-size:11px;font-weight:500">(${perc.toFixed(0)}%)</span></div>
+      <div class="obj-card-sub">Mancante: <strong>€ ${fe(mancante)}</strong> · Obiettivo: € ${fe(obiettivo)}</div>
+      <div class="obj-bar-wrap"><div class="obj-bar" style="width:${perc.toFixed(1)}%"></div></div>`;
+  }
+
+  window.objCalc = function(){
+    const mAll = pf(document.getElementById('obj-m-all')?.value);
+    const mFin = pf(document.getElementById('obj-m-fin')?.value);
+    const qAll = pf(document.getElementById('obj-q-all')?.value);
+    const qFin = pf(document.getElementById('obj-q-fin')?.value);
+
+    const hasAny = mAll || mFin || qAll || qFin;
+    const res = document.getElementById('obj-results');
+    if(res) res.style.display = hasAny ? 'grid' : 'none';
+    if(!hasAny) return;
+
+    // Legge filiale attiva dal tab filtro KPI
+    const activeKvTab = document.querySelector('#kpi-view-tabs .dmode-active');
+    const selFinKey = activeKvTab ? activeKvTab.id.replace('kvtab-','') : 'all';
+    const finKey = selFinKey === 'all' ? null : selFinKey;
+    const finLabel = finKey
+      ? (finKey.charAt(0).toUpperCase() + finKey.slice(1))
+      : 'Financial';
+
+    const eAll = getErogato(null);
+    const eFin = getErogato(finKey);
+
+    const selMonth = document.getElementById('kpi-month-filter')?.value || '';
+    let mLabel = 'mese corrente';
+    if(selMonth){
+      const [y,m] = selMonth.split('-').map(Number);
+      mLabel = new Date(y,m-1,1).toLocaleString('it-IT',{month:'long',year:'numeric'});
+    }
+    // Anno del quarter: preferisce l'anno del filtro periodo se disponibile
+    const qYear = selMonth ? selMonth.split('-')[0] : new Date().getFullYear();
+    const qLabel = `${_currentQ} ${qYear}`;
+
+    renderCard('obj-c-m-all',{label:'Mensile — Tutte',         period:mLabel, raggiunto:eAll.mese,    obiettivo:mAll});
+    renderCard('obj-c-m-fin',{label:`Mensile — ${finLabel}`,   period:mLabel, raggiunto:eFin.mese,    obiettivo:mFin, isTeal:true});
+    renderCard('obj-c-q-all',{label:'Quarter — Tutte',         period:qLabel, raggiunto:eAll.quarter,  obiettivo:qAll});
+    renderCard('obj-c-q-fin',{label:`Quarter — ${finLabel}`,   period:qLabel, raggiunto:eFin.quarter,  obiettivo:qFin, isTeal:true});
+  };
+
+  // Ricalcola anche quando cambia il filtro periodo
+  const orig = window.commRegenKPI;
+  window.commRegenKPI = function(){
+    if(orig) orig();
+    setTimeout(objCalc, 100);
+  };
+})();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════
    COMMERCIALI — monitoraggio pratiche erogate
    ══════════════════════════════════════════════ */
 (function(){
@@ -2828,6 +3007,8 @@ calcPolizza();
   let commFiltered = [];    // righe mostrate in tabella
   let commAssign   = {};    // { praticaId: nomeCommerciale }
   let commFileName = '';    // nome file caricato
+  // Esponi riferimento a commPratiche per il widget obiettivi
+  window._commPraticheRef = () => commPratiche;
 
   const AVATAR_COLORS = ['#1A56DB','#0E7A5F','#5B44C7','#92500A','#B82525','#2563EB','#059669','#7C3AED'];
 
@@ -3633,6 +3814,8 @@ calcPolizza();
       b.classList.toggle('dmode-active', b.id==='kvtab-'+view);
     });
     renderKpiCards();
+    // Aggiorna widget obiettivi con la nuova filiale selezionata
+    if(window.objCalc) setTimeout(window.objCalc, 50);
   };
 
   let _lastAgentStats={}, _lastFinStats={};
