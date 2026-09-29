@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.8.0 · 29/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.9.0 · 29/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -795,21 +795,24 @@ tr:hover td{background:var(--surface3)}
       <!-- Banner ripristino assegnazioni (sopra la griglia, larghezza piena) -->
       <div id="comm-banner-slot" style="margin-bottom:0"></div>
 
-      <!-- Layout a due colonne: sinistra=upload+controlli, destra=calendario -->
-      <div style="display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start">
+      <!-- Layout upload + controlli + calendario -->
+      <div id="comm-main-grid">
 
-        <!-- COLONNA SINISTRA: upload + controlli -->
+        <!-- Colonna unica: upload + controlli + calendario -->
         <div style="display:flex;flex-direction:column;gap:12px">
 
           <!-- Upload zone -->
-          <div id="comm-upload-zone" class="comm-upload-compact"
-               ondragover="event.preventDefault();this.classList.add('drag')"
-               ondragleave="this.classList.remove('drag')"
-               ondrop="commHandleDrop(event)">
-            <input type="file" accept=".xlsx,.xls" onchange="commLoadFile(this.files[0])">
-            <span class="comm-upload-compact-icon">📂</span>
-            <span class="comm-upload-compact-label">Carica file Excel erogato</span>
-            <span class="comm-upload-compact-hint">(.xlsx — trascina o clicca)</span>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div id="comm-upload-zone" class="comm-upload-compact"
+                 ondragover="event.preventDefault();this.classList.add('drag')"
+                 ondragleave="this.classList.remove('drag')"
+                 ondrop="commHandleDrop(event)">
+              <input type="file" accept=".xlsx,.xls" onchange="commLoadFile(this.files[0])">
+              <span class="comm-upload-compact-icon">📂</span>
+              <span class="comm-upload-compact-label">Carica file Excel erogato</span>
+              <span class="comm-upload-compact-hint">(.xlsx — trascina o clicca)</span>
+            </div>
+            <span id="comm-upload-filename" style="display:none;font-size:12px;color:var(--ink2);background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:5px 10px;font-weight:500"></span>
           </div>
 
           <!-- Controlli (visibili dopo caricamento) -->
@@ -870,30 +873,30 @@ tr:hover td{background:var(--surface3)}
             </div>
           </div><!-- /comm-loaded-area -->
 
-        </div><!-- /colonna sinistra -->
-
-        <!-- COLONNA DESTRA: calendario (visibile solo in modalità Giorno, dopo caricamento) -->
-        <div id="comm-cal-col" style="display:none">
-          <div id="comm-cal-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px">
-            <!-- header mese -->
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px">
-              <button onclick="commCalMove(-1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese precedente">‹</button>
-              <span id="comm-cal-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap"></span>
-              <button onclick="commCalMove(+1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese successivo">›</button>
+          <!-- Calendario (visibile solo in modalità Giorno, dopo caricamento) -->
+          <div id="comm-cal-col" style="display:none">
+            <div id="comm-cal-wrap" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:inline-block">
+              <!-- header mese -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px">
+                <button onclick="commCalMove(-1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese precedente">‹</button>
+                <span id="comm-cal-title" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--ink);white-space:nowrap"></span>
+                <button onclick="commCalMove(+1)" style="border:none;background:none;cursor:pointer;font-size:16px;color:var(--ink2);padding:2px 6px;border-radius:6px;line-height:1" title="Mese successivo">›</button>
+              </div>
+              <!-- griglia -->
+              <div id="comm-cal-grid" style="display:grid;grid-template-columns:repeat(7,32px);gap:3px;text-align:center"></div>
+              <!-- legenda -->
+              <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--green-l);border:1.5px solid var(--green);display:inline-block"></span>Tutte assegnate</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--amber-l);border:1.5px solid var(--amber-m);display:inline-block"></span>Parziale</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--red-l);border:1.5px solid var(--red);display:inline-block"></span>Nessuna</span>
+                <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:inline-block"></span>S/D o nessuna pratica</span>
+              </div>
             </div>
-            <!-- griglia -->
-            <div id="comm-cal-grid" style="display:grid;grid-template-columns:repeat(7,32px);gap:3px;text-align:center"></div>
-            <!-- legenda -->
-            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--green-l);border:1.5px solid var(--green);display:inline-block"></span>Tutte assegnate</span>
-              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--amber-l);border:1.5px solid var(--amber-m);display:inline-block"></span>Parziale</span>
-              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--red-l);border:1.5px solid var(--red);display:inline-block"></span>Nessuna</span>
-              <span style="display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--ink3)"><span style="width:10px;height:10px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:inline-block"></span>S/D o nessuna pratica</span>
-            </div>
-          </div>
-        </div><!-- /colonna destra -->
+          </div><!-- /calendario -->
 
-      </div><!-- /grid layout -->
+        </div><!-- /colonna unica -->
+
+      </div><!-- /layout -->
 
       <!-- Spazio per assignment table (fuori dal grid, larghezza piena) -->
       <div id="comm-loaded-area-table" style="display:none;margin-top:16px">
@@ -3430,8 +3433,12 @@ calcPolizza();
         applyFilters();
         commCalRender();
         // Update upload zone label
-        document.querySelector('.comm-upload-label').textContent='✅ '+file.name;
-        document.querySelector('.comm-upload-sub').textContent=commPratiche.length+' pratiche caricate — '+[...new Set(commPratiche.map(r=>r.__dateStr))].length+' giornate';
+        const ulLabel=document.querySelector('.comm-upload-compact-label');
+        const ulHint=document.querySelector('.comm-upload-compact-hint');
+        const ulFilename=document.getElementById('comm-upload-filename');
+        if(ulLabel) ulLabel.textContent='✅ '+file.name;
+        if(ulHint) ulHint.textContent=commPratiche.length+' pratiche · '+[...new Set(commPratiche.map(r=>r.__dateStr))].length+' giornate';
+        if(ulFilename){ ulFilename.textContent='📄 '+file.name; ulFilename.style.display=''; }
       }catch(err){
         alert('Errore nel leggere il file: '+err.message);
       }
