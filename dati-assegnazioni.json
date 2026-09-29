@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-29T15:36:36.329Z",
+  "exportedAt": "2026-09-29T15:37:48.003Z",
   "assignments": {
-    "comm_assign_range_2023-01-05__2026-09-28": {
+    "comm_assign_range_2023-01-05__2026-09-29": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
       "5015495301|VARGIU ROBERTO|14000|2026-09-24": "Valeria Muscas",
@@ -162,10 +162,11 @@
       "5019455301|FANCELLO FRANCESCO|5438|2026-09-28": "Antonella Sanna",
       "5017259301|USCIDDA UGO|24947|2026-09-28": "Francesca Pipia",
       "5012765301|DREI PASQUALE|17000|2026-09-28": "Carlo Zamuner",
-      "5009728301|ESPELETA FLORA|10000|2026-09-28": "Jonathan Zampa"
+      "5009728301|ESPELETA FLORA|10000|2026-09-28": "Jonathan Zampa",
+      "5025944301|MONTEVERDE ANNALISA|4317.4|2026-09-29": "Carlo Zamuner"
     }
   },
-  "currentKey": "comm_assign_range_2023-01-05__2026-09-28",
+  "currentKey": "comm_assign_range_2023-01-05__2026-09-29",
   "currentAssign": {
     "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
     "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -326,6 +327,7 @@
     "5019455301|FANCELLO FRANCESCO|5438|2026-09-28": "Antonella Sanna",
     "5017259301|USCIDDA UGO|24947|2026-09-28": "Francesca Pipia",
     "5012765301|DREI PASQUALE|17000|2026-09-28": "Carlo Zamuner",
-    "5009728301|ESPELETA FLORA|10000|2026-09-28": "Jonathan Zampa"
+    "5009728301|ESPELETA FLORA|10000|2026-09-28": "Jonathan Zampa",
+    "5025944301|MONTEVERDE ANNALISA|4317.4|2026-09-29": "Carlo Zamuner"
   }
 }
