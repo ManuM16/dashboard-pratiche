@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-29T15:38:01.480Z",
+  "exportedAt": "2026-09-29T15:38:08.662Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-09-29": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
@@ -165,7 +165,8 @@
       "5009728301|ESPELETA FLORA|10000|2026-09-28": "Jonathan Zampa",
       "5025944301|MONTEVERDE ANNALISA|4317.4|2026-09-29": "Carlo Zamuner",
       "4995654301|VADILONGA LORENZO|4120.6|2026-09-29": "Manuel Manca",
-      "5024961301|TRIMARCHI ANDREA|37955|2026-09-29": "Eleonora Lupi"
+      "5024961301|TRIMARCHI ANDREA|37955|2026-09-29": "Eleonora Lupi",
+      "5023458301|NANO MARINA|10771|2026-09-29": "Eleonora Lupi"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-09-29",
@@ -332,6 +333,7 @@
     "5009728301|ESPELETA FLORA|10000|2026-09-28": "Jonathan Zampa",
     "5025944301|MONTEVERDE ANNALISA|4317.4|2026-09-29": "Carlo Zamuner",
     "4995654301|VADILONGA LORENZO|4120.6|2026-09-29": "Manuel Manca",
-    "5024961301|TRIMARCHI ANDREA|37955|2026-09-29": "Eleonora Lupi"
+    "5024961301|TRIMARCHI ANDREA|37955|2026-09-29": "Eleonora Lupi",
+    "5023458301|NANO MARINA|10771|2026-09-29": "Eleonora Lupi"
   }
 }
