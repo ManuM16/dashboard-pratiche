@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-29T15:38:24.624Z",
+  "exportedAt": "2026-09-29T15:38:31.409Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-09-29": {
       "ALIFIN S.R.L. - FS CAGLIARI|HERA BOGDAN CONSTANTIN|32721.68|2026-09-24": "Monica Caocci",
@@ -168,7 +168,8 @@
       "5024961301|TRIMARCHI ANDREA|37955|2026-09-29": "Eleonora Lupi",
       "5023458301|NANO MARINA|10771|2026-09-29": "Eleonora Lupi",
       "5018026301|LIKAJ REZART|30000|2026-09-29": "Lorenzo Fontanelli",
-      "5015480301|SECHI PAOLETTO|23500|2026-09-29": "Antonella Sanna"
+      "5015480301|SECHI PAOLETTO|23500|2026-09-29": "Antonella Sanna",
+      "5012968301|BARCELLONA SAMANTHA|12922.2|2026-09-29": "Alessio Dicati"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-09-29",
@@ -338,6 +339,7 @@
     "5024961301|TRIMARCHI ANDREA|37955|2026-09-29": "Eleonora Lupi",
     "5023458301|NANO MARINA|10771|2026-09-29": "Eleonora Lupi",
     "5018026301|LIKAJ REZART|30000|2026-09-29": "Lorenzo Fontanelli",
-    "5015480301|SECHI PAOLETTO|23500|2026-09-29": "Antonella Sanna"
+    "5015480301|SECHI PAOLETTO|23500|2026-09-29": "Antonella Sanna",
+    "5012968301|BARCELLONA SAMANTHA|12922.2|2026-09-29": "Alessio Dicati"
   }
 }
