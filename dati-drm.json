@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-30T14:09:10.428Z",
+  "exportedAt": "2026-09-30T14:09:11.716Z",
   "panels": [
     {
       "id": 1,
       "name": "Cappai Corrado",
       "redditi": [
         {
-          "desc": "R",
+          "desc": "Reddito",
           "importo": ""
         }
       ],
