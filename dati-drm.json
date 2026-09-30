@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-30T14:09:26.172Z",
+  "exportedAt": "2026-09-30T14:09:28.137Z",
   "panels": [
     {
       "id": 1,
@@ -12,7 +12,7 @@
         },
         {
           "desc": "Reddito Co2",
-          "importo": ""
+          "importo": "1500"
         }
       ],
       "rate": [
