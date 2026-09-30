@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.31.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.32.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -3650,9 +3650,10 @@ calcPolizza();
         Object.entries(payload.assignments).forEach(([k,v])=>localStorage.setItem(k,JSON.stringify(v)));
       }
 
-      // 3. Applica assegnazioni
+      // 3. Applica assegnazioni (match su TUTTE le chiavi, indipendente dal range date)
       commAssign={};
-      const currentSaved=loadAssign();
+      const allGhAssign=payload?loadAssignFromGhPayload(payload):{};
+      const currentSaved=Object.keys(allGhAssign).length?allGhAssign:loadAssign();
       if(currentSaved&&commPratiche.length){
         const currentIds=new Set(commPratiche.map(r=>r.__id));
         Object.entries(currentSaved).forEach(([id,agent])=>{if(currentIds.has(id)) commAssign[id]=agent;});
@@ -3712,10 +3713,35 @@ calcPolizza();
     setTimeout(ghAutoRestore, 300);
   });
   function loadAssign(){
+    // Prima cerca nella chiave esatta del range corrente
     const k=commFileKey();
-    if(!k) return null;
-    const saved=localStorage.getItem('comm_assign_'+k);
-    return saved?JSON.parse(saved):null;
+    if(k){
+      const exact=localStorage.getItem('comm_assign_'+k);
+      if(exact) return JSON.parse(exact);
+    }
+    // Fallback: merge di tutte le chiavi comm_assign_* (range diverso, stesso periodo)
+    const merged={};
+    for(let i=0;i<localStorage.length;i++){
+      const key=localStorage.key(i);
+      if(key&&key.startsWith('comm_assign_')){
+        try{ Object.assign(merged,JSON.parse(localStorage.getItem(key))); }catch(e){}
+      }
+    }
+    return Object.keys(merged).length ? merged : null;
+  }
+  // Carica tutte le assegnazioni da tutte le chiavi GH (indipendentemente dal range)
+  function loadAssignFromGhPayload(payload){
+    const merged={};
+    if(payload.assignments){
+      Object.values(payload.assignments).forEach(obj=>{
+        if(obj && typeof obj==='object') Object.assign(merged, obj);
+      });
+    }
+    // Includi anche currentAssign se presente
+    if(payload.currentAssign && typeof payload.currentAssign==='object'){
+      Object.assign(merged, payload.currentAssign);
+    }
+    return merged;
   }
   // Pulisce il localStorage: mantiene SOLO le assegnazioni di pratiche CORTO
   // con data nel mese più recente del file. Elimina tutto il resto.
@@ -4185,52 +4211,59 @@ calcPolizza();
   window.commImportGitHub=async function(){
     const token=ghGetToken(); if(!token) return;
     try{
-      // 1. Carica assegnazioni
+      // 1. Carica assegnazioni da GitHub
       const payload=await ghGetFile(token, GH_FILE);
       if(!payload) throw new Error('Nessun backup assegnazioni trovato su GitHub.');
       if(!payload.version||!payload.assignments) throw new Error('Formato assegnazioni non valido');
+
+      // Salva tutte le chiavi assegnazioni in localStorage
       Object.entries(payload.assignments).forEach(([k,v])=>localStorage.setItem(k,JSON.stringify(v)));
 
-      // 2. Carica pratiche Excel (se presenti)
+      // 2. Se NON ci sono pratiche già caricate, carica anche il file Excel da GitHub
       let praticheRipristinate=0;
-      const pratichePayload=await ghGetFile(token, GH_FILE_PRATICHE);
-      if(pratichePayload && pratichePayload.pratiche && pratichePayload.pratiche.length){
-        commPratiche=pratichePayload.pratiche;
-        commFileName=pratichePayload.fileName||'';
-        praticheRipristinate=commPratiche.length;
-        // Salva anche in cache locale
-        localStorage.setItem(PRATICHE_CACHE_KEY, JSON.stringify({
-          fileName:commFileName, savedAt:new Date().toISOString(), pratiche:commPratiche
-        }));
-        populateYearSelect();
-        commDateMode='day';
-        const today=new Date().toISOString().slice(0,10);
-        document.getElementById('comm-date-filter').value=today;
-        ['day','range','month','year','all'].forEach(m=>{
-          const panel=document.getElementById('dmode-panel-'+m);
-          if(panel) panel.style.display='none';
-          document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
-        });
-        document.getElementById('comm-loaded-area').style.display='flex';
-        document.getElementById('comm-loaded-area-table').style.display='block';
-        const calCol2=document.getElementById('comm-cal-col');
-        if(calCol2) calCol2.style.display='flex';
-        const savedDate=pratichePayload.exportedAt?new Date(pratichePayload.exportedAt).toLocaleDateString('it-IT'):'—';
-        const _ul2=document.querySelector('.comm-upload-compact-label');
-        const _uh2=document.querySelector('.comm-upload-compact-hint');
-        const _uf2=document.getElementById('comm-upload-filename');
-        if(_ul2) _ul2.textContent='☁️ '+commFileName+' (da GitHub)';
-        if(_uh2) _uh2.textContent=commPratiche.length+' pratiche — backup del '+savedDate;
-        if(_uf2){ _uf2.textContent='📄 '+commFileName; _uf2.style.display=''; }
+      if(!commPratiche.length){
+        const pratichePayload=await ghGetFile(token, GH_FILE_PRATICHE);
+        if(pratichePayload && pratichePayload.pratiche && pratichePayload.pratiche.length){
+          commPratiche=pratichePayload.pratiche;
+          commFileName=pratichePayload.fileName||'';
+          praticheRipristinate=commPratiche.length;
+          localStorage.setItem(PRATICHE_CACHE_KEY, JSON.stringify({
+            fileName:commFileName, savedAt:new Date().toISOString(), pratiche:commPratiche
+          }));
+          populateYearSelect();
+          commDateMode='day';
+          const today=new Date().toISOString().slice(0,10);
+          document.getElementById('comm-date-filter').value=today;
+          ['day','range','month','year','all'].forEach(m=>{
+            const panel=document.getElementById('dmode-panel-'+m);
+            if(panel) panel.style.display='none';
+            document.getElementById('dmode-'+m).classList.toggle('dmode-active',m==='day');
+          });
+          document.getElementById('comm-loaded-area').style.display='flex';
+          document.getElementById('comm-loaded-area-table').style.display='block';
+          const calCol2=document.getElementById('comm-cal-col');
+          if(calCol2) calCol2.style.display='flex';
+          const savedDate=pratichePayload.exportedAt?new Date(pratichePayload.exportedAt).toLocaleDateString('it-IT'):'—';
+          const _ul2=document.querySelector('.comm-upload-compact-label');
+          const _uh2=document.querySelector('.comm-upload-compact-hint');
+          const _uf2=document.getElementById('comm-upload-filename');
+          if(_ul2) _ul2.textContent='☁️ '+commFileName+' (da GitHub)';
+          if(_uh2) _uh2.textContent=commPratiche.length+' pratiche — backup del '+savedDate;
+          if(_uf2){ _uf2.textContent='📄 '+commFileName; _uf2.style.display=''; }
+        }
       }
+      // Se le pratiche erano già caricate (file nuovo), non le sovrascriviamo
+      const praticheCorrenti=commPratiche.length;
 
-      // 3. Applica assegnazioni alle pratiche caricate
+      // 3. Applica assegnazioni alle pratiche correnti (match per __id su TUTTE le chiavi GH)
+      const allGhAssign=loadAssignFromGhPayload(payload);
       commAssign={};
-      const currentSaved=loadAssign();
       let matchedPratiche=0;
-      if(currentSaved && commPratiche.length){
+      if(praticheCorrenti){
         const currentIds=new Set(commPratiche.map(r=>r.__id));
-        Object.entries(currentSaved).forEach(([id,agent])=>{if(currentIds.has(id)){commAssign[id]=agent;matchedPratiche++;}});
+        Object.entries(allGhAssign).forEach(([id,agent])=>{
+          if(currentIds.has(id)){ commAssign[id]=agent; matchedPratiche++; }
+        });
       }
       saveAssign();
       _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
@@ -4238,9 +4271,10 @@ calcPolizza();
       commCalRender();
 
       const exportDate=payload.exportedAt?new Date(payload.exportedAt).toLocaleDateString('it-IT'):'—';
-      let msg=`✅ Dati caricati da GitHub!\n\nBackup del: ${exportDate}`;
-      if(praticheRipristinate) msg+=`\nPratiche Excel: ${praticheRipristinate} righe`;
-      msg+=`\nAssegnazioni applicate: ${matchedPratiche}`;
+      let msg=`✅ Assegnazioni caricate da GitHub!\n\nBackup del: ${exportDate}`;
+      if(praticheRipristinate) msg+=`\nPratiche Excel ripristinate: ${praticheRipristinate}`;
+      else msg+=`\nFile Excel corrente mantenuto (${praticheCorrenti} pratiche)`;
+      msg+=`\nAssegnazioni applicate: ${matchedPratiche} / ${Object.keys(allGhAssign).length}`;
       alert(msg);
     }catch(err){
       alert('❌ Errore nel caricamento da GitHub:\n'+err.message);
