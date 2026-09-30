@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.39.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.40.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -974,6 +974,7 @@ tr:hover td{background:var(--surface3)}
             <button class="btn-comm btn-comm-secondary" onclick="commAssignAll()" title="Assegna tutte le pratiche al commerciale selezionato">Assegna tutto a…</button>
             <button class="btn-comm btn-comm-secondary" onclick="commExportGitHub()" title="Salva backup su GitHub">☁️ Salva su GitHub</button>
             <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub()" title="Carica backup da GitHub">📥 Carica da GitHub</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub(false,true)" title="Ripristina dal backup del giorno precedente" style="color:#d97706">🔄 Ripristina backup</button>
             <span id="gh-sync-status" style="display:inline-flex;align-items:center;padding:0 6px"></span>
             <button class="btn-comm btn-comm-secondary" onclick="commDebugLS()" title="Mostra contenuto localStorage" style="color:var(--ink2)">🔍 Debug LS</button>
             <button class="btn-comm btn-comm-secondary" onclick="commNukeAssign()" title="Cancella TUTTE le assegnazioni salvate (non i dati pratiche)" style="color:orange">🧹 Reset assegnazioni</button>
@@ -3601,6 +3602,18 @@ calcPolizza();
     ghSetSyncStatus('saving');
     try{
       const today=new Date().toISOString().slice(0,10);
+      // 1. Leggi il file corrente da GitHub e salvalo come backup (dati giorno x-1)
+      try{
+        const current=await ghGetFile(token, GH_FILE);
+        if(current && current.assignments && Object.keys(current.assignments).length>0){
+          await ghPutFile(token, GH_FILE_BACKUP, current, `Backup giorno precedente ${today}`);
+          console.log('[GH autosave] backup giorno precedente salvato');
+        }
+      }catch(backupErr){
+        // Il backup non blocca il salvataggio principale
+        console.warn('[GH autosave] errore nel salvataggio backup:',backupErr.message);
+      }
+      // 2. Salva dati aggiornati nel file principale
       await ghPutFile(token, GH_FILE, ghBuildPayload(), `Autosave assegnazioni ${today}`);
       if(commPratiche.length){
         const pp={version:1,exportedAt:new Date().toISOString(),fileName:commFileName,pratiche:commPratiche};
@@ -4137,6 +4150,7 @@ calcPolizza();
   const GH_OWNER='ManuM16';
   const GH_REPO='dashboard-pratiche';
   const GH_FILE='dati-assegnazioni.json';
+  const GH_FILE_BACKUP='dati-assegnazioni-backup.json';
   const GH_FILE_PRATICHE='dati-pratiche.json';
 
   function ghGetToken(){
@@ -4216,6 +4230,15 @@ calcPolizza();
     const today=new Date().toISOString().slice(0,10);
     ghSetSyncStatus('saving');
     try{
+      // Prima copia il file corrente nel backup (dati giorno x-1)
+      try{
+        const current=await ghGetFile(token, GH_FILE);
+        if(current && current.assignments && Object.keys(current.assignments).length>0){
+          await ghPutFile(token, GH_FILE_BACKUP, current, `Backup giorno precedente ${today}`);
+        }
+      }catch(backupErr){
+        console.warn('[GH export] errore nel salvataggio backup:',backupErr.message);
+      }
       const payload=ghBuildPayload();
       await ghPutFile(token, GH_FILE, payload, `Backup assegnazioni ${today}`);
       if(commPratiche.length){
@@ -4235,12 +4258,17 @@ calcPolizza();
     }
   };
 
-  window.commImportGitHub=async function(silent){
+  window.commImportGitHub=async function(silent, fromBackup){
     const token=ghGetToken(); if(!token) return;
+    const sourceFile=fromBackup ? GH_FILE_BACKUP : GH_FILE;
+    if(fromBackup && !silent){
+      const ok=confirm('⚠️ Ripristino dal BACKUP del giorno precedente.\n\nQuesto sovrascriverà le assegnazioni correnti con quelle del giorno x-1.\n\nContinuare?');
+      if(!ok) return;
+    }
     try{
       // 1. Carica assegnazioni da GitHub
-      const payload=await ghGetFile(token, GH_FILE);
-      if(!payload) throw new Error('Nessun backup assegnazioni trovato su GitHub.');
+      const payload=await ghGetFile(token, sourceFile);
+      if(!payload) throw new Error(fromBackup ? 'Nessun file di backup trovato su GitHub. Esegui almeno un salvataggio prima.' : 'Nessun backup assegnazioni trovato su GitHub.');
       if(!payload.version||!payload.assignments) throw new Error('Formato assegnazioni non valido');
 
       // Salva tutte le chiavi assegnazioni in localStorage
@@ -4323,13 +4351,14 @@ calcPolizza();
       commCalRender();
 
       const exportDate=payload.exportedAt?new Date(payload.exportedAt).toLocaleDateString('it-IT'):'—';
+      const sourceLabel=fromBackup ? '🔄 BACKUP (giorno precedente)' : '☁️ GitHub';
       if(silent){
         // Ripristino silenzioso: mostra solo un breve avviso non bloccante nella UI
         const syncEl=document.getElementById('gh-sync-status');
         if(syncEl){ syncEl.textContent=`✅ ${matchedPratiche} assegnazioni ripristinate da GitHub`; syncEl.style.color='var(--teal)'; setTimeout(()=>{ syncEl.textContent=''; syncEl.style.color=''; },5000); }
         console.log(`[commImportGitHub silent] ${matchedPratiche} assegnazioni applicate su ${commPratiche.length} pratiche`);
       } else {
-        let msg=`✅ Assegnazioni caricate da GitHub!\n\nBackup del: ${exportDate}`;
+        let msg=`✅ Assegnazioni caricate da ${sourceLabel}!\n\nSalvato il: ${exportDate}`;
         if(praticheRipristinate) msg+=`\nPratiche Excel ripristinate: ${praticheRipristinate}`;
         else msg+=`\nFile Excel corrente mantenuto (${praticheCorrenti} pratiche)`;
         msg+=`\nAssegnazioni applicate: ${matchedPratiche} / ${Object.keys(allGhAssign).length}`;
