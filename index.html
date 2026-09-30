@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.37.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.39.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -3981,7 +3981,7 @@ calcPolizza();
       // Se leggiamo il codice prodotto, usiamo quello; altrimenti mai escludere (meglio calcolare che perdere dati)
       const isCQS=codProdotto>0 && CQS_PRODS.has(codProdotto);
       const tan=(!isCQS && importo && rata && nRate) ? calcolaTAN(importo, rata, nRate) : null;
-      parsed.push({__id:id,__num:numPratica,__idx:i,__dateStr:dateStr,cliente,prodotto,tipo,importo,netto,nRate,rata,polizza,tan,financial,finKey,cittaRaw});
+      parsed.push({__id:id,__num:numPratica,__idx:i,__dateStr:dateStr,cliente,prodotto,codProdotto,tipo,importo,netto,nRate,rata,polizza,tan,financial,finKey,cittaRaw});
     });
     return parsed;
   }
@@ -4094,7 +4094,7 @@ calcPolizza();
       return `<tr>
         <td style="font-family:monospace;font-size:11px;color:var(--ink3)">${r.__num||'—'}</td>
         <td style="font-weight:500">${esc(r.cliente||'—')}</td>
-        <td style="font-size:11.5px;color:var(--ink2)">${esc(r.prodotto||'—')}</td>
+        <td style="font-size:11.5px;color:var(--ink2)">${esc(r.prodotto||'—')}${r.codProdotto?` <span style="font-size:10px;font-weight:600;background:var(--surface2);color:var(--ink3);padding:1px 5px;border-radius:4px;margin-left:3px">${r.codProdotto}</span>`:''}</td>
         <td style="text-align:right;font-weight:600">${r.importo?fe(r.importo):'—'}</td>
         <td style="text-align:center">${tanBadge}</td>
         <td style="text-align:center">${polBadge}</td>
@@ -4622,7 +4622,7 @@ calcPolizza();
       const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:finKey;
 
       // Totali financial: include TUTTE le pratiche, assegnate e non
-      const isGarantito=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
+      const isGarantito=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO' && r.codProdotto!==6;
 
       if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,tanSum:0,tanCount:0};
       const f=finStats[finKey];
@@ -4697,7 +4697,7 @@ calcPolizza();
     // KPI
     const totErogato = pratiche.reduce((a,r)=>a+(r.importo||0),0);
     const nPratiche = pratiche.length;
-    const withPol = pratiche.filter(r=>r.polizza!=null&&(r.prodotto||'').toUpperCase().trim()!=='ALIFIN GARANTITO');
+    const withPol = pratiche.filter(r=>r.polizza!=null&&((r.prodotto||'').toUpperCase().trim()!=='ALIFIN GARANTITO'||r.codProdotto===6));
     const totPremio = withPol.reduce((a,r)=>a+(r.polizza||0),0);
     const withTan = pratiche.filter(r=>r.tan!=null);
     const tanMedio = withTan.length ? (withTan.reduce((a,r)=>a+r.tan,0)/withTan.length) : null;
@@ -4725,7 +4725,7 @@ calcPolizza();
     document.getElementById('agent-modal-tbody').innerHTML = pratiche.length
       ? pratiche.map(r=>{
           const data = r.__dateStr ? new Date(r.__dateStr).toLocaleDateString('it-IT') : '—';
-          const isPP = (r.prodotto||'').toUpperCase().trim()!=='ALIFIN GARANTITO';
+          const isPP = (r.prodotto||'').toUpperCase().trim()!=='ALIFIN GARANTITO'||r.codProdotto===6;
           const polStr = r.polizza!=null && isPP
             ? `<span style="background:var(--amber-l);color:var(--amber);padding:2px 6px;border-radius:4px;font-size:10.5px;font-weight:600">€ ${fe2(r.polizza)}</span>`
             : `<span style="color:var(--ink3);font-size:11px">—</span>`;
@@ -5033,7 +5033,7 @@ calcPolizza();
       const hasPolizza=r.polizza!=null;
       const premioPolizza=r.polizza||0;
 
-      const isGar=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO';
+      const isGar=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO' && r.codProdotto!==6;
       if(!pivot[finKey]) pivot[finKey]={label:'ALIFIN S.R.L. – '+finLabel,color,agenti:{},tot:{importo:0,n:0,polizze:0,premi:0,nPP:0,tanSum:0,tanCount:0}};
       const f=pivot[finKey];
       f.tot.importo+=importo; f.tot.n++; if(!isGar) f.tot.nPP++; if(hasPolizza&&!isGar){f.tot.polizze++;f.tot.premi+=premioPolizza;}
