@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.41.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.42.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -877,7 +877,7 @@ tr:hover td{background:var(--surface3)}
               <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap">
                 <span style="font-size:12px;font-weight:600;color:var(--ink2)">📅 Periodo</span>
                 <button class="btn-comm btn-comm-secondary" style="margin-left:auto;font-size:11px;padding:3px 8px" onclick="commShowAll()">Reset</button>
-                <span class="comm-count" id="comm-count-label" style="font-size:11px"></span>
+                <span class="comm-count" id="comm-count-label-date" style="font-size:11px"></span>
               </div>
               <div style="display:flex;gap:0;border:1px solid var(--border2);border-radius:8px;overflow:hidden;font-size:11.5px;width:100%">
                 <button id="dmode-day"   onclick="commSetDateMode('day')"   class="dmode-btn dmode-active" style="flex:1">Giorno</button>
@@ -952,6 +952,15 @@ tr:hover td{background:var(--surface3)}
             <span>📋 Assegna pratiche</span>
             <span id="comm-assign-progress-label" style="font-size:11px;font-weight:400;color:var(--ink3);margin-left:auto"></span>
           </h3>
+          <!-- Filtri rapidi tabella -->
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+            <button id="qf-all" onclick="commQFilter('all')" class="btn-comm btn-comm-secondary" style="font-size:11.5px;padding:4px 10px;background:var(--ink);color:#fff">Tutte</button>
+            <button id="qf-unassigned" onclick="commQFilter('unassigned')" class="btn-comm btn-comm-secondary" style="font-size:11.5px;padding:4px 10px">Solo non assegnate</button>
+            <select id="qf-agent" onchange="commQFilter('agent')" style="padding:4px 10px;border:1px solid var(--border2);border-radius:7px;font-size:11.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
+              <option value="">Per commerciale…</option>
+            </select>
+            <span id="comm-count-label" style="font-size:11.5px;color:var(--ink3);margin-left:auto"></span>
+          </div>
           <div style="overflow-x:auto">
             <table class="comm-assign-table">
               <thead>
@@ -1060,7 +1069,18 @@ tr:hover td{background:var(--surface3)}
             <div style="padding:14px 16px;box-sizing:border-box">
               <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 12px;color:var(--ink)">📈 Analisi Erogato</h3>
               <div id="comm-kpi-cards"></div>
+              <div id="comm-yoy-panel" style="display:none;margin-top:14px"></div>
             </div>
+          </div>
+          <!-- Storico agente mensile — full width sotto il grid KPI -->
+          <div id="comm-agent-history-section" style="display:none;border-top:1px solid var(--border);padding:14px 16px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+              <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0;color:var(--ink)">📅 Storico mensile per agente</h3>
+              <select id="agent-history-select" onchange="commBuildAgentHistory()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
+                <option value="">— Seleziona agente —</option>
+              </select>
+            </div>
+            <div id="comm-agent-history-table"></div>
           </div>
         </div>
     </div><!-- /s-commerciali -->
@@ -3836,6 +3856,12 @@ calcPolizza();
   /* ---- File loading ---- */
   window.commLoadFile=function(file){
     if(!file) return;
+    // Conferma se ci sono già assegnazioni in memoria
+    const nAssign=Object.keys(commAssign).length;
+    if(nAssign>0){
+      const ok=confirm(`⚠️ Attenzione: ci sono già ${nAssign} assegnazioni in memoria.\n\nCaricando un nuovo file Excel le assegnazioni verranno ricalcolate (quelle compatibili verranno mantenute, le altre perse).\n\nContinuare?`);
+      if(!ok) return;
+    }
     const reader=new FileReader();
     reader.onload=function(ev){
       try{
@@ -4044,6 +4070,64 @@ calcPolizza();
   };
   window.commApplyDateFilter=applyFilters;
   window.commApplyFinFilter=applyFilters;
+
+  /* ---- Quick filter tabella assegnazioni ---- */
+  let _qfMode='all'; // 'all' | 'unassigned' | 'agent'
+  window.commQFilter=function(mode){
+    _qfMode=mode;
+    // Aggiorna stile pulsanti
+    ['all','unassigned'].forEach(id=>{
+      const btn=document.getElementById('qf-'+id);
+      if(btn){btn.style.background=id===mode?'var(--ink)':'';btn.style.color=id===mode?'#fff':'';}
+    });
+    if(mode!=='agent') document.getElementById('qf-agent').value='';
+    // Popola select agenti al primo click
+    if(mode==='unassigned'||mode==='all') _renderTableQF();
+    else _renderTableQF();
+  };
+
+  function _renderTableQF(){
+    // Aggiorna lista agenti nel select
+    const agSel=document.getElementById('qf-agent');
+    const allAgentsInView=[...new Set(commFiltered.map(r=>commAssign[r.__id]).filter(Boolean))].sort();
+    const curVal=agSel.value;
+    agSel.innerHTML='<option value="">Per commerciale…</option>'+allAgentsInView.map(a=>`<option value="${a}"${a===curVal?' selected':''}>${a}</option>`).join('');
+    if(curVal) agSel.value=curVal;
+
+    const agentFilter=_qfMode==='agent'?agSel.value:'';
+    const tbody=document.getElementById('comm-tbody');
+    if(!tbody) return;
+
+    let rows=[...tbody.querySelectorAll('tr')];
+    // Ricostruisce da commFiltered applicando il filtro rapido
+    let data=commFiltered;
+    if(_qfMode==='unassigned') data=commFiltered.filter(r=>!commAssign[r.__id]);
+    else if(_qfMode==='agent' && agentFilter) data=commFiltered.filter(r=>commAssign[r.__id]===agentFilter);
+
+    document.getElementById('comm-count-label').textContent=data.length+' pratiche'+(data.length!==commFiltered.length?' (filtrate)':'');
+
+    // Re-render solo la sottoinsieme
+    if(_qfMode==='all'){renderTable();return;}
+    const tmpFiltered=commFiltered;
+    commFiltered=data;
+    renderTable();
+    commFiltered=tmpFiltered;
+    document.getElementById('comm-count-label').textContent=data.length+' pratiche (filtrate su '+tmpFiltered.length+')';
+  }
+
+  // Patch renderTable per popolare il count label e aggiornare select agenti
+  const _origRenderTable=renderTable;
+  function renderTableWithQF(){
+    _origRenderTable();
+    // Aggiorna select agenti quick filter
+    const agSel=document.getElementById('qf-agent');
+    if(agSel){
+      const allA=[...new Set(commFiltered.map(r=>commAssign[r.__id]).filter(Boolean))].sort();
+      const curV=agSel.value;
+      agSel.innerHTML='<option value="">Per commerciale…</option>'+allA.map(a=>`<option value="${a}"${a===curV?' selected':''}>${a}</option>`).join('');
+    }
+  }
+  renderTable=renderTableWithQF;
   window.commShowAll=function(){
     commDateMode='day';
     ['day','range','month','year','all'].forEach(m=>{
@@ -4570,6 +4654,7 @@ calcPolizza();
             <div style="width:10px;height:10px;border-radius:50%;background:${f.color};flex-shrink:0"></div>
             <span style="font-weight:700;font-size:13px;font-family:'Syne',sans-serif;color:${f.color}">${esc(f.label)}</span>
             <span style="font-size:11px;color:var(--ink3)">${f.n} pratiche</span>
+            ${(f.n-f.nAssegnate)>0?`<button onclick="commShowUnassignedList('${finKey}')" style="padding:2px 8px;border:1px solid var(--red);border-radius:5px;background:var(--red-l);color:var(--red);font-size:10.5px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif" title="Vedi pratiche non assegnate">${f.n-f.nAssegnate} non assegnate</button>`:''}
           </div>
         </td>
         ${COLS.map(c=>`<td style="padding:8px 14px;text-align:right;font-size:13px;font-weight:700;color:${c.color};font-family:'Syne',sans-serif">${c.fmt(f)}</td>`).join('')}
@@ -4618,8 +4703,261 @@ calcPolizza();
       if(info) info.textContent=kpiData.length+' pratiche totali nel file';
     }
     commBuildKPI(kpiData);
+    commBuildYoyPanel(month);
     // Aggiorna widget obiettivi quando cambia il filtro periodo
     if(window.objCalc) setTimeout(window.objCalc, 100);
+  };
+
+  /* ─────────────────────────────────────────────────────────────────
+     Confronto YoY: mese vs stesso mese anno precedente,
+     quarter vs stesso quarter anno precedente
+  ───────────────────────────────────────────────────────────────── */
+  function commCalcStats(pratiche){
+    // Calcola metriche aggregate da un array di pratiche
+    const n=pratiche.length;
+    const importoTot=pratiche.reduce((a,r)=>a+(r.importo||0),0);
+    const isGarFn=r=>(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO'&&r.codProdotto>0&&r.codProdotto!==6;
+    const withPol=pratiche.filter(r=>r.polizza!=null&&!isGarFn(r));
+    const totPolizza=withPol.reduce((a,r)=>a+(r.polizza||0),0);
+    const nPP=pratiche.filter(r=>!isGarFn(r)).length;
+    const penPol=nPP?Math.round(withPol.length/nPP*100):0;
+    const withTan=pratiche.filter(r=>r.tan!=null);
+    const tanMedio=withTan.length?(withTan.reduce((a,r)=>a+r.tan,0)/withTan.length):null;
+    const nAssegnate=pratiche.filter(r=>commAssign[r.__id]).length;
+    return {n,importoTot,totPolizza,nPol:withPol.length,nPP,penPol,tanMedio,nAssegnate};
+  }
+
+  function commYoyDelta(curr,prev,key){
+    if(!prev||!prev[key]) return null;
+    return (curr[key]-prev[key])/prev[key]*100;
+  }
+
+  function commArrow(delta){
+    if(delta===null) return '<span style="color:var(--ink3);font-size:11px">n/d</span>';
+    const up=delta>=0;
+    const color=up?'var(--green)':'var(--red)';
+    const arrow=up?'▲':'▼';
+    return `<span style="color:${color};font-size:12px;font-weight:700">${arrow} ${Math.abs(delta).toFixed(1)}%</span>`;
+  }
+
+  function commGetQuarter(dateStr){
+    if(!dateStr||dateStr.length<7) return null;
+    const m=parseInt(dateStr.slice(5,7));
+    return Math.ceil(m/3);
+  }
+
+  function commBuildYoyPanel(selMonth){
+    // selMonth: "YYYY-MM" oppure '' (tutto)
+    const panel=document.getElementById('comm-yoy-panel');
+    if(!panel) return;
+    if(!selMonth){panel.style.display='none';return;}
+
+    const [y,mo]=selMonth.split('-').map(Number);
+    const prevMonthStr=`${mo===1?y-1:y}-${String(mo===1?12:mo-1).padStart(2,'0')}`;
+    const prevYearMonthStr=`${y-1}-${String(mo).padStart(2,'0')}`;
+
+    const currData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(selMonth));
+    const prevMData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(prevMonthStr));
+    const prevYData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(prevYearMonthStr));
+
+    const curr=commCalcStats(currData);
+    const prevM=prevMData.length?commCalcStats(prevMData):null;
+    const prevY=prevYData.length?commCalcStats(prevYData):null;
+
+    // Quarter
+    const q=commGetQuarter(selMonth+'-01');
+    const qStart=`${y}-${String((q-1)*3+1).padStart(2,'0')}`;
+    const qEnd=`${y}-${String(q*3).padStart(2,'0')}`;
+    const qPrevStart=`${y-1}-${String((q-1)*3+1).padStart(2,'0')}`;
+    const qPrevEnd=`${y-1}-${String(q*3).padStart(2,'0')}`;
+    const qCurrData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr>=qStart&&r.__dateStr<=qEnd+'Z');
+    const qPrevData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr>=qPrevStart&&r.__dateStr<=qPrevEnd+'Z');
+    const qCurr=commCalcStats(qCurrData);
+    const qPrev=qPrevData.length?commCalcStats(qPrevData):null;
+
+    const meseLabel=new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+    const prevMLabel=new Date(y,mo-2<0?11:mo-2,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+    const prevYLabel=new Date(y-1,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+    const qLabel=`Q${q} ${y}`;
+    const qPrevLabel=`Q${q} ${y-1}`;
+
+    const fe2=n=>n?'€ '+fe(n):'€ 0';
+
+    const metricRow=(label,key,fmt)=>`
+      <tr style="border-top:1px solid var(--border)">
+        <td style="padding:7px 12px;font-size:12px;font-weight:500;color:var(--ink2);white-space:nowrap">${label}</td>
+        <td style="padding:7px 12px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink)">${fmt(curr[key])}</td>
+        <td style="padding:7px 12px;text-align:center">${commArrow(commYoyDelta(curr,prevM,key))}</td>
+        <td style="padding:7px 8px;text-align:right;font-size:11.5px;color:var(--ink3)">${prevM?fmt(prevM[key]):'—'}</td>
+        <td style="padding:7px 12px;text-align:center">${commArrow(commYoyDelta(curr,prevY,key))}</td>
+        <td style="padding:7px 8px;text-align:right;font-size:11.5px;color:var(--ink3)">${prevY?fmt(prevY[key]):'—'}</td>
+      </tr>`;
+
+    const qMetricRow=(label,key,fmt)=>`
+      <tr style="border-top:1px solid var(--border)">
+        <td style="padding:7px 12px;font-size:12px;font-weight:500;color:var(--ink2);white-space:nowrap">${label}</td>
+        <td style="padding:7px 12px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink)">${fmt(qCurr[key])}</td>
+        <td style="padding:7px 12px;text-align:center">${commArrow(commYoyDelta(qCurr,qPrev,key))}</td>
+        <td style="padding:7px 8px;text-align:right;font-size:11.5px;color:var(--ink3)">${qPrev?fmt(qPrev[key]):'—'}</td>
+      </tr>`;
+
+    panel.style.display='';
+    panel.innerHTML=`
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+
+        <!-- Confronto mensile -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <span style="font-size:14px">📅</span>
+            <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">Confronto mensile</span>
+          </div>
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr style="background:var(--surface3)">
+                <th style="padding:6px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase"></th>
+                <th style="padding:6px 12px;text-align:right;font-size:10px;font-weight:600;color:var(--blue);text-transform:uppercase">${meseLabel}</th>
+                <th style="padding:6px 8px;text-align:center;font-size:10px;font-weight:600;color:var(--ink3)" colspan="2">vs ${prevMLabel}</th>
+                <th style="padding:6px 8px;text-align:center;font-size:10px;font-weight:600;color:var(--ink3)" colspan="2">vs ${prevYLabel}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${metricRow('Erogato','importoTot',fe2)}
+              ${metricRow('N° Pratiche','n',v=>v+'')}
+              ${metricRow('Polizze','nPol',v=>v+'')}
+              ${metricRow('Penetrazione pol.','penPol',v=>v+'%')}
+              ${metricRow('Premi polizza','totPolizza',fe2)}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Confronto quarter -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <span style="font-size:14px">📊</span>
+            <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">Confronto quarter</span>
+          </div>
+          <table style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr style="background:var(--surface3)">
+                <th style="padding:6px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase"></th>
+                <th style="padding:6px 12px;text-align:right;font-size:10px;font-weight:600;color:var(--blue);text-transform:uppercase">${qLabel}</th>
+                <th style="padding:6px 8px;text-align:center;font-size:10px;font-weight:600;color:var(--ink3)" colspan="2">vs ${qPrevLabel}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${qMetricRow('Erogato','importoTot',fe2)}
+              ${qMetricRow('N° Pratiche','n',v=>v+'')}
+              ${qMetricRow('Polizze','nPol',v=>v+'')}
+              ${qMetricRow('Penetrazione pol.','penPol',v=>v+'%')}
+              ${qMetricRow('Premi polizza','totPolizza',fe2)}
+            </tbody>
+          </table>
+        </div>
+
+      </div>`;
+  }
+
+  /* ─────────────────────────────────────────────────────────────────
+     Storico mensile per agente
+  ───────────────────────────────────────────────────────────────── */
+  function commPopulateAgentHistorySelect(){
+    const sel=document.getElementById('agent-history-select');
+    if(!sel) return;
+    const agents=[...new Set(Object.values(commAssign))].sort();
+    const cur=sel.value;
+    sel.innerHTML='<option value="">— Seleziona agente —</option>'+agents.map(a=>`<option value="${a}"${a===cur?' selected':''}>${a}</option>`).join('');
+    if(cur) sel.value=cur;
+  }
+
+  window.commBuildAgentHistory=function(){
+    const sel=document.getElementById('agent-history-select');
+    const agent=sel?sel.value:'';
+    const section=document.getElementById('comm-agent-history-section');
+    const container=document.getElementById('comm-agent-history-table');
+    if(!section||!container) return;
+    if(!agent){container.innerHTML='';return;}
+
+    // Filtra pratiche dell'agente
+    const agPratiche=commPratiche.filter(r=>commAssign[r.__id]===agent);
+
+    // Raggruppa per mese
+    const byMonth={};
+    agPratiche.forEach(r=>{
+      const m=r.__dateStr?r.__dateStr.slice(0,7):'N/D';
+      if(!byMonth[m]) byMonth[m]=[];
+      byMonth[m].push(r);
+    });
+    const months=Object.keys(byMonth).sort();
+
+    if(!months.length){container.innerHTML='<p style="color:var(--ink3);font-size:12.5px">Nessuna pratica assegnata a questo agente.</p>';return;}
+
+    const fe=v=>v!=null?'€ '+v.toLocaleString('it-IT',{minimumFractionDigits:0,maximumFractionDigits:0}):'—';
+    const pct=v=>v!=null?v+'%':'—';
+
+    const rows=months.map(m=>{
+      const s=commCalcStats(byMonth[m]);
+      const label=m==='N/D'?'N/D':new Date(m+'-01').toLocaleDateString('it-IT',{month:'short',year:'numeric'});
+      return `<tr style="border-top:1px solid var(--border)">
+        <td style="padding:7px 12px;font-size:12px;font-weight:600;white-space:nowrap">${label}</td>
+        <td style="padding:7px 12px;text-align:right;font-size:12px">${s.n}</td>
+        <td style="padding:7px 12px;text-align:right;font-size:12px">${fe(s.importoTot)}</td>
+        <td style="padding:7px 12px;text-align:right;font-size:12px">${s.nPol}</td>
+        <td style="padding:7px 12px;text-align:right;font-size:12px">${pct(s.penPol)}</td>
+        <td style="padding:7px 12px;text-align:right;font-size:12px">${fe(s.totPolizza)}</td>
+        <td style="padding:7px 12px;text-align:right;font-size:12px">${s.tanMedio!=null?s.tanMedio.toFixed(2)+'%':'—'}</td>
+      </tr>`;
+    }).join('');
+
+    // Totale
+    const tot=commCalcStats(agPratiche);
+    container.innerHTML=`
+      <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;min-width:560px">
+        <thead>
+          <tr style="background:var(--surface2)">
+            <th style="padding:7px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">Mese</th>
+            <th style="padding:7px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">Pratiche</th>
+            <th style="padding:7px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">Erogato</th>
+            <th style="padding:7px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">Polizze</th>
+            <th style="padding:7px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">Pen.%</th>
+            <th style="padding:7px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">Premi pol.</th>
+            <th style="padding:7px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">TAN medio</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr style="background:var(--surface2);border-top:2px solid var(--border2)">
+            <td style="padding:7px 12px;font-size:12px;font-weight:700">TOTALE</td>
+            <td style="padding:7px 12px;text-align:right;font-size:12px;font-weight:700">${tot.n}</td>
+            <td style="padding:7px 12px;text-align:right;font-size:12px;font-weight:700">${fe(tot.importoTot)}</td>
+            <td style="padding:7px 12px;text-align:right;font-size:12px;font-weight:700">${tot.nPol}</td>
+            <td style="padding:7px 12px;text-align:right;font-size:12px;font-weight:700">${pct(tot.penPol)}</td>
+            <td style="padding:7px 12px;text-align:right;font-size:12px;font-weight:700">${fe(tot.totPolizza)}</td>
+            <td style="padding:7px 12px;text-align:right;font-size:12px;font-weight:700">${tot.tanMedio!=null?tot.tanMedio.toFixed(2)+'%':'—'}</td>
+          </tr>
+        </tfoot>
+      </table>
+      </div>`;
+  };
+
+  /* ─────────────────────────────────────────────────────────────────
+     Export report in Excel
+  ───────────────────────────────────────────────────────────────── */
+  window.commExportReportXLSX=function(rows, columns, title){
+    if(!rows||!rows.length){alert('Nessun dato da esportare.');return;}
+    const wb=XLSX.utils.book_new();
+    const headers=columns.map(c=>c.label||c.key);
+    const data=[headers,...rows.map(r=>columns.map(c=>{
+      const v=r[c.key];
+      if(v==null) return '';
+      if(typeof v==='number') return v;
+      return v;
+    }))];
+    const ws=XLSX.utils.aoa_to_sheet(data);
+    // Larghezza colonne automatica
+    ws['!cols']=headers.map((_,i)=>({wch:Math.max(12,...data.map(row=>(row[i]!=null?String(row[i]).length:0)+2))}));
+    XLSX.utils.book_append_sheet(wb,ws,title||'Report');
+    XLSX.writeFile(wb,(title||'report')+'_'+new Date().toISOString().slice(0,10)+'.xlsx');
   };
 
   /* ---- KPI generation ---- */
@@ -4638,6 +4976,7 @@ calcPolizza();
     }
 
     commBuildKPI(kpiData);
+    commBuildYoyPanel(month);
   };
 
   function commBuildKPI(kpiData){
@@ -4700,8 +5039,70 @@ calcPolizza();
 
     section.style.display='';
     renderKpiCards();
+    // Mostra storico agente
+    const agHistSection=document.getElementById('comm-agent-history-section');
+    if(agHistSection) agHistSection.style.display='';
+    commPopulateAgentHistorySelect();
+    // Se c'era già un agente selezionato, aggiorna il suo storico
+    if(document.getElementById('agent-history-select')?.value) commBuildAgentHistory();
     section.scrollIntoView({behavior:'smooth',block:'start'});
   }
+
+  /* ---- Lista pratiche non assegnate per filiale ---- */
+  window.commShowUnassignedList=function(finKey){
+    const selMonth=document.getElementById('kpi-month-filter')?.value||'';
+    const srcData=selMonth?commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(selMonth)):commPratiche;
+    const list=srcData.filter(r=>r.finKey===finKey&&!commAssign[r.__id]);
+    if(!list.length){alert('Nessuna pratica non assegnata per questa filiale nel periodo selezionato.');return;}
+    const finLabel=FINANCIAL_MAP[finKey]?FINANCIAL_MAP[finKey].label:finKey;
+    const fe=n=>n!=null?'€ '+n.toLocaleString('it-IT',{minimumFractionDigits:0,maximumFractionDigits:0}):'—';
+    const rows=list.map(r=>`<tr style="border-top:1px solid var(--border)">
+      <td style="padding:6px 10px;font-size:11.5px;font-weight:600">${esc(r.cliente||r.ndg||'—')}</td>
+      <td style="padding:6px 10px;font-size:11.5px;color:var(--ink2)">${esc(r.ndg||'—')}</td>
+      <td style="padding:6px 10px;font-size:11.5px;text-align:right">${fe(r.importo)}</td>
+      <td style="padding:6px 10px;font-size:11.5px;color:var(--ink3)">${r.__dateStr?r.__dateStr.slice(0,10):'—'}</td>
+      <td style="padding:6px 10px;font-size:11px;color:var(--ink3)">${esc(r.prodotto||'—')}</td>
+    </tr>`).join('');
+    const html=`
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9100;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px" id="unassigned-modal" onclick="if(event.target.id==='unassigned-modal')document.getElementById('unassigned-modal').remove()">
+      <div style="background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:780px;max-width:98%;overflow:hidden">
+        <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">🔴 Pratiche non assegnate — ${esc(finLabel)}</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:2px">${list.length} pratiche${selMonth?' · periodo: '+selMonth:''}</div>
+          </div>
+          <button onclick="document.getElementById('unassigned-modal').remove()" style="border:none;background:none;font-size:20px;cursor:pointer;color:var(--ink3)">✕</button>
+        </div>
+        <div style="overflow:auto;max-height:60vh">
+          <table style="width:100%;border-collapse:collapse;font-family:'Outfit',sans-serif">
+            <thead><tr style="background:var(--surface2);border-bottom:2px solid var(--border)">
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase">Cliente</th>
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase">NDG</th>
+              <th style="padding:7px 10px;text-align:right;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase">Importo</th>
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase">Data</th>
+              <th style="padding:7px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase">Prodotto</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <div style="padding:10px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn-comm btn-comm-secondary" onclick="commGoAssignUnassigned('${finKey}');document.getElementById('unassigned-modal').remove()">➡️ Vai alle assegnazioni</button>
+          <button class="btn-comm btn-comm-primary" onclick="document.getElementById('unassigned-modal').remove()">Chiudi</button>
+        </div>
+      </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend',html);
+  };
+
+  window.commGoAssignUnassigned=function(finKey){
+    // Vai alla sezione commerciali e attiva il filtro solo non assegnate
+    document.querySelector('[data-s="commerciali"]')?.click();
+    setTimeout(()=>{
+      commQFilter('unassigned');
+      // Scrolla alla tabella
+      document.getElementById('comm-table-wrap')?.scrollIntoView({behavior:'smooth',block:'start'});
+    },300);
+  };
 
   /* ---- Dettaglio pratiche per agente ---- */
   window.commOpenAgentDetail = function(agentName){
@@ -5013,7 +5414,10 @@ calcPolizza();
           <button onclick="document.getElementById('report-builder-modal').remove()" style="border:none;background:none;font-size:20px;cursor:pointer;color:var(--ink3);padding:4px 8px">✕</button>
         </div>
         <div style="padding:16px 20px">
-          <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Seleziona i dati da includere</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px">Seleziona i dati da includere</div>
+            <button onclick="commRbSelectAll()" id="rb-sel-all-btn" style="font-size:11px;font-weight:600;color:var(--blue);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:4px;text-decoration:underline">Seleziona tutto</button>
+          </div>
           <div style="display:flex;flex-direction:column;gap:8px">${checkboxes}</div>
         </div>
         <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end">
@@ -5027,8 +5431,25 @@ calcPolizza();
 
   window.commRbToggle=function(id){
     // Almeno una colonna sempre selezionata
-    const checked=[...document.querySelectorAll('#report-builder-modal input[type=checkbox]')].filter(c=>c.checked);
+    const all=[...document.querySelectorAll('#report-builder-modal input[type=checkbox]')];
+    const checked=all.filter(c=>c.checked);
     if(checked.length===0) document.getElementById('rb-chk-'+id).checked=true;
+    // Aggiorna etichetta pulsante seleziona tutto
+    const btn=document.getElementById('rb-sel-all-btn');
+    if(btn) btn.textContent=all.every(c=>c.checked)?'Deseleziona tutto':'Seleziona tutto';
+  };
+
+  window.commRbSelectAll=function(){
+    const all=[...document.querySelectorAll('#report-builder-modal input[type=checkbox]')];
+    const allChecked=all.every(c=>c.checked);
+    if(allChecked){
+      // Deseleziona tutto tranne il primo (almeno uno obbligatorio)
+      all.forEach((c,i)=>{ c.checked=(i===0); });
+    } else {
+      all.forEach(c=>{ c.checked=true; });
+    }
+    const btn=document.getElementById('rb-sel-all-btn');
+    if(btn) btn.textContent=all.every(c=>c.checked)?'Deseleziona tutto':'Seleziona tutto';
   };
 
   /* ---- Genera Report — step 2: costruzione tabella ---- */
@@ -5147,6 +5568,7 @@ calcPolizza();
         </div>
         <div style="padding:12px 20px;border-top:1px solid #e5e7eb;display:flex;gap:8px;justify-content:flex-end;background:#fff">
           <button class="btn-comm btn-comm-secondary" onclick="commShowReportBuilder()">⚙️ Modifica colonne</button>
+          <button class="btn-comm btn-comm-secondary" onclick="commExportReportFromTable('${periodLabel}')">📥 Esporta Excel</button>
           <button class="btn-comm btn-comm-secondary" onclick="commSaveReportImage()">🖼 Salva immagine</button>
           <button class="btn-comm btn-comm-secondary" onclick="commCopyReport()">📋 Copia tabella</button>
           <button class="btn-comm btn-comm-primary" onclick="document.getElementById('report-modal').remove()">Chiudi</button>
@@ -5154,6 +5576,19 @@ calcPolizza();
       </div>
     </div>`;
     document.body.insertAdjacentHTML('beforeend',html);
+  };
+
+  window.commExportReportFromTable=function(periodLabel){
+    const table=document.querySelector('#report-modal table');
+    if(!table){alert('Report non trovato.');return;}
+    const rows=[...table.querySelectorAll('tr')];
+    const data=rows.map(tr=>[...tr.querySelectorAll('th,td')].map(c=>c.textContent.trim()));
+    const wb=XLSX.utils.book_new();
+    const ws=XLSX.utils.aoa_to_sheet(data);
+    ws['!cols']=data[0].map((_,i)=>({wch:Math.max(14,...data.map(r=>(r[i]||'').length+2))}));
+    XLSX.utils.book_append_sheet(wb,ws,'Report Erogato');
+    const fname='report-erogato_'+(periodLabel||'').replace(/\s+/g,'_')+'_'+new Date().toISOString().slice(0,10)+'.xlsx';
+    XLSX.writeFile(wb,fname);
   };
 
   window.commCopyReport=function(){
