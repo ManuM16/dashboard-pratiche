@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.30.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.31.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -4133,7 +4133,7 @@ calcPolizza();
   }
 
   async function ghGetFile(token, ghFile){
-    // Prima prova: API contents (funziona fino a ~1MB)
+    // Step 1: API contents — restituisce base64 per file ≤1MB, sha+size per file più grandi
     const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile}`;
     const res=await fetch(apiUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
     if(res.status===404) return null;
@@ -4141,17 +4141,17 @@ calcPolizza();
     const j=await res.json();
     const raw=(j.content||'').replace(/\n/g,'').trim();
     if(raw){
-      // File piccolo: base64 presente nell'API response
+      // File piccolo: base64 già presente
       try{
         const jsonStr=new TextDecoder().decode(Uint8Array.from(atob(raw),c=>c.charCodeAt(0)));
         return JSON.parse(jsonStr);
       }catch(e){ throw new Error('Parsing "'+ghFile+'" fallito: '+e.message); }
     }
-    // File grande (>1MB): content vuoto nell'API, usa raw URL
-    const rawUrl=`https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/main/${ghFile}`;
-    const res2=await fetch(rawUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token}});
-    if(res2.status===404) return null;
-    if(!res2.ok) throw new Error('Errore HTTP '+res2.status+' nel leggere (raw) '+ghFile);
+    // Step 2: File grande (>1MB) — usa Git Blobs API con Accept: raw (supporta CORS)
+    if(!j.sha) throw new Error('SHA non trovato per "'+ghFile+'" — impossibile leggere file grande');
+    const blobUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/git/blobs/${j.sha}`;
+    const res2=await fetch(blobUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.raw+json'}});
+    if(!res2.ok) throw new Error('Errore HTTP '+res2.status+' nel leggere blob "'+ghFile+'"');
     const text=await res2.text();
     if(!text.trim()) throw new Error('Il file "'+ghFile+'" su GitHub è vuoto. Fai prima "Salva su GitHub".');
     try{ return JSON.parse(text); }
