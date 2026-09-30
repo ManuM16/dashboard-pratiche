@@ -247,6 +247,39 @@ tr:hover td{background:var(--surface3)}
 .drm-inp:focus{border-color:var(--blue-m)}
 .drm-row-del{border:none;background:none;cursor:pointer;color:var(--ink3);font-size:11px;padding:2px 4px}
 .drm-row-del:hover{color:var(--red)}
+
+/* ── DRM/DTI Calculator panels ── */
+.drmc-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:0;overflow:hidden;display:flex;flex-direction:column}
+.drmc-panel-head{background:var(--surface2);padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.drmc-panel-name{flex:1;border:none;background:transparent;font-size:14px;font-weight:600;font-family:'Syne',sans-serif;color:var(--ink);outline:none;min-width:0}
+.drmc-panel-name::placeholder{color:var(--ink3);font-weight:400}
+.drmc-panel-del{border:none;background:none;cursor:pointer;color:var(--ink3);font-size:14px;padding:2px 5px;border-radius:4px;transition:.12s}
+.drmc-panel-del:hover{background:var(--red-l);color:var(--red)}
+.drmc-panel-body{padding:12px 14px;flex:1;display:flex;flex-direction:column;gap:10px}
+.drmc-section-label{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:4px}
+.drmc-tbl{width:100%;border-collapse:collapse;font-size:11.5px}
+.drmc-tbl th{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--ink3);padding:3px 5px;border-bottom:1px solid var(--border);text-align:left}
+.drmc-tbl th.r{text-align:right}
+.drmc-tbl td{padding:3px 5px;border-bottom:.5px solid var(--border);vertical-align:middle}
+.drmc-tbl td.r{text-align:right}
+.drmc-tbl tr:last-child td{border-bottom:none}
+.drmc-cell-inp{width:100%;border:none;border-radius:4px;padding:3px 5px;font-size:11px;font-family:'Outfit',sans-serif;color:var(--ink);background:transparent;outline:none;text-align:inherit}
+.drmc-cell-inp:focus{background:var(--blue-l);border-radius:4px}
+.drmc-cell-inp.r{text-align:right}
+.drmc-add-row{border:none;background:none;cursor:pointer;color:var(--blue);font-size:11px;padding:3px 6px;border-radius:4px;font-family:'Outfit',sans-serif;text-align:left;width:100%;transition:.12s}
+.drmc-add-row:hover{background:var(--blue-l)}
+.drmc-del-row{border:none;background:none;cursor:pointer;color:var(--ink3);font-size:11px;padding:2px 5px;border-radius:3px;line-height:1;transition:.12s}
+.drmc-del-row:hover{color:var(--red);background:var(--red-l)}
+.drmc-results{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 0 4px;border-top:1px solid var(--border);margin-top:4px}
+.drmc-kpi{background:var(--surface2);border-radius:8px;padding:10px 12px}
+.drmc-kpi-l{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:3px}
+.drmc-kpi-v{font-size:17px;font-weight:700;font-family:'Syne',sans-serif}
+.drmc-pos{color:var(--green)}.drmc-neg{color:var(--red)}
+.drmc-neutral{color:var(--ink)}
+.drmc-mesi-auto{font-size:10px;color:var(--ink3);font-style:italic}
+.drmc-global-kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;min-width:120px}
+.drmc-global-kpi .gl{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:2px}
+.drmc-global-kpi .gv{font-size:15px;font-weight:700;font-family:'Syne',sans-serif}
 .nm-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px}
 .fg{display:flex;flex-direction:column;gap:4px}
@@ -315,7 +348,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.22.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.23.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -359,6 +392,9 @@ tr:hover td{background:var(--surface3)}
     </button>
     <button class="sb-item" onclick="nav('calc-polizza',this)">
       <span class="sb-icon">🛡</span> Rimborso Polizza
+    </button>
+    <button class="sb-item" onclick="nav('calc-drm',this)">
+      <span class="sb-icon">⚖️</span> DRM / DTI
     </button>
   </nav>
   <div class="sb-footer">
@@ -1286,6 +1322,32 @@ tr:hover td{background:var(--surface3)}
       </div>
     </div>
 
+    <!-- ═══ CALCOLATORE DRM / DTI ═══ -->
+    <div class="section" id="s-calc-drm">
+      <div style="max-width:1200px;margin:0 auto">
+
+        <!-- Top bar: riepilogo globale + pulsanti -->
+        <div id="drmc-topbar" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px">
+          <div style="display:flex;gap:14px;flex-wrap:wrap" id="drmc-global-kpis">
+            <!-- populated by JS -->
+          </div>
+          <button onclick="drmAddPanel()" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:1.5px solid var(--blue-m);background:var(--blue-l);color:var(--blue);font-size:13px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif">
+            ＋ Nuovo pannello
+          </button>
+        </div>
+
+        <!-- Griglia pannelli -->
+        <div id="drmc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(370px,1fr));gap:16px">
+          <!-- panels injected by JS -->
+        </div>
+
+        <div id="drmc-empty" style="display:none;padding:48px;text-align:center;border:1.5px dashed var(--border2);border-radius:var(--r);background:var(--surface3);color:var(--ink3);font-size:14px">
+          <div style="font-size:36px;margin-bottom:10px">⚖️</div>
+          Nessun pannello DRM / DTI.<br>Clicca <strong>+ Nuovo pannello</strong> per iniziare.
+        </div>
+      </div>
+    </div>
+
     <div class="scheda-wrap" id="s-scheda">
       <button class="scheda-back" onclick="closeScheda()">← Torna all'elenco</button>
 
@@ -1415,6 +1477,7 @@ const TITLES = {
   'calc-prestito':'Calcolatore Prestito — Ammortamento alla Francese',
   'calc-cqs':'Calcolatore Cessione del Quinto (CQS / CQP)',
   'calc-polizza':'Calcolatore Rimborso Polizza MetLife (estinzione anticipata)',
+  'calc-drm':'Calcolatore DRM / DTI — Disponibilità Reddituale Mensile',
   'commerciali':'Monitoraggio Commerciali'
 };
 function nav(id, btn){
@@ -1423,7 +1486,7 @@ function nav(id, btn){
   document.getElementById('s-'+id).classList.add('active');
   btn.classList.add('active');
   document.getElementById('tb-title').textContent = TITLES[id];
-  const noYS = ['mensile','confronto','funnel','assegnaz','canali','pratiche','calc-prestito','calc-cqs','calc-polizza','commerciali'];
+  const noYS = ['mensile','confronto','funnel','assegnaz','canali','pratiche','calc-prestito','calc-cqs','calc-polizza','calc-drm','commerciali'];
   document.getElementById('global-ys').style.display = noYS.includes(id) ? 'none' : 'flex';
   // Mostra/nascondi albero mesi nella sidebar
   const sbTree = document.getElementById('sb-mo-tree');
@@ -1439,6 +1502,7 @@ function nav(id, btn){
   } else {
     sbTree.style.display='none';
   }
+  if(id==='calc-drm' && typeof drmRenderAll==='function') drmRenderAll();
 }
 
 // ── PANORAMICA ──────────────────────────────────────────────────────────────────
@@ -2895,6 +2959,284 @@ function calcPolizza(){
   document.getElementById('pl-results').style.display = 'block';
 }
 calcPolizza();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════
+   CALCOLATORE DRM / DTI
+   ══════════════════════════════════════════════ */
+(function(){
+  const LS_KEY = 'drmc_panels_v1';
+  const GH_FILE_DRM = 'dati-drm.json';
+  // panels: array of panel objects
+  // panel: { id, name, redditi:[{desc,importo}], rate:[{desc,importo,scadenza,debitoRes}] }
+  let panels = [];
+  let _nextId = 1;
+
+  /* ── Persistence ── */
+  function loadPanels(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(raw){ const d=JSON.parse(raw); panels=d.panels||[]; _nextId=d.nextId||1; }
+    }catch(e){}
+  }
+  function savePanels(){
+    localStorage.setItem(LS_KEY, JSON.stringify({panels, nextId:_nextId}));
+    drmGhAutoSave();
+  }
+
+  /* ── GitHub sync ── */
+  async function drmGhAutoSave(){
+    try{
+      const token=localStorage.getItem('gh_pat');
+      if(!token) return;
+      const today=new Date().toISOString().slice(0,10);
+      await ghPutFileDrm(token, GH_FILE_DRM, {version:1,exportedAt:new Date().toISOString(),panels,nextId:_nextId}, 'Autosave DRM '+today);
+    }catch(e){ console.warn('DRM GH autosave:',e.message); }
+  }
+  async function ghPutFileDrm(token, ghFile, jsonObj, message){
+    const apiUrl=`https://api.github.com/repos/ManuM16/dashboard-pratiche/contents/${ghFile}`;
+    const hdrs={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
+    let sha=null;
+    try{
+      const r=await fetch(apiUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+      if(r.ok){const j=await r.json();sha=j.sha||null;}
+    }catch(e){}
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(jsonObj,null,2))));
+    const body={message,content}; if(sha) body.sha=sha;
+    await fetch(apiUrl,{method:'PUT',headers:hdrs,body:JSON.stringify(body)});
+  }
+  async function drmGhLoad(){
+    try{
+      const token=localStorage.getItem('gh_pat');
+      if(!token) return;
+      const apiUrl=`https://api.github.com/repos/ManuM16/dashboard-pratiche/contents/${GH_FILE_DRM}`;
+      const r=await fetch(apiUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+      if(!r.ok) return;
+      const j=await r.json();
+      const d=JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))));
+      if(d && d.panels){
+        panels=d.panels; _nextId=d.nextId||(_nextId);
+        localStorage.setItem(LS_KEY,JSON.stringify({panels,nextId:_nextId}));
+        renderAll();
+      }
+    }catch(e){ console.warn('DRM GH load:',e.message); }
+  }
+
+  /* ── Calculations ── */
+  function parseN(v){
+    if(v===undefined||v===null||v==='') return 0;
+    const s=String(v).replace(/\./g,'').replace(',','.');
+    const n=parseFloat(s);
+    return isNaN(n)?0:n;
+  }
+  function calcPanel(p){
+    const totRed = (p.redditi||[]).reduce((a,r)=>a+parseN(r.importo),0);
+    const totRate = (p.rate||[]).reduce((a,r)=>a+parseN(r.importo),0);
+    const totDebit = (p.rate||[]).reduce((a,r)=>a+parseN(r.debitoRes),0);
+    const drm = totRed - totRate;
+    const dti = totRed>0 ? totRate/totRed : 0;
+    return {totRed, totRate, totDebit, drm, dti};
+  }
+  function mesiAlla(scadenza){
+    if(!scadenza) return null;
+    const today = new Date(); today.setHours(0,0,0,0);
+    const sc = new Date(scadenza);
+    if(isNaN(sc)) return null;
+    const diff = (sc.getFullYear()-today.getFullYear())*12 + (sc.getMonth()-today.getMonth());
+    return Math.max(0,diff);
+  }
+  function fe(n){ return n.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+  /* ── Render ── */
+  function renderAll(){
+    const grid = document.getElementById('drmc-grid');
+    const empty = document.getElementById('drmc-empty');
+    if(!grid) return;
+    grid.innerHTML='';
+    if(panels.length===0){ empty.style.display='block'; }
+    else { empty.style.display='none'; panels.forEach(p=>grid.appendChild(buildPanel(p))); }
+    renderGlobalKpis();
+  }
+
+  function buildPanel(p){
+    const wrap = document.createElement('div');
+    wrap.className='drmc-panel';
+    wrap.id='drmc-panel-'+p.id;
+    const redditi = p.redditi||[];
+    const rate = p.rate||[];
+
+    /* redditi rows html */
+    const redRowsHtml = redditi.map((r,i)=>`
+      <tr>
+        <td><input class="drmc-cell-inp" value="${esc(r.desc)}" placeholder="Descrizione" oninput="drmUpdateReddito(${p.id},${i},'desc',this.value)"></td>
+        <td class="r"><input class="drmc-cell-inp r" value="${esc(r.importo)}" placeholder="0,00" oninput="drmUpdateReddito(${p.id},${i},'importo',this.value)" style="width:80px"></td>
+        <td class="r"><button class="drmc-del-row" onclick="drmDelReddito(${p.id},${i})">✕</button></td>
+      </tr>`).join('');
+
+    /* rate rows html */
+    const rateRowsHtml = rate.map((r,i)=>{
+      const m = mesiAlla(r.scadenza);
+      const mLabel = m!==null ? `<span class="drmc-mesi-auto">${m} mesi</span>` : '';
+      return `<tr>
+        <td><input class="drmc-cell-inp" value="${esc(r.desc)}" placeholder="Descrizione" oninput="drmUpdateRata(${p.id},${i},'desc',this.value)"></td>
+        <td class="r"><input class="drmc-cell-inp r" value="${esc(r.importo)}" placeholder="0,00" oninput="drmUpdateRata(${p.id},${i},'importo',this.value)" style="width:70px"></td>
+        <td class="r"><input class="drmc-cell-inp r" type="date" value="${esc(r.scadenza||'')}" oninput="drmUpdateRata(${p.id},${i},'scadenza',this.value)" style="width:110px;font-size:10.5px">${mLabel}</td>
+        <td class="r"><input class="drmc-cell-inp r" value="${esc(r.debitoRes)}" placeholder="—" oninput="drmUpdateRata(${p.id},${i},'debitoRes',this.value)" style="width:80px"></td>
+        <td class="r"><button class="drmc-del-row" onclick="drmDelRata(${p.id},${i})">✕</button></td>
+      </tr>`;
+    }).join('');
+
+    const {totRed,totRate,totDebit,drm,dti} = calcPanel(p);
+    const drmCls = drm>=0?'drmc-pos':'drmc-neg';
+    const dtiCls = dti<=0.35?'drmc-pos':(dti<=0.50?'drmc-neutral':'drmc-neg');
+    const dtiIcon = dti<=0.35?'✅':(dti<=0.50?'⚠️':'❌');
+
+    wrap.innerHTML=`
+      <div class="drmc-panel-head">
+        <input class="drmc-panel-name" value="${esc(p.name)}" placeholder="Nome cliente / pratica" oninput="drmUpdateName(${p.id},this.value)">
+        <button class="drmc-panel-del" onclick="drmDelPanel(${p.id})" title="Elimina pannello">🗑</button>
+      </div>
+      <div class="drmc-panel-body">
+        <!-- Redditi -->
+        <div>
+          <div class="drmc-section-label">Redditi mensili netti</div>
+          <table class="drmc-tbl">
+            <thead><tr>
+              <th>Fonte</th>
+              <th class="r">€ / mese</th>
+              <th class="r"></th>
+            </tr></thead>
+            <tbody id="drmc-red-${p.id}">${redRowsHtml}</tbody>
+          </table>
+          <button class="drmc-add-row" onclick="drmAddReddito(${p.id})">＋ Aggiungi fonte reddito</button>
+        </div>
+        <!-- Rate -->
+        <div>
+          <div class="drmc-section-label">Impegni / rate in corso</div>
+          <table class="drmc-tbl">
+            <thead><tr>
+              <th>Tipo</th>
+              <th class="r">€ / mese</th>
+              <th class="r">Scadenza</th>
+              <th class="r">Debito res. (€)</th>
+              <th class="r"></th>
+            </tr></thead>
+            <tbody id="drmc-rate-${p.id}">${rateRowsHtml}</tbody>
+          </table>
+          <button class="drmc-add-row" onclick="drmAddRata(${p.id})">＋ Aggiungi impegno</button>
+        </div>
+        <!-- Totali & risultati -->
+        <div style="font-size:11.5px;color:var(--ink2);border-top:1px solid var(--border);padding-top:8px;display:flex;gap:20px;flex-wrap:wrap">
+          <span>Totale redditi: <strong>€ ${fe(totRed)}</strong></span>
+          <span>Totale rate: <strong>€ ${fe(totRate)}</strong></span>
+          ${totDebit>0?`<span>Debito tot. res.: <strong>€ ${fe(totDebit)}</strong></span>`:''}
+        </div>
+        <div class="drmc-results">
+          <div class="drmc-kpi">
+            <div class="drmc-kpi-l">DRM — Disponibilità mensile</div>
+            <div class="drmc-kpi-v ${drmCls}">€ ${fe(drm)}</div>
+          </div>
+          <div class="drmc-kpi">
+            <div class="drmc-kpi-l">DTI — Debt-to-Income ${dtiIcon}</div>
+            <div class="drmc-kpi-v ${dtiCls}">${(dti*100).toFixed(1).replace('.',',')} %</div>
+          </div>
+        </div>
+      </div>`;
+    return wrap;
+  }
+
+  function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+  function renderGlobalKpis(){
+    const el = document.getElementById('drmc-global-kpis');
+    if(!el||panels.length===0){ if(el) el.innerHTML=''; return; }
+    const totRed = panels.reduce((a,p)=>a+calcPanel(p).totRed,0);
+    const totRate = panels.reduce((a,p)=>a+calcPanel(p).totRate,0);
+    const totDRM = totRed - totRate;
+    const gDTI = totRed>0?totRate/totRed:0;
+    const drmCls = totDRM>=0?'drmc-pos':'drmc-neg';
+    const dtiCls = gDTI<=0.35?'drmc-pos':(gDTI<=0.50?'drmc-neutral':'drmc-neg');
+    el.innerHTML=`
+      <div class="drmc-global-kpi"><div class="gl">Pannelli attivi</div><div class="gv drmc-neutral">${panels.length}</div></div>
+      <div class="drmc-global-kpi"><div class="gl">Tot. redditi</div><div class="gv drmc-neutral">€ ${fe(totRed)}</div></div>
+      <div class="drmc-global-kpi"><div class="gl">Tot. rate</div><div class="gv drmc-neutral">€ ${fe(totRate)}</div></div>
+      <div class="drmc-global-kpi"><div class="gl">DRM globale</div><div class="gv ${drmCls}">€ ${fe(totDRM)}</div></div>
+      <div class="drmc-global-kpi"><div class="gl">DTI globale</div><div class="gv ${dtiCls}">${(gDTI*100).toFixed(1).replace('.',',')} %</div></div>`;
+  }
+
+  function findPanel(id){ return panels.find(p=>p.id===id); }
+  function reRenderPanel(id){
+    const el=document.getElementById('drmc-panel-'+id);
+    if(!el) return;
+    const p=findPanel(id); if(!p) return;
+    const newEl=buildPanel(p);
+    el.replaceWith(newEl);
+    renderGlobalKpis();
+  }
+
+  /* ── Public API (called from inline handlers) ── */
+  window.drmAddPanel = function(){
+    const p={id:_nextId++, name:'', redditi:[{desc:'',importo:''}], rate:[{desc:'',importo:'',scadenza:'',debitoRes:''}]};
+    panels.push(p);
+    savePanels();
+    renderAll();
+    // focus name
+    const el=document.getElementById('drmc-panel-'+p.id);
+    if(el){ const inp=el.querySelector('.drmc-panel-name'); if(inp) inp.focus(); }
+  };
+
+  window.drmDelPanel = function(id){
+    if(!confirm('Eliminare questo pannello?')) return;
+    panels=panels.filter(p=>p.id!==id);
+    savePanels();
+    renderAll();
+  };
+
+  window.drmUpdateName = function(id,val){
+    const p=findPanel(id); if(!p) return;
+    p.name=val; savePanels(); renderGlobalKpis();
+  };
+
+  window.drmAddReddito = function(id){
+    const p=findPanel(id); if(!p) return;
+    p.redditi.push({desc:'',importo:''});
+    savePanels(); reRenderPanel(id);
+  };
+  window.drmDelReddito = function(id,i){
+    const p=findPanel(id); if(!p) return;
+    p.redditi.splice(i,1);
+    savePanels(); reRenderPanel(id);
+  };
+  window.drmUpdateReddito = function(id,i,field,val){
+    const p=findPanel(id); if(!p) return;
+    p.redditi[i][field]=val; savePanels(); reRenderPanel(id);
+  };
+
+  window.drmAddRata = function(id){
+    const p=findPanel(id); if(!p) return;
+    p.rate.push({desc:'',importo:'',scadenza:'',debitoRes:''});
+    savePanels(); reRenderPanel(id);
+  };
+  window.drmDelRata = function(id,i){
+    const p=findPanel(id); if(!p) return;
+    p.rate.splice(i,1);
+    savePanels(); reRenderPanel(id);
+  };
+  window.drmUpdateRata = function(id,i,field,val){
+    const p=findPanel(id); if(!p) return;
+    p.rate[i][field]=val; savePanels(); reRenderPanel(id);
+  };
+
+  /* ── Init ── */
+  loadPanels();
+  // Expose render for nav hook
+  window.drmRenderAll = renderAll;
+  // Try to load from GitHub if PAT is set
+  if(localStorage.getItem('gh_pat')) drmGhLoad().then(()=>{}).catch(()=>{});
+  // Initial render
+  document.addEventListener('DOMContentLoaded', ()=>renderAll());
+})();
 </script>
 
 <script>
