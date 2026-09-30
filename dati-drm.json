@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-30T14:09:46.668Z",
+  "exportedAt": "2026-09-30T14:09:54.290Z",
   "panels": [
     {
       "id": 1,
@@ -8,7 +8,7 @@
       "redditi": [
         {
           "desc": "Reddito Co1",
-          "importo": "2500"
+          "importo": "250100"
         },
         {
           "desc": "Reddito Co2",
