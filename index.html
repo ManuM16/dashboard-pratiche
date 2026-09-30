@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.18.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.20.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -946,8 +946,11 @@ tr:hover td{background:var(--surface3)}
           </div>
         </div>
 
-        <!-- KPI section -->
-        <div class="comm-kpi-section" id="comm-kpi-section" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+        </div><!-- /comm-loaded-area-table EARLY CLOSE -->
+      </div><!-- /comm-main-grid EARLY CLOSE -->
+
+        <!-- KPI section — full width, sotto il grid a 2 colonne -->
+        <div class="comm-kpi-section" id="comm-kpi-section" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:14px">
           <!-- Top control bar (full width) -->
           <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border)">
             <!-- Periodo -->
@@ -1022,9 +1025,8 @@ tr:hover td{background:var(--surface3)}
             </div>
           </div>
         </div>
-      </div>
+    </div><!-- /s-commerciali -->
 
-    </div>
     <!-- ═══ / COMMERCIALI ═══ -->
 
     <!-- ═══ CALCOLATORE PRESTITO ═══ -->
@@ -4268,6 +4270,38 @@ calcPolizza();
     document.body.style.overflow = '';
   };
 
+  window.commSaveAgentDetailImage = function(){
+    const modal = document.getElementById('agent-modal');
+    if(!modal){ alert('Pannello non trovato.'); return; }
+    const agentName = document.getElementById('agent-modal-name').textContent || 'commerciale';
+    const safeName = agentName.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9\-]/g,'');
+    function doCapture(){
+      html2canvas(modal,{
+        backgroundColor: null,
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: modal.scrollWidth,
+        windowHeight: modal.scrollHeight
+      }).then(canvas=>{
+        const link = document.createElement('a');
+        link.download = 'pratiche-' + safeName + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }).catch(()=>alert('❌ Errore durante la generazione dell\'immagine.'));
+    }
+    if(window.html2canvas){ doCapture(); }
+    else{
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      s.onload = doCapture;
+      s.onerror = ()=>alert('❌ Impossibile caricare html2canvas. Controlla la connessione.');
+      document.head.appendChild(s);
+    }
+  };
+
   // Chiudi con Escape
   document.addEventListener('keydown', e => { if(e.key==='Escape') window.commCloseAgentDetail?.(); });
 
@@ -4657,6 +4691,7 @@ calcPolizza();
         <div class="agent-modal-name" id="agent-modal-name"></div>
         <div class="agent-modal-sub" id="agent-modal-sub"></div>
       </div>
+      <button class="agent-modal-close" onclick="commSaveAgentDetailImage()" title="Salva elenco come immagine" style="margin-right:4px">🖼 Salva immagine</button>
       <button class="agent-modal-close" onclick="commCloseAgentDetail()">✕ Chiudi</button>
     </div>
     <div class="agent-modal-kpis" id="agent-modal-kpis"></div>
