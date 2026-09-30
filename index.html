@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.32.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.33.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -3823,12 +3823,22 @@ calcPolizza();
         const raw=XLSX.utils.sheet_to_json(ws,{defval:null,raw:true,cellDates:true});
         commPratiche=parsePratiche(raw);
         commFileName=file.name;
-        commAssign={};
         // Salva i dati parsati in cache per ripristino automatico
         savePraticheCache(file.name);
-        // Pulisce localStorage e carica solo assegnazioni valide (pratiche CORTO del file)
-        const cleanedAssign=cleanupAssignStorage();
-        if(cleanedAssign) Object.assign(commAssign,cleanedAssign);
+        // Ripristina assegnazioni: match per __id su TUTTE le chiavi localStorage
+        commAssign={};
+        const newIds=new Set(commPratiche.map(r=>r.__id));
+        for(let i=0;i<localStorage.length;i++){
+          const lk=localStorage.key(i);
+          if(lk&&lk.startsWith('comm_assign_')){
+            try{
+              const saved=JSON.parse(localStorage.getItem(lk));
+              Object.entries(saved).forEach(([id,agent])=>{ if(newIds.has(id)) commAssign[id]=agent; });
+            }catch(e){}
+          }
+        }
+        // Salva il risultato del match nella chiave del range corrente
+        saveAssign();
         // Popola anni disponibili
         populateYearSelect();
         // default filter = today (modalità giorno)
