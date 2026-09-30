@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.20.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.21.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3493,10 +3493,8 @@ calcPolizza();
       // ── FILTRO CORTO ──
       if(tipo!=='CORTO') return;
 
-      // Cerca il numero pratica in colonne note, poi fallback alla prima colonna non-null
-      const numPratica = get(['NUM_PRATICA','N_PRATICA','NUMERO_PRATICA','COD_PRATICA','ID','ID_PRATICA'])
-        || keys.map(k=>r[k]).find(v=>v!=null&&v!=='')
-        || i;
+      // Cerca il numero pratica in colonne note; se non trovato rimane null (visualizza —)
+      const numPratica = get(['NUM_PRATICA','N_PRATICA','NUMERO_PRATICA','COD_PRATICA','ID','ID_PRATICA']) || null;
       const cliente=get(['DES_CLIENTE']);
       const prodotto=get(['AUT_Fami']);
       // Helper: converte numero o stringa in float (gestisce sia numeri nativi che stringhe con virgola/punto)
