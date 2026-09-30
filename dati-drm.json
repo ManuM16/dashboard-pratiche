@@ -1,28 +1,10 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-30T13:59:39.823Z",
+  "exportedAt": "2026-09-30T14:09:06.635Z",
   "panels": [
     {
       "id": 1,
       "name": "Cappai Corrado",
-      "redditi": [
-        {
-          "desc": "",
-          "importo": ""
-        }
-      ],
-      "rate": [
-        {
-          "desc": "",
-          "importo": "",
-          "scadenza": "",
-          "debitoRes": ""
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "name": "",
       "redditi": [
         {
           "desc": "",
