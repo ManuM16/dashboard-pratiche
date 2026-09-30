@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.28.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.29.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -3012,7 +3012,9 @@ calcPolizza();
       const r=await fetch(apiUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
       if(!r.ok) return;
       const j=await r.json();
-      const d=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\n/g,'')),c=>c.charCodeAt(0))));
+      const _raw=(j.content||'').replace(/\n/g,'').trim();
+      if(!_raw){ console.warn('DRM GH: file vuoto'); return; }
+      const d=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(_raw),c=>c.charCodeAt(0))));
       if(d && d.panels){
         panels=d.panels; _nextId=d.nextId||(_nextId);
         localStorage.setItem(LS_KEY,JSON.stringify({panels,nextId:_nextId}));
@@ -4134,9 +4136,19 @@ calcPolizza();
     const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile}`;
     const res=await fetch(apiUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
     if(res.status===404) return null;
-    if(!res.ok) throw new Error('Errore '+res.status+' nel leggere '+ghFile);
+    if(!res.ok) throw new Error('Errore HTTP '+res.status+' nel leggere '+ghFile);
     const j=await res.json();
-    return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\n/g,'')),c=>c.charCodeAt(0))));
+    // j.content può essere assente o vuoto se il file è vuoto su GitHub
+    const raw=(j.content||'').replace(/\n/g,'').trim();
+    if(!raw) throw new Error('Il file "'+ghFile+'" su GitHub è vuoto (0 byte). Fai prima "Salva su GitHub" per creare un backup valido.');
+    let bytes;
+    try{ bytes=atob(raw); }
+    catch(e){ throw new Error('Decodifica base64 fallita per "'+ghFile+'": '+e.message); }
+    let jsonStr;
+    try{ jsonStr=new TextDecoder().decode(Uint8Array.from(bytes,c=>c.charCodeAt(0))); }
+    catch(e){ throw new Error('Decodifica testo fallita per "'+ghFile+'": '+e.message); }
+    try{ return JSON.parse(jsonStr); }
+    catch(e){ throw new Error('JSON non valido in "'+ghFile+'" (primi 200 car: '+jsonStr.slice(0,200)+'): '+e.message); }
   }
 
   window.commExportGitHub=async function(silent=false){
