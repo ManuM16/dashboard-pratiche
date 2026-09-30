@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.36.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.37.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -4292,9 +4292,30 @@ calcPolizza();
         console.log('[commImportGitHub] ID GitHub (primi 5):',ghIds.slice(0,5));
         console.log('[commImportGitHub] ID Excel (primi 5):',commPratiche.slice(0,5).map(r=>r.__id));
         console.log('[commImportGitHub] Totale ID GitHub:',ghIds.length,'| Totale pratiche Excel:',commPratiche.length);
+        // Passaggio 1: match esatto per __id
         Object.entries(allGhAssign).forEach(([id,agent])=>{
           if(currentIds.has(id)){ commAssign[id]=agent; matchedPratiche++; }
         });
+        // Passaggio 2: match per cliente+importo+data per le CQS (ID GitHub ha filiale al posto del numero)
+        // Costruisce indice: "NOME|importo|data" → __id pratica Excel
+        const unmatched=Object.entries(allGhAssign).filter(([id])=>!commAssign[id]&&id.startsWith('ALIFIN'));
+        if(unmatched.length){
+          const byClientKey={};
+          commPratiche.forEach(r=>{
+            if(!commAssign[r.__id]){
+              const parts=r.__id.split('|');
+              // chiave fallback: cliente|importo|data (parti 1,2,3 dell'ID Excel)
+              const fbKey=parts.slice(1).join('|');
+              if(fbKey) byClientKey[fbKey]=r.__id;
+            }
+          });
+          unmatched.forEach(([ghId,agent])=>{
+            const ghParts=ghId.split('|');
+            const fbKey=ghParts.slice(1).join('|'); // cliente|importo|data
+            const excelId=byClientKey[fbKey];
+            if(excelId){ commAssign[excelId]=agent; matchedPratiche++; }
+          });
+        }
       }
       saveAssign();
       _calYear=new Date().getFullYear(); _calMonth=new Date().getMonth();
