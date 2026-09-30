@@ -412,7 +412,7 @@ tr:hover td{background:var(--surface3)}
   <div class="topbar">
     <div class="topbar-left">
       <div class="topbar-title" id="tb-title">Panoramica generale</div>
-      <div class="topbar-crumb" id="tb-crumb">Gen 2025 – Ago 2026 · 20 mesi</div>
+      <div class="topbar-crumb" id="tb-crumb"></div>
     </div>
     <div class="year-switcher" id="global-ys" style="display:flex">
       <button class="ys-btn active" onclick="setGY('both',this)">Tutto</button>
@@ -844,7 +844,6 @@ tr:hover td{background:var(--surface3)}
           <div class="comm-title">📊 Monitoraggio Commerciali</div>
           <div style="font-size:12px;color:var(--ink3);margin-top:3px">Carica il file erogato giornaliero e assegna le pratiche ai commerciali</div>
         </div>
-        <span style="font-size:11.5px;color:var(--ink3);background:var(--surface2);padding:5px 10px;border-radius:7px;border:1px solid var(--border)">Solo pratiche <strong>CORTO</strong></span>
       </div>
 
       <!-- Banner ripristino automatico da GitHub (auto-restore all'avvio) -->
@@ -953,13 +952,14 @@ tr:hover td{background:var(--surface3)}
             <span id="comm-assign-progress-label" style="font-size:11px;font-weight:400;color:var(--ink3);margin-left:auto"></span>
           </h3>
           <!-- Filtri rapidi tabella -->
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;padding:0 2px">
+            <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap">Filtra:</span>
             <button id="qf-all" onclick="commQFilter('all')" class="btn-comm btn-comm-secondary" style="font-size:11.5px;padding:4px 10px;background:var(--ink);color:#fff">Tutte</button>
-            <button id="qf-unassigned" onclick="commQFilter('unassigned')" class="btn-comm btn-comm-secondary" style="font-size:11.5px;padding:4px 10px">Solo non assegnate</button>
+            <button id="qf-unassigned" onclick="commQFilter('unassigned')" class="btn-comm btn-comm-secondary" style="font-size:11.5px;padding:4px 10px">Non assegnate</button>
             <select id="qf-agent" onchange="commQFilter('agent')" style="padding:4px 10px;border:1px solid var(--border2);border-radius:7px;font-size:11.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
               <option value="">Per commerciale…</option>
             </select>
-            <span id="comm-count-label" style="font-size:11.5px;color:var(--ink3);margin-left:auto"></span>
+            <span id="comm-count-label" style="font-size:11px;color:var(--ink3);margin-left:auto;font-weight:500"></span>
           </div>
           <div style="overflow-x:auto">
             <table class="comm-assign-table">
@@ -978,18 +978,26 @@ tr:hover td{background:var(--surface3)}
               <tbody id="comm-tbody"></tbody>
             </table>
           </div>
-          <div class="comm-assign-actions">
-            <span id="comm-assign-status" style="font-size:12px;color:var(--ink3)">0 / 0 assegnate</span>
-            <button class="btn-comm btn-comm-secondary" onclick="commAssignAll()" title="Assegna tutte le pratiche al commerciale selezionato">Assegna tutto a…</button>
-            <button class="btn-comm btn-comm-secondary" onclick="commExportGitHub()" title="Salva backup su GitHub">☁️ Salva su GitHub</button>
-            <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub()" title="Carica backup da GitHub">📥 Carica da GitHub</button>
-            <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub(false,true)" title="Ripristina dal backup del giorno precedente" style="color:#d97706">🔄 Ripristina backup</button>
-            <span id="gh-sync-status" style="display:inline-flex;align-items:center;padding:0 6px"></span>
-            <button class="btn-comm btn-comm-secondary" onclick="commDebugLS()" title="Mostra contenuto localStorage" style="color:var(--ink2)">🔍 Debug LS</button>
-            <button class="btn-comm btn-comm-secondary" onclick="commNukeAssign()" title="Cancella TUTTE le assegnazioni salvate (non i dati pratiche)" style="color:orange">🧹 Reset assegnazioni</button>
-            <button class="btn-comm btn-comm-secondary" onclick="commClearAllData()" title="Cancella tutti i dati salvati nel browser" style="color:var(--red)">🗑 Azzera dati</button>
-            <button class="btn-comm btn-comm-secondary" onclick="commShowReportBuilder()" title="Genera report personalizzato">📊 Genera Report</button>
-            <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi">Genera analisi →</button>
+          <div class="comm-assign-actions" style="flex-wrap:nowrap;overflow-x:auto">
+            <span id="comm-assign-status" style="font-size:12px;color:var(--ink3);white-space:nowrap;flex-shrink:0">0 / 0 assegnate</span>
+            <span id="gh-sync-status" style="display:inline-flex;align-items:center;padding:0 2px;flex-shrink:0"></span>
+            <button class="btn-comm btn-comm-secondary" onclick="commAssignAll()" title="Assegna tutte le pratiche al commerciale selezionato" style="white-space:nowrap;flex-shrink:0">Assegna a…</button>
+            <!-- GitHub group -->
+            <button class="btn-comm btn-comm-secondary" onclick="commExportGitHub()" title="Salva backup su GitHub" style="white-space:nowrap;flex-shrink:0">☁️ Salva</button>
+            <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub()" title="Carica backup da GitHub" style="white-space:nowrap;flex-shrink:0">📥 Carica</button>
+            <!-- Dropdown avanzato -->
+            <div style="position:relative;flex-shrink:0" id="comm-more-wrap">
+              <button class="btn-comm btn-comm-secondary" onclick="commToggleMoreMenu()" style="white-space:nowrap" title="Altre azioni">⚙️ Altro ▾</button>
+              <div id="comm-more-menu" style="display:none;position:absolute;bottom:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);padding:6px;min-width:200px;z-index:500">
+                <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub(false,true);commToggleMoreMenu()" style="width:100%;text-align:left;color:#d97706;margin-bottom:2px">🔄 Ripristina backup GH</button>
+                <button class="btn-comm btn-comm-secondary" onclick="commShowReportBuilder();commToggleMoreMenu()" style="width:100%;text-align:left;margin-bottom:2px">📊 Genera Report</button>
+                <hr style="border:none;border-top:1px solid var(--border);margin:4px 0">
+                <button class="btn-comm btn-comm-secondary" onclick="commDebugLS();commToggleMoreMenu()" style="width:100%;text-align:left;color:var(--ink2);margin-bottom:2px">🔍 Debug localStorage</button>
+                <button class="btn-comm btn-comm-secondary" onclick="commNukeAssign();commToggleMoreMenu()" style="width:100%;text-align:left;color:orange;margin-bottom:2px">🧹 Reset assegnazioni</button>
+                <button class="btn-comm btn-comm-secondary" onclick="commClearAllData();commToggleMoreMenu()" style="width:100%;text-align:left;color:var(--red)">🗑 Azzera tutti i dati</button>
+              </div>
+            </div>
+            <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi" style="white-space:nowrap;flex-shrink:0;margin-left:auto">Genera analisi →</button>
           </div>
         </div>
 
@@ -1068,8 +1076,8 @@ tr:hover td{background:var(--surface3)}
             <!-- Right: KPI cards -->
             <div style="padding:14px 16px;box-sizing:border-box">
               <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 12px;color:var(--ink)">📈 Analisi Erogato</h3>
+              <div id="comm-yoy-panel" style="display:none;margin-bottom:16px"></div>
               <div id="comm-kpi-cards"></div>
-              <div id="comm-yoy-panel" style="display:none;margin-top:14px"></div>
             </div>
           </div>
           <!-- Storico agente mensile — full width sotto il grid KPI -->
@@ -4071,6 +4079,18 @@ calcPolizza();
   window.commApplyDateFilter=applyFilters;
   window.commApplyFinFilter=applyFilters;
 
+  /* ---- Menu "Altro" dropdown ---- */
+  window.commToggleMoreMenu=function(){
+    const menu=document.getElementById('comm-more-menu');
+    if(!menu) return;
+    const isOpen=menu.style.display!=='none';
+    menu.style.display=isOpen?'none':'';
+    if(!isOpen){
+      const close=e=>{if(!document.getElementById('comm-more-wrap')?.contains(e.target)){menu.style.display='none';document.removeEventListener('click',close,true);}};
+      setTimeout(()=>document.addEventListener('click',close,true),0);
+    }
+  };
+
   /* ---- Quick filter tabella assegnazioni ---- */
   let _qfMode='all'; // 'all' | 'unassigned' | 'agent'
   window.commQFilter=function(mode){
@@ -4785,73 +4805,91 @@ calcPolizza();
 
     const metricRow=(label,key,fmt)=>`
       <tr style="border-top:1px solid var(--border)">
-        <td style="padding:7px 12px;font-size:12px;font-weight:500;color:var(--ink2);white-space:nowrap">${label}</td>
-        <td style="padding:7px 12px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink)">${fmt(curr[key])}</td>
-        <td style="padding:7px 12px;text-align:center">${commArrow(commYoyDelta(curr,prevM,key))}</td>
-        <td style="padding:7px 8px;text-align:right;font-size:11.5px;color:var(--ink3)">${prevM?fmt(prevM[key]):'—'}</td>
-        <td style="padding:7px 12px;text-align:center">${commArrow(commYoyDelta(curr,prevY,key))}</td>
-        <td style="padding:7px 8px;text-align:right;font-size:11.5px;color:var(--ink3)">${prevY?fmt(prevY[key]):'—'}</td>
+        <td style="padding:6px 10px;font-size:11.5px;font-weight:500;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</td>
+        <td style="padding:6px 8px;text-align:right;font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${fmt(curr[key])}</td>
+        <td style="padding:6px 2px;text-align:center;font-size:11px">${commArrow(commYoyDelta(curr,prevM,key))}</td>
+        <td style="padding:6px 6px;text-align:right;font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${prevM?fmt(prevM[key]):'—'}</td>
+        <td style="padding:6px 2px;text-align:center;font-size:11px">${commArrow(commYoyDelta(curr,prevY,key))}</td>
+        <td style="padding:6px 6px;text-align:right;font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${prevY?fmt(prevY[key]):'—'}</td>
       </tr>`;
 
     const qMetricRow=(label,key,fmt)=>`
       <tr style="border-top:1px solid var(--border)">
-        <td style="padding:7px 12px;font-size:12px;font-weight:500;color:var(--ink2);white-space:nowrap">${label}</td>
-        <td style="padding:7px 12px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink)">${fmt(qCurr[key])}</td>
-        <td style="padding:7px 12px;text-align:center">${commArrow(commYoyDelta(qCurr,qPrev,key))}</td>
-        <td style="padding:7px 8px;text-align:right;font-size:11.5px;color:var(--ink3)">${qPrev?fmt(qPrev[key]):'—'}</td>
+        <td style="padding:6px 10px;font-size:11.5px;font-weight:500;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</td>
+        <td style="padding:6px 8px;text-align:right;font-size:12px;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${fmt(qCurr[key])}</td>
+        <td style="padding:6px 2px;text-align:center;font-size:11px">${commArrow(commYoyDelta(qCurr,qPrev,key))}</td>
+        <td style="padding:6px 6px;text-align:right;font-size:11px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${qPrev?fmt(qPrev[key]):'—'}</td>
       </tr>`;
 
     panel.style.display='';
     panel.innerHTML=`
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div style="display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:14px">
 
         <!-- Confronto mensile -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;min-width:0">
           <div style="padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
             <span style="font-size:14px">📅</span>
             <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">Confronto mensile</span>
           </div>
-          <table style="width:100%;border-collapse:collapse">
+          <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:440px">
+            <colgroup>
+              <col style="width:130px">
+              <col style="width:110px">
+              <col style="width:38px">
+              <col style="width:100px">
+              <col style="width:38px">
+              <col style="width:100px">
+            </colgroup>
             <thead>
               <tr style="background:var(--surface3)">
-                <th style="padding:6px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase"></th>
-                <th style="padding:6px 12px;text-align:right;font-size:10px;font-weight:600;color:var(--blue);text-transform:uppercase">${meseLabel}</th>
-                <th style="padding:6px 8px;text-align:center;font-size:10px;font-weight:600;color:var(--ink3)" colspan="2">vs ${prevMLabel}</th>
-                <th style="padding:6px 8px;text-align:center;font-size:10px;font-weight:600;color:var(--ink3)" colspan="2">vs ${prevYLabel}</th>
+                <th style="padding:6px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></th>
+                <th style="padding:6px 8px;text-align:right;font-size:10px;font-weight:600;color:var(--blue);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${meseLabel}</th>
+                <th style="padding:4px 2px;text-align:center;font-size:9px;font-weight:600;color:var(--ink3)" colspan="2">vs ${prevMLabel}</th>
+                <th style="padding:4px 2px;text-align:center;font-size:9px;font-weight:600;color:var(--ink3)" colspan="2">vs ${prevYLabel}</th>
               </tr>
             </thead>
             <tbody>
               ${metricRow('Erogato','importoTot',fe2)}
-              ${metricRow('N° Pratiche','n',v=>v+'')}
+              ${metricRow('Pratiche','n',v=>v+'')}
               ${metricRow('Polizze','nPol',v=>v+'')}
-              ${metricRow('Penetrazione pol.','penPol',v=>v+'%')}
-              ${metricRow('Premi polizza','totPolizza',fe2)}
+              ${metricRow('Penetrazione','penPol',v=>v+'%')}
+              ${metricRow('Premi pol.','totPolizza',fe2)}
             </tbody>
           </table>
+          </div>
         </div>
 
         <!-- Confronto quarter -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;min-width:0">
           <div style="padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
             <span style="font-size:14px">📊</span>
             <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">Confronto quarter</span>
           </div>
-          <table style="width:100%;border-collapse:collapse">
+          <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;table-layout:fixed;min-width:280px">
+            <colgroup>
+              <col style="width:110px">
+              <col style="width:90px">
+              <col style="width:34px">
+              <col style="width:90px">
+            </colgroup>
             <thead>
               <tr style="background:var(--surface3)">
-                <th style="padding:6px 12px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase"></th>
-                <th style="padding:6px 12px;text-align:right;font-size:10px;font-weight:600;color:var(--blue);text-transform:uppercase">${qLabel}</th>
-                <th style="padding:6px 8px;text-align:center;font-size:10px;font-weight:600;color:var(--ink3)" colspan="2">vs ${qPrevLabel}</th>
+                <th style="padding:6px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></th>
+                <th style="padding:6px 8px;text-align:right;font-size:10px;font-weight:600;color:var(--blue);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${qLabel}</th>
+                <th style="padding:4px 2px;text-align:center;font-size:9px;font-weight:600;color:var(--ink3)" colspan="2">vs ${qPrevLabel}</th>
               </tr>
             </thead>
             <tbody>
               ${qMetricRow('Erogato','importoTot',fe2)}
-              ${qMetricRow('N° Pratiche','n',v=>v+'')}
+              ${qMetricRow('Pratiche','n',v=>v+'')}
               ${qMetricRow('Polizze','nPol',v=>v+'')}
-              ${qMetricRow('Penetrazione pol.','penPol',v=>v+'%')}
-              ${qMetricRow('Premi polizza','totPolizza',fe2)}
+              ${qMetricRow('Penetrazione','penPol',v=>v+'%')}
+              ${qMetricRow('Premi pol.','totPolizza',fe2)}
             </tbody>
           </table>
+          </div>
         </div>
 
       </div>`;
