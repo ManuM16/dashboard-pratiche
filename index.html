@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.15.0 · 29/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.16.0 · 29/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -1024,36 +1024,6 @@ tr:hover td{background:var(--surface3)}
         </div>
       </div>
 
-    </div>
-    <!-- Agent detail modal -->
-    <div id="agent-modal-overlay" class="agent-modal-overlay" style="display:none" onclick="if(event.target===this)commCloseAgentDetail()">
-      <div class="agent-modal" id="agent-modal">
-        <div class="agent-modal-header" id="agent-modal-header">
-          <div class="agent-modal-avatar" id="agent-modal-avatar"></div>
-          <div>
-            <div class="agent-modal-name" id="agent-modal-name"></div>
-            <div class="agent-modal-sub" id="agent-modal-sub"></div>
-          </div>
-          <button class="agent-modal-close" onclick="commCloseAgentDetail()">✕ Chiudi</button>
-        </div>
-        <div class="agent-modal-kpis" id="agent-modal-kpis"></div>
-        <div class="agent-modal-table-wrap">
-          <table class="agent-modal-table">
-            <thead>
-              <tr>
-                <th style="text-align:left">Data</th>
-                <th style="text-align:left">N° Pratica</th>
-                <th style="text-align:left">Cliente</th>
-                <th style="text-align:left">Prodotto</th>
-                <th style="text-align:right">Importo</th>
-                <th style="text-align:center">TAN</th>
-                <th style="text-align:center">Polizza</th>
-              </tr>
-            </thead>
-            <tbody id="agent-modal-tbody"></tbody>
-          </table>
-        </div>
-      </div>
     </div>
     <!-- ═══ / COMMERCIALI ═══ -->
 
@@ -4677,5 +4647,36 @@ calcPolizza();
 
 })();
 </script>
+
+<!-- Agent detail modal — fuori da tutte le sezioni, direttamente in body -->
+<div id="agent-modal-overlay" class="agent-modal-overlay" style="display:none" onclick="if(event.target===this)commCloseAgentDetail()">
+  <div class="agent-modal" id="agent-modal">
+    <div class="agent-modal-header" id="agent-modal-header">
+      <div class="agent-modal-avatar" id="agent-modal-avatar"></div>
+      <div>
+        <div class="agent-modal-name" id="agent-modal-name"></div>
+        <div class="agent-modal-sub" id="agent-modal-sub"></div>
+      </div>
+      <button class="agent-modal-close" onclick="commCloseAgentDetail()">✕ Chiudi</button>
+    </div>
+    <div class="agent-modal-kpis" id="agent-modal-kpis"></div>
+    <div class="agent-modal-table-wrap">
+      <table class="agent-modal-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Data</th>
+            <th style="text-align:left">N° Pratica</th>
+            <th style="text-align:left">Cliente</th>
+            <th style="text-align:left">Prodotto</th>
+            <th style="text-align:right">Importo</th>
+            <th style="text-align:center">TAN</th>
+            <th style="text-align:center">Polizza</th>
+          </tr>
+        </thead>
+        <tbody id="agent-modal-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 </body>
 </html>
