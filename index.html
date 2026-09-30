@@ -3589,6 +3589,12 @@ calcPolizza();
   async function ghAutoSaveNow(){
     const token=localStorage.getItem('gh_pat');
     if(!token) return;
+    // Sicurezza: non sovrascrivere GitHub se non ci sono assegnazioni
+    if(Object.keys(commAssign).length===0){
+      console.warn('[GH autosave] bloccato: commAssign vuoto, skip per sicurezza');
+      ghSetSyncStatus('idle');
+      return;
+    }
     ghSetSyncStatus('saving');
     try{
       const today=new Date().toISOString().slice(0,10);
@@ -3839,6 +3845,14 @@ calcPolizza();
         }
         // Salva il risultato del match nella chiave del range corrente
         saveAssign();
+        // Se non ci sono assegnazioni in localStorage ma c'è il token GitHub,
+        // tenta il ripristino automatico da GitHub senza che l'utente debba cliccare
+        if(Object.keys(commAssign).length===0 && localStorage.getItem('gh_pat')){
+          console.log('[commLoadFile] localStorage vuoto, avvio ripristino automatico da GitHub...');
+          setTimeout(function(){
+            commImportGitHub(true /* silent */);
+          }, 300);
+        }
         // Popola anni disponibili
         populateYearSelect();
         // default filter = today (modalità giorno)
@@ -4218,7 +4232,7 @@ calcPolizza();
     }
   };
 
-  window.commImportGitHub=async function(){
+  window.commImportGitHub=async function(silent){
     const token=ghGetToken(); if(!token) return;
     try{
       // 1. Carica assegnazioni da GitHub
@@ -4281,13 +4295,21 @@ calcPolizza();
       commCalRender();
 
       const exportDate=payload.exportedAt?new Date(payload.exportedAt).toLocaleDateString('it-IT'):'—';
-      let msg=`✅ Assegnazioni caricate da GitHub!\n\nBackup del: ${exportDate}`;
-      if(praticheRipristinate) msg+=`\nPratiche Excel ripristinate: ${praticheRipristinate}`;
-      else msg+=`\nFile Excel corrente mantenuto (${praticheCorrenti} pratiche)`;
-      msg+=`\nAssegnazioni applicate: ${matchedPratiche} / ${Object.keys(allGhAssign).length}`;
-      alert(msg);
+      if(silent){
+        // Ripristino silenzioso: mostra solo un breve avviso non bloccante nella UI
+        const syncEl=document.getElementById('gh-sync-status');
+        if(syncEl){ syncEl.textContent=`✅ ${matchedPratiche} assegnazioni ripristinate da GitHub`; syncEl.style.color='var(--teal)'; setTimeout(()=>{ syncEl.textContent=''; syncEl.style.color=''; },5000); }
+        console.log(`[commImportGitHub silent] ${matchedPratiche} assegnazioni applicate su ${commPratiche.length} pratiche`);
+      } else {
+        let msg=`✅ Assegnazioni caricate da GitHub!\n\nBackup del: ${exportDate}`;
+        if(praticheRipristinate) msg+=`\nPratiche Excel ripristinate: ${praticheRipristinate}`;
+        else msg+=`\nFile Excel corrente mantenuto (${praticheCorrenti} pratiche)`;
+        msg+=`\nAssegnazioni applicate: ${matchedPratiche} / ${Object.keys(allGhAssign).length}`;
+        alert(msg);
+      }
     }catch(err){
-      alert('❌ Errore nel caricamento da GitHub:\n'+err.message);
+      if(!silent) alert('❌ Errore nel caricamento da GitHub:\n'+err.message);
+      else console.warn('[commImportGitHub silent] errore:',err.message);
     }
   };
 
