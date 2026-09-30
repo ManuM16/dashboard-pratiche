@@ -36,19 +36,18 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);min-h
   transition:transform .25s ease
 }
 .sb-logo{padding:20px 20px 16px;border-bottom:1px solid rgba(255,255,255,.07)}
-.sb-logo-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;letter-spacing:-.2px;color:#fff}
-.sb-logo-sub{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px}
+.sb-logo-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;letter-spacing:-.2px;color:#fff}
 .sb-nav{padding:14px 10px;flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent}
 .sb-nav::-webkit-scrollbar{width:4px}
 .sb-nav::-webkit-scrollbar-track{background:transparent}
 .sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:4px}
 .sb-nav::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.28)}
-.sb-section{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.9px;
+.sb-section{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.9px;
   color:rgba(255,255,255,.28);padding:10px 10px 5px;margin-top:6px}
 .sb-item{
   display:flex;align-items:center;gap:10px;width:100%;
   padding:9px 10px;border-radius:8px;cursor:pointer;
-  font-size:13px;font-weight:400;color:rgba(255,255,255,.55);
+  font-size:14.5px;font-weight:400;color:rgba(255,255,255,.55);
   border:none;background:none;font-family:'Outfit',sans-serif;
   text-align:left;transition:.15s;letter-spacing:.1px
 }
@@ -349,11 +348,27 @@ tr:hover td{background:var(--surface3)}
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sb-logo">
-    <div class="sb-logo-title">Pratiche 2025/26</div>
-    <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.25.0 · 30/09/2026</div>
+    <div class="sb-logo-title">Dashboard</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.27.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
+    <div class="sb-section">Erogato</div>
+    <button class="sb-item" onclick="nav('commerciali',this)">
+      <span class="sb-icon">📊</span> Analisi Erogato
+    </button>
+    <div class="sb-section">Calcolatori</div>
+    <button class="sb-item" onclick="nav('calc-prestito',this)">
+      <span class="sb-icon">⊞</span> Prestito
+    </button>
+    <button class="sb-item" onclick="nav('calc-cqs',this)">
+      <span class="sb-icon">⊟</span> Cessione del Quinto
+    </button>
+    <button class="sb-item" onclick="nav('calc-polizza',this)">
+      <span class="sb-icon">🛡</span> Rimborso Polizza
+    </button>
+    <button class="sb-item" onclick="nav('calc-drm',this)">
+      <span class="sb-icon">⚖️</span> DRM / DTI
+    </button>
     <div class="sb-section">Analisi</div>
     <button class="sb-item active" onclick="nav('panoramica',this)">
       <span class="sb-icon">◈</span> Panoramica
@@ -382,23 +397,6 @@ tr:hover td{background:var(--surface3)}
     <div id="sb-mo-tree" style="display:none;padding:4px 6px 6px">
       <div id="sb-mo-tree-inner"></div>
     </div>
-    <div class="sb-section">Erogato</div>
-    <button class="sb-item" onclick="nav('commerciali',this)">
-      <span class="sb-icon">📊</span> Analisi Erogato
-    </button>
-    <div class="sb-section">Calcolatori</div>
-    <button class="sb-item" onclick="nav('calc-prestito',this)">
-      <span class="sb-icon">⊞</span> Prestito
-    </button>
-    <button class="sb-item" onclick="nav('calc-cqs',this)">
-      <span class="sb-icon">⊟</span> Cessione del Quinto
-    </button>
-    <button class="sb-item" onclick="nav('calc-polizza',this)">
-      <span class="sb-icon">🛡</span> Rimborso Polizza
-    </button>
-    <button class="sb-item" onclick="nav('calc-drm',this)">
-      <span class="sb-icon">⚖️</span> DRM / DTI
-    </button>
   </nav>
   <div class="sb-footer">
     <div style="margin-bottom:10px"><span class="sb-dot"></span>487 pratiche · Gen 2025 – Ago 2026</div>
@@ -3067,27 +3065,39 @@ calcPolizza();
     const dtiIcon = dti<=0.35?'✅':(dti<=0.50?'⚠️':'❌');
     const panel = document.getElementById('drmc-panel-'+id);
     if(!panel) return;
+
+    // Totali
     const totEl = panel.querySelector('.drmc-totals');
     if(totEl){
       totEl.innerHTML=`<span>Totale redditi: <strong>€ ${fe(totRed)}</strong></span>
         <span>Totale rate: <strong>€ ${fe(totRate)}</strong></span>
         ${totDebit>0?`<span>Debito tot. res.: <strong>€ ${fe(totDebit)}</strong></span>`:''}`;
     }
-    const drmEl = panel.querySelector('.drmc-kpi-drm');
-    if(drmEl){ drmEl.className='drmc-kpi-v '+drmCls; drmEl.textContent='€ '+fe(drm); }
-    const dtiEl = panel.querySelector('.drmc-kpi-dti');
-    if(dtiEl){ dtiEl.className='drmc-kpi-v '+dtiCls; dtiEl.textContent=(dti*100).toFixed(1).replace('.',',')+' %'; }
-    const dtiLbl = panel.querySelector('.drmc-kpi-dti-lbl');
-    if(dtiLbl){ dtiLbl.textContent='DTI — Debt-to-Income '+dtiIcon; }
-    // mesi alla scadenza (aggiorna span senza toccare input)
-    const rateBody = panel.querySelector('.drmc-rate-body');
-    if(rateBody){
-      rateBody.querySelectorAll('.drmc-mesi-span').forEach((span,i)=>{
-        const r=p.rate[i]; if(!r) return;
-        const m=mesiAlla(r.scadenza);
-        span.textContent = m!==null ? m+' mesi' : '';
-      });
+
+    // DRM — usa data-drm per trovare l'elemento senza dipendere da className
+    const drmEl = panel.querySelector('[data-drm]');
+    if(drmEl){
+      drmEl.textContent='€ '+fe(drm);
+      drmEl.classList.remove('drmc-pos','drmc-neg','drmc-neutral');
+      drmEl.classList.add(drmCls);
     }
+
+    // DTI
+    const dtiEl = panel.querySelector('[data-dti]');
+    if(dtiEl){
+      dtiEl.textContent=(dti*100).toFixed(1).replace('.',',')+' %';
+      dtiEl.classList.remove('drmc-pos','drmc-neg','drmc-neutral');
+      dtiEl.classList.add(dtiCls);
+    }
+    const dtiLbl = panel.querySelector('[data-dti-lbl]');
+    if(dtiLbl) dtiLbl.textContent='DTI — Debt-to-Income '+dtiIcon;
+
+    // Mesi alla scadenza
+    panel.querySelectorAll('.drmc-mesi-span').forEach((span,i)=>{
+      const r=p.rate[i]; if(!r) return;
+      const m=mesiAlla(r.scadenza);
+      span.textContent = m!==null ? m+' mesi' : '';
+    });
   }
 
   function buildRedRow(pid, r, i){
@@ -3170,11 +3180,11 @@ calcPolizza();
         <div class="drmc-results">
           <div class="drmc-kpi">
             <div class="drmc-kpi-l">DRM — Disponibilità mensile</div>
-            <div class="drmc-kpi-v drmc-kpi-drm ${drmCls}">€ ${fe(drm)}</div>
+            <div class="drmc-kpi-v ${drmCls}" data-drm>€ ${fe(drm)}</div>
           </div>
           <div class="drmc-kpi">
-            <div class="drmc-kpi-l drmc-kpi-dti-lbl">DTI — Debt-to-Income ${dtiIcon}</div>
-            <div class="drmc-kpi-v drmc-kpi-dti ${dtiCls}">${(dti*100).toFixed(1).replace('.',',')} %</div>
+            <div class="drmc-kpi-l" data-dti-lbl>DTI — Debt-to-Income ${dtiIcon}</div>
+            <div class="drmc-kpi-v ${dtiCls}" data-dti>${(dti*100).toFixed(1).replace('.',',')} %</div>
           </div>
         </div>
       </div>`;
