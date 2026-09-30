@@ -315,7 +315,7 @@ tr:hover td{background:var(--surface3)}
   <div class="sb-logo">
     <div class="sb-logo-title">Pratiche 2025/26</div>
     <div class="sb-logo-sub">Dashboard analitica</div>
-    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.17.0 · 30/09/2026</div>
+    <div style="margin-top:6px;font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.18.0 · 30/09/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -793,7 +793,7 @@ tr:hover td{background:var(--surface3)}
         .agent-modal-kpi-label{font-size:10px;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
         .agent-modal-kpi-value{font-size:19px;font-weight:700;font-family:'Syne',sans-serif;color:var(--ink)}
         .agent-modal-kpi-sub{font-size:10.5px;color:var(--ink3);margin-top:2px}
-        .agent-modal-table-wrap{overflow-x:auto;max-height:480px;overflow-y:auto}
+        .agent-modal-table-wrap{overflow-x:auto}
         .agent-modal-table{width:100%;border-collapse:collapse;font-size:12.5px}
         .agent-modal-table th{position:sticky;top:0;padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;z-index:1}
         .agent-modal-table td{padding:7px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -4236,7 +4236,7 @@ calcPolizza();
     </div>`).join('');
 
     // Popola tabella pratiche
-    pratiche.sort((a,b)=>(b.__dateStr||'').localeCompare(a.__dateStr||''));
+    pratiche.sort((a,b)=>(a.__dateStr||'').localeCompare(b.__dateStr||''));
     document.getElementById('agent-modal-tbody').innerHTML = pratiche.length
       ? pratiche.map(r=>{
           const data = r.__dateStr ? new Date(r.__dateStr).toLocaleDateString('it-IT') : '—';
