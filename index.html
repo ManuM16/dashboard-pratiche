@@ -3535,6 +3535,9 @@ calcPolizza();
   let commFileName = '';    // nome file caricato
   // Esponi riferimento a commPratiche per il widget obiettivi
   window._commPraticheRef = () => commPratiche;
+  // Debug: esponi variabili globalmente
+  Object.defineProperty(window,'commAssign',{get:()=>commAssign,configurable:true});
+  Object.defineProperty(window,'commPratiche',{get:()=>commPratiche,configurable:true});
 
   const AVATAR_COLORS = ['#1A56DB','#0E7A5F','#5B44C7','#92500A','#B82525','#2563EB','#059669','#7C3AED'];
 
@@ -4285,6 +4288,10 @@ calcPolizza();
       let matchedPratiche=0;
       if(praticheCorrenti){
         const currentIds=new Set(commPratiche.map(r=>r.__id));
+        const ghIds=Object.keys(allGhAssign);
+        console.log('[commImportGitHub] ID GitHub (primi 5):',ghIds.slice(0,5));
+        console.log('[commImportGitHub] ID Excel (primi 5):',commPratiche.slice(0,5).map(r=>r.__id));
+        console.log('[commImportGitHub] Totale ID GitHub:',ghIds.length,'| Totale pratiche Excel:',commPratiche.length);
         Object.entries(allGhAssign).forEach(([id,agent])=>{
           if(currentIds.has(id)){ commAssign[id]=agent; matchedPratiche++; }
         });
