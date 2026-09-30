@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "exportedAt": "2026-09-30T16:05:17.093Z",
-  "fileName": "ALIFIN FILE EROGATO 2026 con ass (7).xlsx",
+  "exportedAt": "2026-09-30T16:07:45.381Z",
+  "fileName": "ALIFIN FILE EROGATO 2026 con ass (8).xlsx",
   "pratiche": [
     {
       "__id": "null|SAMBUCETI ANTONIETTA|14250|2023-01-05",
@@ -97706,6 +97706,60 @@
       "financial": "FS Cagliari",
       "finKey": "cagliari",
       "cittaRaw": "ALIFIN S.R.L. - FS CAGLIARI"
+    },
+    {
+      "__id": "null|CALISE ANTONIO|10000|2026-09-30",
+      "__num": null,
+      "__idx": 35086,
+      "__dateStr": "2026-09-30",
+      "cliente": "CALISE ANTONIO",
+      "prodotto": " ALIFIN NN GARANTITO",
+      "tipo": "CORTO",
+      "importo": 10000,
+      "netto": 6957.21,
+      "nRate": 120,
+      "rata": 131,
+      "polizza": null,
+      "tan": 9.79,
+      "financial": "FS Genova",
+      "finKey": "genova",
+      "cittaRaw": "ALIFIN SRL - FS GENOVA"
+    },
+    {
+      "__id": "null|CRABOLU GABRIELE|33619|2026-09-30",
+      "__num": null,
+      "__idx": 35088,
+      "__dateStr": "2026-09-30",
+      "cliente": "CRABOLU GABRIELE",
+      "prodotto": " ALIFIN NN GARANTITO",
+      "tipo": "CORTO",
+      "importo": 33619,
+      "netto": 2702.97,
+      "nRate": 120,
+      "rata": 441,
+      "polizza": 2619,
+      "tan": 9.82,
+      "financial": "FS Olbia",
+      "finKey": "olbia",
+      "cittaRaw": "ALIFIN SRL - FS OLBIA"
+    },
+    {
+      "__id": "null|GUSINU CLAUDIO|4120.6|2026-09-30",
+      "__num": null,
+      "__idx": 35110,
+      "__dateStr": "2026-09-30",
+      "cliente": "GUSINU CLAUDIO",
+      "prodotto": " ALIFIN NN GARANTITO",
+      "tipo": "CORTO",
+      "importo": 4120.6,
+      "netto": 3989.7,
+      "nRate": 24,
+      "rata": 190,
+      "polizza": 120.6,
+      "tan": 9.92,
+      "financial": "FS Sassari",
+      "finKey": "sassari",
+      "cittaRaw": "ALIFIN S.R.L. - FS SASSARI"
     }
   ]
 }
