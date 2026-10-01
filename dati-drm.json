@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-01T15:22:51.750Z",
+  "exportedAt": "2026-10-01T15:22:52.936Z",
   "panels": [
     {
       "id": 1,
@@ -14,7 +14,7 @@
       "rate": [
         {
           "desc": "Agos",
-          "importo": "250",
+          "importo": "",
           "scadenza": "",
           "debitoRes": ""
         },
