@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-01T15:22:41.209Z",
+  "exportedAt": "2026-10-01T15:22:49.593Z",
   "panels": [
     {
       "id": 1,
@@ -8,7 +8,7 @@
       "redditi": [
         {
           "desc": "Reddito Co1",
-          "importo": "155"
+          "importo": "1550"
         }
       ],
       "rate": [
@@ -26,7 +26,15 @@
         },
         {
           "desc": "DB",
-          "importo": "150",
+          "importo": "",
+          "scadenza": "",
+          "debitoRes": ""
+        },
+        {
+          "tipo": "",
+          "istituto": "",
+          "ruolo": "intestatario",
+          "importo": "",
           "scadenza": "",
           "debitoRes": ""
         }
