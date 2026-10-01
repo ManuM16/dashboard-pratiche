@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.53.0 · 01/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.54.0 · 01/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -3123,12 +3123,15 @@ calcPolizza();
     const dtiLbl = panel.querySelector('[data-dti-lbl]');
     if(dtiLbl) dtiLbl.textContent='DTI — Debt-to-Income '+dtiIcon;
 
-    // Mesi alla scadenza
+    // Mesi alla scadenza — aggiorna i badge testuali calcolati
     panel.querySelectorAll('.drmc-mesi-span').forEach((span,i)=>{
       const r=p.rate[i]; if(!r) return;
       const m=mesiAlla(r.scadenza);
       span.textContent = m!==null ? m+' mesi' : '';
     });
+    // Totale debiti residui — aggiorna anche il badge KPI separato
+    const debitKpi = panel.querySelector('[data-debit-tot]');
+    if(debitKpi) debitKpi.textContent = '€ '+fe(totDebit);
   }
 
   function buildRedRow(pid, r, i){
@@ -3143,19 +3146,38 @@ calcPolizza();
     return tr;
   }
 
+  const TIPO_OPTS = [{v:'',l:'— Tipo —'},{v:'P.f.',l:'P.f. (Finalizzato)'},{v:'Mutuo',l:'Mutuo'},{v:'P.p.',l:'P.p. (Personale)'},{v:'Carta',l:'Carta di credito'}];
+  const RUOLO_OPTS = [{v:'intestatario',l:'Intestatario'},{v:'coobbligato',l:'Coobbligato'},{v:'garante',l:'Garante'}];
+
+  function buildSelect(opts, val, cls){
+    return `<select class="drmc-cell-sel ${cls||''}" style="font-size:12px;padding:2px 4px;border:1px solid var(--border2);border-radius:5px;background:var(--surface);color:var(--ink);font-family:'Outfit',sans-serif;max-width:100%">
+      ${opts.map(o=>`<option value="${o.v}"${o.v===val?' selected':''}>${o.l}</option>`).join('')}
+    </select>`;
+  }
+
   function buildRateRow(pid, r, i){
     const m = mesiAlla(r.scadenza);
+    // Badge colore per ruolo
+    const ruoloBg = r.ruolo==='garante'?'#fff3cd;color:#856404':(r.ruolo==='coobbligato'?'#d1ecf1;color:#0c5460':'#d4edda;color:#155724');
     const tr = document.createElement('tr');
     tr.innerHTML=`
-      <td><input class="drmc-cell-inp" value="${esc(r.desc)}" placeholder="Tipo / descrizione"></td>
-      <td class="r"><input class="drmc-cell-inp r" value="${esc(r.importo)}" placeholder="0,00" style="width:90px"></td>
+      <td style="min-width:90px">${buildSelect(TIPO_OPTS, r.tipo||'', 'drmc-tipo-sel')}</td>
+      <td style="min-width:110px"><input class="drmc-cell-inp" value="${esc(r.istituto||'')}" placeholder="Istituto" style="width:100%"></td>
+      <td style="min-width:100px">${buildSelect(RUOLO_OPTS, r.ruolo||'intestatario', 'drmc-ruolo-sel')}</td>
+      <td class="r"><input class="drmc-cell-inp r" value="${esc(r.importo)}" placeholder="0,00" style="width:80px"></td>
       <td class="r" style="white-space:nowrap">
-        <input class="drmc-cell-inp r" type="date" value="${esc(r.scadenza||'')}" style="width:130px;font-size:13px">
-        <span class="drmc-mesi-span drmc-mesi-auto">${m!==null?m+' mesi':''}</span>
+        <input class="drmc-cell-inp r" type="date" value="${esc(r.scadenza||'')}" style="width:125px;font-size:12px">
+        <span class="drmc-mesi-span drmc-mesi-auto" style="display:block;font-size:10.5px;color:var(--ink3);margin-top:2px;font-weight:600">${m!==null?m+' mesi':''}</span>
       </td>
-      <td class="r"><input class="drmc-cell-inp r" value="${esc(r.debitoRes)}" placeholder="—" style="width:100px"></td>
+      <td class="r"><input class="drmc-cell-inp r" value="${esc(r.debitoRes||'')}" placeholder="—" style="width:90px"></td>
       <td class="r"><button class="drmc-del-row" type="button">✕</button></td>`;
-    tr.querySelectorAll('input')[0].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].desc=this.value; savePanels();} });
+    // Tipo select
+    tr.querySelector('.drmc-tipo-sel').addEventListener('change', function(){ const p=findPanel(pid); if(p){p.rate[i].tipo=this.value; savePanels(); updateResults(pid);} });
+    // Istituto input
+    tr.querySelectorAll('input')[0].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].istituto=this.value; savePanels();} });
+    // Ruolo select
+    tr.querySelector('.drmc-ruolo-sel').addEventListener('change', function(){ const p=findPanel(pid); if(p){p.rate[i].ruolo=this.value; savePanels(); updateResults(pid);} });
+    // Importo, scadenza, debito
     tr.querySelectorAll('input')[1].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].importo=this.value; savePanels(); updateResults(pid);} });
     tr.querySelectorAll('input')[2].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].scadenza=this.value; savePanels(); updateResults(pid);} });
     tr.querySelectorAll('input')[3].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].debitoRes=this.value; savePanels(); updateResults(pid);} });
@@ -3194,8 +3216,10 @@ calcPolizza();
           <table class="drmc-tbl">
             <thead><tr>
               <th>Tipo</th>
+              <th>Istituto</th>
+              <th>Ruolo</th>
               <th class="r">€ / mese</th>
-              <th class="r">Scadenza</th>
+              <th class="r">Scadenza / mesi</th>
               <th class="r">Debito res. (€)</th>
               <th class="r"></th>
             </tr></thead>
@@ -3217,6 +3241,13 @@ calcPolizza();
             <div class="drmc-kpi-l" data-dti-lbl>DTI — Debt-to-Income ${dtiIcon}</div>
             <div class="drmc-kpi-v ${dtiCls}" data-dti>${(dti*100).toFixed(1).replace('.',',')} %</div>
           </div>
+          ${totDebit>0?`<div class="drmc-kpi">
+            <div class="drmc-kpi-l">Totale debiti residui</div>
+            <div class="drmc-kpi-v drmc-neutral" data-debit-tot>€ ${fe(totDebit)}</div>
+          </div>`:`<div class="drmc-kpi">
+            <div class="drmc-kpi-l">Totale debiti residui</div>
+            <div class="drmc-kpi-v" data-debit-tot style="color:var(--ink3)">—</div>
+          </div>`}
         </div>
       </div>`;
 
@@ -3251,7 +3282,7 @@ calcPolizza();
 
   /* ── Public API ── */
   window.drmAddPanel = function(){
-    const p={id:_nextId++, name:'', numPratica:'', redditi:[{desc:'',importo:''}], rate:[{desc:'',importo:'',scadenza:'',debitoRes:''}]};
+    const p={id:_nextId++, name:'', numPratica:'', redditi:[{desc:'',importo:''}], rate:[{tipo:'',istituto:'',ruolo:'intestatario',importo:'',scadenza:'',debitoRes:''}]};
     panels.push(p);
     savePanels();
     renderAll();
@@ -3279,7 +3310,7 @@ calcPolizza();
 
   window.drmAddRata = function(id){
     const p=findPanel(id); if(!p) return;
-    p.rate.push({desc:'',importo:'',scadenza:'',debitoRes:''});
+    p.rate.push({tipo:'',istituto:'',ruolo:'intestatario',importo:'',scadenza:'',debitoRes:''});
     savePanels(); reRenderPanel(id);
   };
   window.drmDelRata = function(id,i){
