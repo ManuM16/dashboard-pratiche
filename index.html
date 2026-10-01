@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.55.0 · 01/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.56.0 · 01/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -4789,8 +4789,13 @@ calcPolizza();
       {key:'pratiche', label:'N° Pratiche',     color:'var(--teal)',
         fmt:d=>{
           const gar=d.nGar||0; const non=d.nNonGar!==undefined?d.nNonGar:(d.n-gar);
-          const sub=d.n>0?`<span style="font-size:10.5px;color:var(--ink3);font-weight:400;display:block;line-height:1.3">${gar} gar · ${non} non-gar</span>`:'';
-          return d.n+sub;
+          const badges=d.n>0
+            ?`<span style="display:flex;gap:4px;margin-top:4px;justify-content:flex-end;flex-wrap:wrap">
+                <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:20px;background:var(--teal-l);color:var(--teal);white-space:nowrap">✔ ${gar} gar</span>
+                <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:20px;background:var(--surface2);color:var(--ink2);white-space:nowrap">✗ ${non} non</span>
+              </span>`
+            :'';
+          return d.n+badges;
         },
         val:d=>d.n},
       {key:'ticket',   label:'Ticket medio',   color:'var(--blue-m)',
@@ -5605,11 +5610,12 @@ calcPolizza();
     const periodLabel=month?(()=>{const [y,mo]=month.split('-');return new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});})():'Tutto il file';
 
     const cols=[
-      {id:'erogato',   label:'Importo erogato',  checked:true,  color:'var(--blue)'},
-      {id:'pratiche',  label:'N° Pratiche',       checked:false, color:'var(--teal)'},
-      {id:'polizze',   label:'Polizze',            checked:false, color:'var(--purple)'},
-      {id:'premi',     label:'Premi polizza',      checked:false, color:'var(--amber)'},
-      {id:'tan',       label:'TAN medio p.p. (escl. CQ)',     checked:false, color:'var(--blue-m)'},
+      {id:'erogato',   label:'Importo erogato',           checked:true,  color:'var(--blue)'},
+      {id:'pratiche',  label:'N° Pratiche',                checked:false, color:'var(--teal)'},
+      {id:'ticket',    label:'Ticket medio',               checked:false, color:'var(--blue-m)'},
+      {id:'polizze',   label:'Polizze',                    checked:false, color:'var(--purple)'},
+      {id:'premi',     label:'Premi polizza',              checked:false, color:'var(--amber)'},
+      {id:'tan',       label:'TAN medio p.p. (escl. CQ)', checked:false, color:'var(--blue-m)'},
     ];
 
     const checkboxes=cols.map(c=>`
@@ -5671,11 +5677,12 @@ calcPolizza();
   /* ---- Genera Report — step 2: costruzione tabella ---- */
   window.commBuildReport=function(){
     const COLS_DEF=[
-      {id:'erogato',  label:'Importo erogato', color:'#2563eb'},
-      {id:'pratiche', label:'N° Pratiche',      color:'#0d9488'},
-      {id:'polizze',  label:'Polizze',           color:'#7c3aed'},
-      {id:'premi',    label:'Premi polizza',     color:'#d97706'},
-      {id:'tan',      label:'TAN medio p.p. (escl. CQ)',   color:'#3B72F6'},
+      {id:'erogato',  label:'Importo erogato',           color:'#2563eb'},
+      {id:'pratiche', label:'N° Pratiche',                color:'#0d9488'},
+      {id:'ticket',   label:'Ticket medio',               color:'#3B72F6'},
+      {id:'polizze',  label:'Polizze',                    color:'#7c3aed'},
+      {id:'premi',    label:'Premi polizza',              color:'#d97706'},
+      {id:'tan',      label:'TAN medio p.p. (escl. CQ)', color:'#3B72F6'},
     ];
     const activeCols=COLS_DEF.filter(c=>document.getElementById('rb-chk-'+c.id)?.checked);
     if(!activeCols.length) return;
@@ -5717,6 +5724,7 @@ calcPolizza();
     const valOf=(col,d)=>{
       if(col.id==='erogato')   return fmtE(d.importo);
       if(col.id==='pratiche')  return d.n+'';
+      if(col.id==='ticket')    return d.n>0?fmtE(d.importo/d.n):'—';
       if(col.id==='polizze')   return fmtPol(d);
       if(col.id==='premi')     return d.premi?fmtE(d.premi):'—';
       if(col.id==='tan')       return fmtTan(d);
