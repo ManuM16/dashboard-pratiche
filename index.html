@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.51.0 · 01/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.52.0 · 01/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1028,6 +1028,16 @@ tr:hover td{background:var(--surface3)}
             <!-- Riga controlli -->
             <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px">
               <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink2);white-space:nowrap">🎯 Obiettivi</span>
+              <!-- Input annuale -->
+              <div style="display:flex;align-items:center;gap:6px">
+                <label style="font-size:11px;font-weight:600;color:var(--ink3);white-space:nowrap">Obiettivo annuale</label>
+                <input type="text" inputmode="decimal" id="obj-annual-total"
+                  class="obj-month-input" style="width:140px;font-size:14px;font-weight:700"
+                  placeholder="es. 8.000.000"
+                  oninput="objSetAnnuale(this.value)">
+              </div>
+              <!-- Separator -->
+              <div style="width:1px;height:28px;background:var(--border2);flex-shrink:0"></div>
               <!-- Tab quarti -->
               <div style="display:flex;gap:3px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:2px" id="obj-q-tabs">
                 <button class="obj-qtab" onclick="objSetQ('Q1',this)">Q1</button>
@@ -3306,6 +3316,8 @@ calcPolizza();
   let _currentView = 'all'; // 'all' | 'filiale'
 
   // Persistent storage: obiettivi tutte le filiali [Q][monthIdx]
+  // _objAnnuale = 8000000  — obiettivo annuale totale
+  let _objAnnuale = 0;
   // _objQTotal['Q3'] = 2000000  — obiettivo trimestrale totale
   const _objQTotal = {};
   // _objData['Q3'][7] = 500000  — obiettivo per mese (idx 0-based)
@@ -3322,6 +3334,12 @@ calcPolizza();
       b.classList.toggle('obj-qtab-active', b.textContent.trim() === _currentQ);
     });
   }
+
+  // Aggiorna obiettivo annuale
+  window.objSetAnnuale = function(val){
+    _objAnnuale = pf(val);
+    objCalc();
+  };
 
   window.objSetQ = function(q, btn){
     _currentQ = q;
@@ -3415,6 +3433,12 @@ calcPolizza();
   window.objRenderInputs = function(){
     const months = Q_MONTHS[_currentQ];
 
+    // Livello 0: campo annuale
+    const annInput = document.getElementById('obj-annual-total');
+    if(annInput){
+      annInput.value = _objAnnuale ? _objAnnuale.toLocaleString('it-IT') : '';
+    }
+
     // Livello 1: campo Q totale
     const qtInput = document.getElementById('obj-q-total');
     if(qtInput){
@@ -3475,11 +3499,22 @@ calcPolizza();
     const qYear = refY;
 
     const hasAny = months.some(mi => ((_objData[_currentQ]||{})[mi]||0) > 0);
-    if(!hasAny && !_objQTotal[_currentQ]){ return; }
+    const hasQ = !!_objQTotal[_currentQ];
+    const hasAnnual = _objAnnuale > 0;
+
+    if(!hasAny && !hasQ && !hasAnnual){ return; }
 
     // Riga orizzontale di card
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;margin-top:4px';
+
+    // Card annuale — in testa, la più grande
+    if(hasAnnual){
+      // Somma tutto l'erogato dell'anno
+      let annErogato = 0;
+      for(let mi = 0; mi < 12; mi++) annErogato += getErogato(null, refY, mi);
+      renderCardIntoEl(row, {label:`Anno ${refY}`, period:`Obiettivo annuale`, raggiunto:annErogato, obiettivo:_objAnnuale, isTotal:true, isAnnual:true});
+    }
 
     let qObiettivo = 0, qErogato = 0;
     for(const mi of months){
@@ -3497,34 +3532,40 @@ calcPolizza();
   };
 
   function renderCardIntoEl(parent, opts){
-    const {label, period, raggiunto, obiettivo, isTotal} = opts;
+    const {label, period, raggiunto, obiettivo, isTotal, isAnnual} = opts;
     const el = document.createElement('div');
     const perc = obiettivo > 0 ? Math.min((raggiunto/obiettivo)*100, 100) : 0;
     const mancante = Math.max(obiettivo - raggiunto, 0);
     const percClass = perc >= 100 ? 'obj-ok' : perc >= 70 ? 'obj-warn' : 'obj-bad';
     const barColor = perc >= 100 ? 'var(--green)' : perc >= 70 ? 'var(--amber)' : 'var(--red)';
-    // Semicerchio progress
-    const deg = perc / 100 * 180;
     const arcColor = perc >= 100 ? 'var(--green)' : perc >= 70 ? 'var(--amber)' : 'var(--red)';
 
-    el.style.cssText = isTotal
-      ? 'background:var(--surface);border:2px solid var(--border2);border-radius:12px;padding:14px 18px;min-width:200px;flex:1;max-width:280px;box-shadow:0 2px 8px rgba(0,0,0,.06)'
-      : 'background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 16px;min-width:170px;flex:1;max-width:240px';
+    if(isAnnual){
+      el.style.cssText = 'background:var(--surface);border:2px solid var(--blue);border-radius:12px;padding:14px 18px;min-width:220px;flex:0 0 auto;max-width:300px;box-shadow:0 2px 12px rgba(0,0,0,.09)';
+    } else if(isTotal){
+      el.style.cssText = 'background:var(--surface);border:2px solid var(--border2);border-radius:12px;padding:14px 18px;min-width:200px;flex:1;max-width:280px;box-shadow:0 2px 8px rgba(0,0,0,.06)';
+    } else {
+      el.style.cssText = 'background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 16px;min-width:170px;flex:1;max-width:240px';
+    }
+
+    const bigSize = isAnnual ? '24px' : isTotal ? '22px' : '18px';
+    const valSize = isAnnual ? '19px' : isTotal ? '17px' : '14px';
+    const labelSize = (isAnnual||isTotal) ? '12px' : '11px';
 
     el.innerHTML = `
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
         <div>
-          <div style="font-size:${isTotal?'12px':'11px'};font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)">${label}</div>
+          <div style="font-size:${labelSize};font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:${isAnnual?'var(--blue)':'var(--ink3)'}">${label}${isAnnual?' 📅':''}</div>
           <div style="font-size:10px;color:var(--ink3);opacity:.7">${period}</div>
         </div>
-        <div style="font-size:${isTotal?'22px':'18px'};font-weight:800;font-family:'Syne',sans-serif" class="${percClass}">${perc.toFixed(0)}%</div>
+        <div style="font-size:${bigSize};font-weight:800;font-family:'Syne',sans-serif" class="${percClass}">${perc.toFixed(0)}%</div>
       </div>
-      <div style="font-size:${isTotal?'17px':'14px'};font-weight:700;color:var(--ink);font-family:'Syne',sans-serif;margin-bottom:2px">€ ${fe(raggiunto)}</div>
+      <div style="font-size:${valSize};font-weight:700;color:var(--ink);font-family:'Syne',sans-serif;margin-bottom:2px">€ ${fe(raggiunto)}</div>
       <div style="font-size:10.5px;color:var(--ink3);margin-bottom:7px">
         su <strong style="color:var(--ink2)">€ ${fe(obiettivo)}</strong>
         ${mancante>0?`· mancano <strong style="color:${arcColor}">€ ${fe(mancante)}</strong>`:'<strong style="color:var(--green)">✓ raggiunto</strong>'}
       </div>
-      <div style="height:6px;background:rgba(0,0,0,.07);border-radius:4px;overflow:hidden">
+      <div style="height:${isAnnual?'8px':'6px'};background:rgba(0,0,0,.07);border-radius:4px;overflow:hidden">
         <div style="height:100%;width:${perc.toFixed(1)}%;border-radius:4px;background:${barColor};transition:width .4s ease"></div>
       </div>`;
 
@@ -4722,7 +4763,7 @@ calcPolizza();
           <td style="padding:7px 14px 7px 20px">
             <div style="display:flex;align-items:center;gap:8px">
               <div style="width:24px;height:24px;border-radius:50%;background:${col};color:#fff;font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif">${initials}</div>
-              <span style="font-size:12.5px;font-weight:500">${esc(s.name)}</span>
+              <span style="font-size:12.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px">${esc(s.name)}</span>
               <button onclick="commOpenAgentDetail('${agentNameEsc}')" style="margin-left:6px;padding:3px 7px;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);color:var(--ink2);font-size:13px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center" title="Vedi lista pratiche">🔍</button>
             </div>
           </td>
@@ -4744,11 +4785,19 @@ calcPolizza();
       </tr>`;
 
       return `<div style="margin-bottom:16px;background:var(--surface);border-radius:12px;border:2px solid ${f.color};overflow:hidden;box-shadow:var(--shadow)">
-        <table style="width:100%;border-collapse:collapse">
+        <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+          <colgroup>
+            <col style="width:220px">
+            <col style="width:140px">
+            <col style="width:100px">
+            <col style="width:180px">
+            <col style="width:130px">
+            <col style="width:155px">
+          </colgroup>
           ${thead}
           <tbody>
             ${totRow}
-            ${agents.length ? agentRows : '<tr><td colspan="5" style="padding:10px 20px;font-size:12px;color:var(--ink3);font-style:italic">Nessuna pratica assegnata nel periodo.</td></tr>'}
+            ${agents.length ? agentRows : '<tr><td colspan="6" style="padding:10px 20px;font-size:12px;color:var(--ink3);font-style:italic">Nessuna pratica assegnata nel periodo.</td></tr>'}
           </tbody>
         </table>
       </div>`;
