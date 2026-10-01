@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.52.0 · 01/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.53.0 · 01/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1053,6 +1053,7 @@ tr:hover td{background:var(--surface3)}
                   placeholder="es. 2.000.000"
                   oninput="objSetQTotal(this.value)">
                 <button onclick="objRipartisciMesi()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:7px;background:var(--surface);font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);white-space:nowrap;font-family:'Outfit',sans-serif" title="Ripartisci equamente sui 3 mesi">÷ mesi</button>
+                <span id="obj-q-mismatch" style="display:none;font-size:11px;font-weight:700;color:var(--amber);background:#fff7e6;border:1px solid var(--amber);border-radius:6px;padding:3px 9px;white-space:nowrap" title="La somma dei mesi non corrisponde all'obiettivo trimestrale">⚠ mesi ≠ Q</span>
               </div>
               <!-- Separator -->
               <div style="width:1px;height:28px;background:var(--border2);flex-shrink:0"></div>
@@ -3489,7 +3490,26 @@ calcPolizza();
     }
   };
 
+  function objCheckMismatch(){
+    const badge = document.getElementById('obj-q-mismatch');
+    if(!badge) return;
+    const qTot = _objQTotal[_currentQ] || 0;
+    const months = Q_MONTHS[_currentQ];
+    const monthSum = months.reduce((s, mi) => s + (((_objData[_currentQ]||{})[mi])||0), 0);
+    // Mostra il badge solo se entrambi i valori sono > 0 e non coincidono (tolleranza 1€ per arrotondamenti)
+    const show = qTot > 0 && monthSum > 0 && Math.abs(qTot - monthSum) > 1;
+    badge.style.display = show ? '' : 'none';
+    if(show){
+      const diff = monthSum - qTot;
+      badge.textContent = diff > 0
+        ? `⚠ mesi eccedono di € ${fe(diff)}`
+        : `⚠ mesi mancano € ${fe(Math.abs(diff))}`;
+      badge.title = `Somma mesi: € ${fe(monthSum)} · Obiettivo Q: € ${fe(qTot)}`;
+    }
+  }
+
   window.objCalc = function(){
+    objCheckMismatch();
     const res = document.getElementById('obj-results');
     if(!res) return;
     res.innerHTML = '';
