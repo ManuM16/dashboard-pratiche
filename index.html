@@ -867,6 +867,7 @@ tr:hover td{background:var(--surface3)}
             <span class="comm-upload-compact-label">Carica file Excel erogato</span>
             <span class="comm-upload-compact-hint">(.xlsx — trascina o clicca)</span>
           </div>
+          <button id="comm-btn-gh-excel" class="btn-comm btn-comm-secondary" onclick="commLoadExcelFromGitHub()" style="width:100%;box-sizing:border-box;font-size:12.5px;display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 14px;border:1.5px dashed var(--border2);border-radius:9px;background:var(--surface)">☁️ Carica Excel da GitHub</button>
           <span id="comm-upload-filename" style="display:none;font-size:12px;color:var(--ink2);background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:5px 10px;font-weight:500;width:100%;box-sizing:border-box"></span>
 
           <!-- Filtro periodo (visibile dopo caricamento) -->
@@ -4037,6 +4038,8 @@ calcPolizza();
         if(ulLabel) ulLabel.textContent='✅ '+file.name;
         if(ulHint) ulHint.textContent=commPratiche.length+' pratiche · '+[...new Set(commPratiche.map(r=>r.__dateStr))].length+' giornate';
         if(ulFilename){ ulFilename.textContent='📄 '+file.name; ulFilename.style.display=''; }
+        // Salva copia raw Excel su GitHub (in background, silenzioso)
+        ghSaveExcelRaw(ev.target.result, file.name);
       }catch(err){
         alert('Errore nel leggere il file: '+err.message);
       }
@@ -4409,6 +4412,7 @@ calcPolizza();
   const GH_FILE='dati-assegnazioni.json';
   const GH_FILE_BACKUP='dati-assegnazioni-backup.json';
   const GH_FILE_PRATICHE='dati-pratiche.json';
+  const GH_FILE_EXCEL='dati-excel.xlsx';
 
   function ghGetToken(){
     let t=localStorage.getItem('gh_pat');
@@ -4481,6 +4485,91 @@ calcPolizza();
     try{ return JSON.parse(text); }
     catch(e){ throw new Error('JSON non valido in "'+ghFile+'": '+e.message); }
   }
+
+  /* ---- GitHub raw binary helpers (per file Excel) ---- */
+  async function ghPutFileRaw(token, ghFile, arrayBuffer, message){
+    const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile}`;
+    // Converti ArrayBuffer → base64 in chunk per evitare stack overflow su file grandi
+    const bytes=new Uint8Array(arrayBuffer);
+    let bin='';
+    const CHUNK=8192;
+    for(let i=0;i<bytes.length;i+=CHUNK){
+      bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+CHUNK));
+    }
+    const content=btoa(bin);
+    const putHeaders={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'};
+    let sha=null;
+    try{ sha=await ghGetSha(token,apiUrl); }catch(e){}
+    const body={message,content};
+    if(sha) body.sha=sha;
+    const res=await fetch(apiUrl,{method:'PUT',headers:putHeaders,body:JSON.stringify(body)});
+    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||res.status);}
+  }
+
+  async function ghGetFileRaw(token, ghFile){
+    // Step 1: leggi metadata per ottenere sha e verificare esistenza
+    const apiUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile}`;
+    const res=await fetch(apiUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+    if(res.status===404) return null;
+    if(!res.ok) throw new Error('Errore HTTP '+res.status+' nel leggere '+ghFile);
+    const j=await res.json();
+    const raw=(j.content||'').replace(/\n/g,'').trim();
+    let base64='';
+    if(raw){
+      base64=raw;
+    } else {
+      // File grande: usa Git Blobs API con Accept: raw per ottenere base64
+      if(!j.sha) throw new Error('SHA non trovato per "'+ghFile+'"');
+      const blobUrl=`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/git/blobs/${j.sha}`;
+      const res2=await fetch(blobUrl,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+      if(!res2.ok) throw new Error('Errore HTTP '+res2.status+' nel leggere blob "'+ghFile+'"');
+      const bj=await res2.json();
+      base64=(bj.content||'').replace(/\n/g,'').trim();
+      if(!base64) throw new Error('Blob vuoto per "'+ghFile+'"');
+    }
+    // Converti base64 → ArrayBuffer
+    const binStr=atob(base64);
+    const bytes=new Uint8Array(binStr.length);
+    for(let i=0;i<binStr.length;i++) bytes[i]=binStr.charCodeAt(i);
+    return bytes.buffer;
+  }
+
+  async function ghSaveExcelRaw(arrayBuffer, fileName){
+    const token=localStorage.getItem('gh_pat');
+    if(!token) return; // nessun token → salto silenziosamente
+    const today=new Date().toISOString().slice(0,10);
+    try{
+      await ghPutFileRaw(token, GH_FILE_EXCEL, arrayBuffer, 'Excel erogato '+fileName+' — '+today);
+      localStorage.setItem('gh_excel_name', fileName);
+      console.log('[ghSaveExcelRaw] Excel salvato su GitHub come '+GH_FILE_EXCEL);
+      // Piccolo badge visivo sull'upload zone
+      const hint=document.querySelector('.comm-upload-compact-hint');
+      if(hint) hint.textContent+=' · ☁️ salvato';
+    }catch(err){
+      console.warn('[ghSaveExcelRaw] Errore salvataggio Excel su GitHub:',err.message);
+    }
+  }
+
+  window.commLoadExcelFromGitHub=async function(){
+    const token=ghGetToken(); if(!token) return;
+    const savedName=localStorage.getItem('gh_excel_name')||'dati-excel.xlsx';
+    const ok=confirm('Vuoi caricare il file Excel salvato su GitHub?\n\nFile: '+savedName+'\n\nL\'Excel verrà scaricato e caricato nella dashboard.');
+    if(!ok) return;
+    const btn=document.getElementById('comm-btn-gh-excel');
+    if(btn){ btn.disabled=true; btn.textContent='⏳ Scarico…'; }
+    try{
+      const ab=await ghGetFileRaw(token, GH_FILE_EXCEL);
+      if(!ab){ alert('Nessun file Excel trovato su GitHub.\nCarica prima un file Excel dalla dashboard.'); return; }
+      // Costruisci un File finto dall'ArrayBuffer e processa come se l'utente avesse scelto il file
+      const blob=new Blob([ab],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const file=new File([blob], savedName, {type:blob.type});
+      commLoadFile(file);
+    }catch(err){
+      alert('❌ Errore nel caricare l\'Excel da GitHub:\n'+err.message);
+    }finally{
+      if(btn){ btn.disabled=false; btn.textContent='☁️ Excel da GitHub'; }
+    }
+  };
 
   window.commExportGitHub=async function(silent=false){
     const token=ghGetToken(); if(!token) return;
