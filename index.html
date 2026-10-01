@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.45.0 · 01/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.51.0 · 01/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -734,7 +734,7 @@ tr:hover td{background:var(--surface3)}
 
         /* Assignment table */
         .comm-assign-wrap{background:var(--surface);border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:20px}
-        .comm-assign-wrap h3{padding:12px 16px;font-size:13px;font-weight:600;border-bottom:1px solid var(--border);color:var(--ink);display:flex;align-items:center;gap:8px}
+        .comm-assign-wrap h3{padding:14px 22px;font-size:13px;font-weight:600;border-bottom:1px solid var(--border);color:var(--ink);display:flex;align-items:center;gap:8px}
         /* ── Calendario custom ── */
         .cal-dow{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.4px;padding:2px 0 4px;text-transform:uppercase}
         .cal-day{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;border:1.5px solid transparent;transition:.12s;position:relative;font-weight:500}
@@ -749,8 +749,8 @@ tr:hover td{background:var(--surface3)}
         .cal-today::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.6}
         /* ── / Calendario ── */
         .comm-assign-table{width:100%;border-collapse:collapse;font-size:12.5px}
-        .comm-assign-table th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);background:var(--surface2);border-bottom:1px solid var(--border)}
-        .comm-assign-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+        .comm-assign-table th{padding:9px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);background:var(--surface2);border-bottom:1px solid var(--border)}
+        .comm-assign-table td{padding:9px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
         .comm-assign-table tr:last-child td{border-bottom:none}
         .comm-assign-table tr:hover td{background:var(--surface3)}
         .comm-sel{width:100%;padding:4px 8px;border:1px solid var(--border2);border-radius:6px;font-family:'Outfit',sans-serif;font-size:12px;background:var(--surface);color:var(--ink);cursor:pointer}
@@ -759,7 +759,7 @@ tr:hover td{background:var(--surface3)}
         .comm-badge-nopol{display:inline-block;padding:2px 6px;border-radius:5px;font-size:10px;color:var(--ink3);background:var(--surface2)}
         .comm-progress{height:4px;background:var(--border);border-radius:2px;margin-top:6px}
         .comm-progress-bar{height:4px;border-radius:2px;background:var(--blue);transition:.3s}
-        .comm-assign-actions{display:flex;gap:8px;padding:10px 16px;background:var(--surface2);border-top:1px solid var(--border);align-items:center;flex-wrap:wrap}
+        .comm-assign-actions{display:flex;gap:8px;padding:10px 22px;background:var(--surface2);border-top:1px solid var(--border);align-items:center;flex-wrap:wrap}
         .btn-comm{padding:7px 16px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:.15s}
         .btn-comm-primary{background:var(--blue);color:#fff}
         .btn-comm-primary:hover{background:var(--blue-m)}
@@ -771,9 +771,9 @@ tr:hover td{background:var(--surface3)}
         .comm-kpi-section{margin-top:16px}
         .comm-kpi-section h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:14px;color:var(--ink)}
         /* Obiettivi widget */
-        .obj-qtab{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--ink2);font-family:'Outfit',sans-serif;transition:.15s}
-        .obj-qtab:hover{background:var(--surface);color:var(--ink)}
-        .obj-qtab-active{background:var(--ink)!important;color:#fff!important;font-weight:600}
+        .obj-qtab{padding:5px 13px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--ink2);font-family:'Outfit',sans-serif;transition:.15s}
+        .obj-qtab:hover{background:var(--surface2);color:var(--ink)}
+        .obj-qtab-active{background:var(--ink)!important;color:#fff!important;font-weight:700}
         .obj-card{background:var(--blue-l);border:1px solid #c5d5f8;border-radius:8px;padding:8px 11px}
         .obj-card-teal{background:var(--teal-l);border-color:#a7dece}
         .obj-card-label{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:2px}
@@ -841,8 +841,7 @@ tr:hover td{background:var(--surface3)}
 
       <div class="comm-header">
         <div>
-          <div class="comm-title">📊 Monitoraggio Commerciali</div>
-          <div style="font-size:12px;color:var(--ink3);margin-top:3px">Carica il file erogato giornaliero e assegna le pratiche ai commerciali</div>
+          <div style="font-size:12px;color:var(--ink3)">Carica il file erogato giornaliero e assegna le pratiche ai commerciali</div>
         </div>
       </div>
 
@@ -949,19 +948,19 @@ tr:hover td{background:var(--surface3)}
         <div class="comm-assign-wrap" id="comm-assign-wrap">
           <h3>
             <span>📋 Assegna pratiche</span>
-            <span id="comm-assign-progress-label" style="font-size:11px;font-weight:400;color:var(--ink3);margin-left:auto"></span>
+            <span id="comm-assign-progress-label" style="font-size:12px;font-weight:600;color:var(--ink2);margin-left:auto;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:3px 10px"></span>
           </h3>
           <!-- Filtri rapidi tabella -->
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;padding:0 2px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;padding:12px 22px 0">
             <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap">Filtra:</span>
             <button id="qf-all" onclick="commQFilter('all')" class="btn-comm btn-comm-secondary" style="font-size:11.5px;padding:4px 10px;background:var(--ink);color:#fff">Tutte</button>
             <button id="qf-unassigned" onclick="commQFilter('unassigned')" class="btn-comm btn-comm-secondary" style="font-size:11.5px;padding:4px 10px">Non assegnate</button>
             <select id="qf-agent" onchange="commQFilter('agent')" style="padding:4px 10px;border:1px solid var(--border2);border-radius:7px;font-size:11.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
               <option value="">Per commerciale…</option>
             </select>
-            <span id="comm-count-label" style="font-size:11px;color:var(--ink3);margin-left:auto;font-weight:500"></span>
+            <span id="comm-count-label" style="font-size:12px;color:var(--ink2);margin-left:auto;font-weight:600;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:3px 10px"></span>
           </div>
-          <div style="overflow-x:auto">
+          <div style="overflow-x:auto;padding:0 6px">
             <table class="comm-assign-table">
               <thead>
                 <tr>
@@ -985,17 +984,9 @@ tr:hover td{background:var(--surface3)}
             <!-- GitHub group -->
             <button class="btn-comm btn-comm-secondary" onclick="commExportGitHub()" title="Salva backup su GitHub" style="white-space:nowrap;flex-shrink:0">☁️ Salva</button>
             <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub()" title="Carica backup da GitHub" style="white-space:nowrap;flex-shrink:0">📥 Carica</button>
-            <!-- Dropdown avanzato -->
+            <!-- Dropdown avanzato — menu portale nel body -->
             <div style="position:relative;flex-shrink:0" id="comm-more-wrap">
-              <button class="btn-comm btn-comm-secondary" onclick="commToggleMoreMenu()" style="white-space:nowrap" title="Altre azioni">⚙️ Altro ▾</button>
-              <div id="comm-more-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);padding:6px;min-width:200px;z-index:1000">
-                <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub(false,true);commToggleMoreMenu()" style="width:100%;text-align:left;color:#d97706;margin-bottom:2px">🔄 Ripristina backup GH</button>
-                <button class="btn-comm btn-comm-secondary" onclick="commShowReportBuilder();commToggleMoreMenu()" style="width:100%;text-align:left;margin-bottom:2px">📊 Genera Report</button>
-                <hr style="border:none;border-top:1px solid var(--border);margin:4px 0">
-                <button class="btn-comm btn-comm-secondary" onclick="commDebugLS();commToggleMoreMenu()" style="width:100%;text-align:left;color:var(--ink2);margin-bottom:2px">🔍 Debug localStorage</button>
-                <button class="btn-comm btn-comm-secondary" onclick="commNukeAssign();commToggleMoreMenu()" style="width:100%;text-align:left;color:orange;margin-bottom:2px">🧹 Reset assegnazioni</button>
-                <button class="btn-comm btn-comm-secondary" onclick="commClearAllData();commToggleMoreMenu()" style="width:100%;text-align:left;color:var(--red)">🗑 Azzera tutti i dati</button>
-              </div>
+              <button class="btn-comm btn-comm-secondary" id="comm-more-btn" onclick="commToggleMoreMenu()" style="white-space:nowrap" title="Altre azioni">⚙️ Altro ▾</button>
             </div>
             <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi" style="white-space:nowrap;flex-shrink:0;margin-left:auto">Genera analisi →</button>
           </div>
@@ -1032,53 +1023,51 @@ tr:hover td{background:var(--surface3)}
               </div>
             </div>
           </div>
-          <!-- Body: two-column grid -->
-          <div style="display:grid;grid-template-columns:340px 1fr;min-height:300px">
-            <!-- Left: obiettivi widget -->
-            <div id="obj-widget" style="border-right:1px solid var(--border);padding:14px 16px;box-sizing:border-box">
-              <!-- Header con Q tabs -->
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-                <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3)">🎯 Obiettivi erogato</span>
-                <div style="display:flex;gap:3px;background:var(--surface2);border-radius:7px;padding:2px" id="obj-q-tabs">
-                  <button class="obj-qtab" onclick="objSetQ('Q1',this)">Q1</button>
-                  <button class="obj-qtab" onclick="objSetQ('Q2',this)">Q2</button>
-                  <button class="obj-qtab obj-qtab-active" onclick="objSetQ('Q3',this)">Q3</button>
-                  <button class="obj-qtab" onclick="objSetQ('Q4',this)">Q4</button>
-                </div>
+          <!-- OBIETTIVI — banda orizzontale sopra tutto -->
+          <div id="obj-widget" style="border-bottom:1px solid var(--border);padding:16px 20px;box-sizing:border-box;background:var(--surface2)">
+            <!-- Riga controlli -->
+            <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px">
+              <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink2);white-space:nowrap">🎯 Obiettivi</span>
+              <!-- Tab quarti -->
+              <div style="display:flex;gap:3px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:2px" id="obj-q-tabs">
+                <button class="obj-qtab" onclick="objSetQ('Q1',this)">Q1</button>
+                <button class="obj-qtab" onclick="objSetQ('Q2',this)">Q2</button>
+                <button class="obj-qtab obj-qtab-active" onclick="objSetQ('Q3',this)">Q3</button>
+                <button class="obj-qtab" onclick="objSetQ('Q4',this)">Q4</button>
               </div>
-              <!-- Livello 1: obiettivo trimestrale totale -->
-              <div style="margin-bottom:10px">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:4px">Obiettivo trimestrale totale (€)</div>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <input type="text" inputmode="decimal" id="obj-q-total"
-                    class="obj-month-input" style="max-width:160px;font-size:14px;font-weight:700"
-                    placeholder="es. 2.000.000"
-                    oninput="objSetQTotal(this.value)">
-                  <button onclick="objRipartisciMesi()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:7px;background:var(--surface2);font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);white-space:nowrap;font-family:'Outfit',sans-serif" title="Ripartisci equamente sui 3 mesi">÷ Ripartisci mesi</button>
-                </div>
+              <!-- Input trimestrale -->
+              <div style="display:flex;align-items:center;gap:6px">
+                <label style="font-size:11px;font-weight:600;color:var(--ink3);white-space:nowrap">Obiettivo trimestrale</label>
+                <input type="text" inputmode="decimal" id="obj-q-total"
+                  class="obj-month-input" style="width:140px;font-size:14px;font-weight:700"
+                  placeholder="es. 2.000.000"
+                  oninput="objSetQTotal(this.value)">
+                <button onclick="objRipartisciMesi()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:7px;background:var(--surface);font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);white-space:nowrap;font-family:'Outfit',sans-serif" title="Ripartisci equamente sui 3 mesi">÷ mesi</button>
               </div>
-              <!-- Livello 2: obiettivo per mese -->
-              <div style="margin-bottom:10px" id="obj-mesi-section">
-                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:4px">Per mese</div>
-                <div id="obj-inputs" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px"></div>
-              </div>
-              <!-- Livello 3: obiettivo per filiale per mese -->
-              <div id="obj-filiale-section">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-                  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)">Per filiale</div>
-                  <button onclick="objRipartisciFiliali()" style="padding:3px 8px;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);font-size:10px;font-weight:600;cursor:pointer;color:var(--teal);font-family:'Outfit',sans-serif" title="Ripartisci equamente per filiale">÷ Ripartisci</button>
-                </div>
-                <div id="obj-fil-inputs"></div>
-              </div>
-              <!-- Results section rendered by JS -->
-              <div id="obj-results" style="margin-top:10px"></div>
+              <!-- Separator -->
+              <div style="width:1px;height:28px;background:var(--border2);flex-shrink:0"></div>
+              <!-- Input mensili affiancati -->
+              <div id="obj-inputs" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap"></div>
+              <!-- Filiali toggle -->
+              <button onclick="objToggleFiliale()" id="obj-fil-toggle" style="margin-left:auto;padding:5px 12px;border:1px solid var(--border2);border-radius:7px;background:var(--surface);font-size:11px;font-weight:600;cursor:pointer;color:var(--teal);white-space:nowrap;font-family:'Outfit',sans-serif;flex-shrink:0">Per filiale ▾</button>
             </div>
-            <!-- Right: KPI cards -->
-            <div style="padding:14px 16px;box-sizing:border-box">
-              <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 12px;color:var(--ink)">📈 Analisi Erogato</h3>
-              <div id="comm-yoy-panel" style="display:none;margin-bottom:16px"></div>
-              <div id="comm-kpi-cards"></div>
+            <!-- Sezione filiali (collassabile) -->
+            <div id="obj-filiale-section" style="display:none;margin-bottom:14px;padding:12px 14px;background:var(--surface);border:1px solid var(--border2);border-radius:10px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)">Obiettivi per filiale</span>
+                <button onclick="objRipartisciFiliali()" style="padding:4px 10px;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);font-size:11px;font-weight:600;cursor:pointer;color:var(--teal);font-family:'Outfit',sans-serif">÷ Ripartisci</button>
+              </div>
+              <div id="obj-fil-inputs"></div>
             </div>
+            <!-- Card risultati in riga -->
+            <div id="obj-results"></div>
+          </div>
+
+          <!-- KPI + YoY -->
+          <div style="padding:14px 16px;box-sizing:border-box">
+            <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 12px;color:var(--ink)">📈 Analisi Erogato</h3>
+            <div id="comm-yoy-panel" style="display:none;margin-bottom:16px"></div>
+            <div id="comm-kpi-cards"></div>
           </div>
           <!-- Storico agente mensile — full width sotto il grid KPI -->
           <div id="comm-agent-history-section" style="display:none;border-top:1px solid var(--border);padding:14px 16px">
@@ -3412,6 +3401,16 @@ calcPolizza();
     return selMonth ? parseInt(selMonth.split('-')[0]) : new Date().getFullYear();
   }
 
+  // Toggle sezione filiali
+  window.objToggleFiliale = function(){
+    const sec = document.getElementById('obj-filiale-section');
+    const btn = document.getElementById('obj-fil-toggle');
+    if(!sec) return;
+    const open = sec.style.display !== 'none';
+    sec.style.display = open ? 'none' : '';
+    if(btn) btn.textContent = open ? 'Per filiale ▾' : 'Per filiale ▴';
+  };
+
   // Render: obiettivo trimestrale + mesi + filiali
   window.objRenderInputs = function(){
     const months = Q_MONTHS[_currentQ];
@@ -3423,16 +3422,16 @@ calcPolizza();
       qtInput.value = stored ? stored.toLocaleString('it-IT') : '';
     }
 
-    // Livello 2: input per mese
+    // Livello 2: input per mese — colonnine orizzontali
     const mesiContainer = document.getElementById('obj-inputs');
     if(mesiContainer){
       let html = '';
       for(const mi of months){
         const stored = (_objData[_currentQ]||{})[mi] || '';
         const storedStr = stored ? stored.toLocaleString('it-IT') : '';
-        html += `<div>
-          <div style="font-size:10px;color:var(--ink3);margin-bottom:3px;font-weight:600">${MONTH_LABELS[mi]}</div>
-          <input type="text" inputmode="decimal" class="obj-month-input"
+        html += `<div style="display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:10px;color:var(--ink3);font-weight:700;text-transform:uppercase;letter-spacing:.4px">${MONTH_LABELS[mi]}</div>
+          <input type="text" inputmode="decimal" class="obj-month-input" style="width:130px"
             data-q="${_currentQ}" data-mi="${mi}"
             placeholder="0"
             value="${storedStr}"
@@ -3478,41 +3477,57 @@ calcPolizza();
     const hasAny = months.some(mi => ((_objData[_currentQ]||{})[mi]||0) > 0);
     if(!hasAny && !_objQTotal[_currentQ]){ return; }
 
-    const grid = document.createElement('div');
-    grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px';
+    // Riga orizzontale di card
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;margin-top:4px';
 
     let qObiettivo = 0, qErogato = 0;
     for(const mi of months){
       const obi = ((_objData[_currentQ]||{})[mi]||0);
       const era = getErogato(null, refY, mi);
       qObiettivo += obi; qErogato += era;
-      if(obi > 0) renderCardIntoEl(grid, {label:`${MONTH_LABELS[mi]}`, period:`${refY}`, raggiunto:era, obiettivo:obi, isTeal:false});
+      if(obi > 0) renderCardIntoEl(row, {label:`${MONTH_LABELS[mi]}`, period:`${refY}`, raggiunto:era, obiettivo:obi, isTotal:false});
     }
-    // Usa il totale trimestrale se non ci sono mesi
+    // Card totale trimestrale — più grande e in evidenza
     const qObj = qObiettivo || _objQTotal[_currentQ] || 0;
     if(qObj > 0){
-      renderCardIntoEl(grid, {label:`Totale ${_currentQ}`, period:`${qYear}`, raggiunto:qErogato, obiettivo:qObj, isTeal:false});
+      renderCardIntoEl(row, {label:`Totale ${_currentQ}`, period:`${qYear}`, raggiunto:qErogato, obiettivo:qObj, isTotal:true});
     }
-    if(grid.children.length) res.appendChild(grid);
+    if(row.children.length) res.appendChild(row);
   };
 
   function renderCardIntoEl(parent, opts){
-    const {label, period, raggiunto, obiettivo, isTeal} = opts;
+    const {label, period, raggiunto, obiettivo, isTotal} = opts;
     const el = document.createElement('div');
-    el.className = isTeal ? 'obj-card obj-card-teal' : 'obj-card';
-    if(!obiettivo){
-      el.innerHTML = `<div class="obj-card-label">${label}</div><div class="obj-card-period">${period}</div><div class="obj-card-main" style="opacity:.35">—</div>`;
-    } else {
-      const perc = Math.min(obiettivo > 0 ? (raggiunto/obiettivo)*100 : 0, 100);
-      const mancante = Math.max(obiettivo - raggiunto, 0);
-      const percClass = perc >= 100 ? 'obj-ok' : perc >= 70 ? 'obj-warn' : 'obj-bad';
-      el.innerHTML = `
-        <div class="obj-card-label">${label}</div>
-        <div class="obj-card-period">${period}</div>
-        <div class="obj-card-main ${percClass}">€ ${fe(raggiunto)} <span style="font-size:11px;font-weight:500">(${perc.toFixed(0)}%)</span></div>
-        <div class="obj-card-sub">Mancante: <strong>€ ${fe(mancante)}</strong> · Obiettivo: € ${fe(obiettivo)}</div>
-        <div class="obj-bar-wrap"><div class="obj-bar" style="width:${perc.toFixed(1)}%"></div></div>`;
-    }
+    const perc = obiettivo > 0 ? Math.min((raggiunto/obiettivo)*100, 100) : 0;
+    const mancante = Math.max(obiettivo - raggiunto, 0);
+    const percClass = perc >= 100 ? 'obj-ok' : perc >= 70 ? 'obj-warn' : 'obj-bad';
+    const barColor = perc >= 100 ? 'var(--green)' : perc >= 70 ? 'var(--amber)' : 'var(--red)';
+    // Semicerchio progress
+    const deg = perc / 100 * 180;
+    const arcColor = perc >= 100 ? 'var(--green)' : perc >= 70 ? 'var(--amber)' : 'var(--red)';
+
+    el.style.cssText = isTotal
+      ? 'background:var(--surface);border:2px solid var(--border2);border-radius:12px;padding:14px 18px;min-width:200px;flex:1;max-width:280px;box-shadow:0 2px 8px rgba(0,0,0,.06)'
+      : 'background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 16px;min-width:170px;flex:1;max-width:240px';
+
+    el.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div>
+          <div style="font-size:${isTotal?'12px':'11px'};font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)">${label}</div>
+          <div style="font-size:10px;color:var(--ink3);opacity:.7">${period}</div>
+        </div>
+        <div style="font-size:${isTotal?'22px':'18px'};font-weight:800;font-family:'Syne',sans-serif" class="${percClass}">${perc.toFixed(0)}%</div>
+      </div>
+      <div style="font-size:${isTotal?'17px':'14px'};font-weight:700;color:var(--ink);font-family:'Syne',sans-serif;margin-bottom:2px">€ ${fe(raggiunto)}</div>
+      <div style="font-size:10.5px;color:var(--ink3);margin-bottom:7px">
+        su <strong style="color:var(--ink2)">€ ${fe(obiettivo)}</strong>
+        ${mancante>0?`· mancano <strong style="color:${arcColor}">€ ${fe(mancante)}</strong>`:'<strong style="color:var(--green)">✓ raggiunto</strong>'}
+      </div>
+      <div style="height:6px;background:rgba(0,0,0,.07);border-radius:4px;overflow:hidden">
+        <div style="height:100%;width:${perc.toFixed(1)}%;border-radius:4px;background:${barColor};transition:width .4s ease"></div>
+      </div>`;
+
     parent.appendChild(el);
   }
 
@@ -4079,17 +4094,61 @@ calcPolizza();
   window.commApplyDateFilter=applyFilters;
   window.commApplyFinFilter=applyFilters;
 
-  /* ---- Menu "Altro" dropdown ---- */
-  window.commToggleMoreMenu=function(){
-    const menu=document.getElementById('comm-more-menu');
-    if(!menu) return;
-    const isOpen=menu.style.display!=='none';
-    menu.style.display=isOpen?'none':'';
-    if(!isOpen){
-      const close=e=>{if(!document.getElementById('comm-more-wrap')?.contains(e.target)){menu.style.display='none';document.removeEventListener('click',close,true);}};
-      setTimeout(()=>document.addEventListener('click',close,true),0);
+  /* ---- Menu "Altro" — portale nel body ---- */
+  (function(){
+    // Crea il menu una volta sola e lo appende al body
+    const MENU_ID = 'comm-more-menu-portal';
+    function getOrCreateMenu(){
+      let m = document.getElementById(MENU_ID);
+      if(m) return m;
+      m = document.createElement('div');
+      m.id = MENU_ID;
+      m.style.cssText = 'display:none;position:fixed;background:var(--surface);border:1px solid var(--border2);border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:6px;min-width:210px;z-index:99999;font-family:"Outfit",sans-serif';
+      m.innerHTML = `
+        <button class="btn-comm btn-comm-secondary" onclick="commImportGitHub(false,true);commToggleMoreMenu()" style="width:100%;text-align:left;color:#d97706;margin-bottom:2px">🔄 Ripristina backup GH</button>
+        <button class="btn-comm btn-comm-secondary" onclick="commShowReportBuilder();commToggleMoreMenu()" style="width:100%;text-align:left;margin-bottom:2px">📊 Genera Report</button>
+        <hr style="border:none;border-top:1px solid var(--border);margin:4px 0">
+        <button class="btn-comm btn-comm-secondary" onclick="commDebugLS();commToggleMoreMenu()" style="width:100%;text-align:left;color:var(--ink2);margin-bottom:2px">🔍 Debug localStorage</button>
+        <button class="btn-comm btn-comm-secondary" onclick="commNukeAssign();commToggleMoreMenu()" style="width:100%;text-align:left;color:orange;margin-bottom:2px">🧹 Reset assegnazioni</button>
+        <button class="btn-comm btn-comm-secondary" onclick="commClearAllData();commToggleMoreMenu()" style="width:100%;text-align:left;color:var(--red)">🗑 Azzera tutti i dati</button>`;
+      document.body.appendChild(m);
+      return m;
     }
-  };
+    window.commToggleMoreMenu = function(){
+      const menu = getOrCreateMenu();
+      const btn  = document.getElementById('comm-more-btn');
+      const isOpen = menu.style.display !== 'none';
+      if(isOpen){ menu.style.display='none'; return; }
+      // Calcola posizione dal bottone
+      if(btn){
+        const r = btn.getBoundingClientRect();
+        const menuW = 210;
+        // Apri verso il basso; se non c'è spazio apri verso l'alto
+        const spaceBelow = window.innerHeight - r.bottom;
+        if(spaceBelow < 220){
+          menu.style.top  = '';
+          menu.style.bottom = (window.innerHeight - r.top + 6)+'px';
+        } else {
+          menu.style.bottom = '';
+          menu.style.top  = (r.bottom + 6)+'px';
+        }
+        // Allinea a destra del bottone, senza uscire dallo schermo
+        let left = r.right - menuW;
+        if(left < 8) left = 8;
+        menu.style.left = left+'px';
+        menu.style.right = '';
+      }
+      menu.style.display = '';
+      // Chiudi cliccando fuori
+      const close = e => {
+        if(!menu.contains(e.target) && e.target !== btn){
+          menu.style.display = 'none';
+          document.removeEventListener('click', close, true);
+        }
+      };
+      setTimeout(()=>document.addEventListener('click', close, true), 0);
+    };
+  })();
 
   /* ---- Quick filter tabella assegnazioni ---- */
   let _qfMode='all'; // 'all' | 'unassigned' | 'agent'
@@ -4124,7 +4183,9 @@ calcPolizza();
     if(_qfMode==='unassigned') data=commFiltered.filter(r=>!commAssign[r.__id]);
     else if(_qfMode==='agent' && agentFilter) data=commFiltered.filter(r=>commAssign[r.__id]===agentFilter);
 
-    document.getElementById('comm-count-label').textContent=data.length+' pratiche'+(data.length!==commFiltered.length?' (filtrate)':'');
+    const cntEl=document.getElementById('comm-count-label');
+    cntEl.textContent=data.length+' pratiche'+(data.length!==commFiltered.length?' (filtrate)':'');
+    cntEl.style.display=data.length?'':'none';
 
     // Re-render solo la sottoinsieme
     if(_qfMode==='all'){renderTable();return;}
@@ -4211,7 +4272,7 @@ calcPolizza();
       return `<tr>
         <td style="font-family:monospace;font-size:11px;color:var(--ink3)">${r.__num||'—'}</td>
         <td style="font-weight:500">${esc(r.cliente||'—')}</td>
-        <td style="font-size:11.5px;color:var(--ink2)">${esc(r.prodotto||'—')}${r.codProdotto?` <span style="font-size:10px;font-weight:600;background:var(--surface2);color:var(--ink3);padding:1px 5px;border-radius:4px;margin-left:3px">${r.codProdotto}</span>`:''}</td>
+        <td style="font-size:12.5px;color:var(--ink2)">${esc(r.prodotto||'—')}${r.codProdotto?` <span style="font-size:11px;font-weight:600;background:var(--surface2);color:var(--ink3);padding:2px 6px;border-radius:4px;margin-left:4px">${r.codProdotto}</span>`:''}</td>
         <td style="text-align:right;font-weight:600">${r.importo?fe(r.importo):'—'}</td>
         <td style="text-align:center">${tanBadge}</td>
         <td style="text-align:center">${polBadge}</td>
@@ -4591,7 +4652,9 @@ calcPolizza();
     // Mostra: assegnate nella vista corrente / assegnate totali / pratiche totali
     document.getElementById('comm-assign-status').textContent=doneFilt+' / '+totFilt+' (vista) · '+done+' / '+tot+' (totale)';
     document.getElementById('comm-btn-kpi').disabled=done===0;
-    document.getElementById('comm-assign-progress-label').textContent=tot?Math.round(done/tot*100)+'% completato':'';
+    const progEl=document.getElementById('comm-assign-progress-label');
+    if(tot){progEl.textContent=Math.round(done/tot*100)+'% assegnate';progEl.style.display='';}
+    else{progEl.textContent='';progEl.style.display='none';}
   }
 
   /* ---- Vista KPI per Financial ---- */
@@ -5204,7 +5267,7 @@ calcPolizza();
             <td style="white-space:nowrap;color:var(--ink3)">${data}</td>
             <td style="font-family:monospace;font-size:12px">${esc(r.__num||'—')}</td>
             <td style="font-weight:500">${esc(r.cliente||'—')}</td>
-            <td><span style="font-size:11px;color:var(--ink2)">${esc(r.prodotto||'—')}</span></td>
+            <td><span style="font-size:12.5px;color:var(--ink2)">${esc(r.prodotto||'—')}${r.codProdotto?` <span style="font-size:11px;font-weight:600;background:var(--surface2);color:var(--ink3);padding:2px 6px;border-radius:4px;margin-left:4px">${r.codProdotto}</span>`:''}</span></td>
             <td style="text-align:right;font-weight:700;color:var(--blue)">€ ${fe(r.importo||0)}</td>
             <td style="text-align:center">${tanStr}</td>
             <td style="text-align:center">${polStr}</td>
