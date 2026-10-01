@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.61.0 · 01/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.62.0 · 01/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -5761,20 +5761,18 @@ calcPolizza();
 
     const globCols=activeCols.map(c=>`<td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:700;color:${c.color}">${valOf(c,glob)}</td>`).join('');
 
-    const colWidth=activeCols.length===1?'620px':activeCols.length===2?'700px':activeCols.length===3?'800px':'920px';
-
     const html=`
-    <div style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;overflow-y:auto;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px" id="report-modal" onclick="if(event.target.id==='report-modal')document.getElementById('report-modal').remove()">
-      <div style="background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:${colWidth};max-width:98%;overflow:hidden" id="report-modal-inner">
-        <div style="padding:18px 20px 14px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;background:#fff">
+    <div style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9000;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px" id="report-modal" onclick="if(event.target.id==='report-modal')document.getElementById('report-modal').remove()">
+      <div style="background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:max-content;min-width:600px;max-width:none;overflow:visible" id="report-modal-inner">
+        <div style="padding:18px 20px 14px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:14px 14px 0 0">
           <div>
             <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:#111">📊 Report Erogato</div>
             <div style="font-size:11px;color:#6b7280;margin-top:2px">Periodo: ${periodLabel} · ${activeCols.map(c=>c.label).join(', ')}</div>
           </div>
           <button onclick="document.getElementById('report-modal').remove()" style="border:none;background:none;font-size:20px;cursor:pointer;color:#9ca3af;padding:4px 8px">✕</button>
         </div>
-        <div style="overflow-x:auto">
-          <table style="width:100%;border-collapse:collapse;font-family:'Outfit',sans-serif">
+        <div style="overflow:visible">
+          <table style="width:max-content;min-width:100%;border-collapse:collapse;font-family:'Outfit',sans-serif">
             <thead>
               <tr style="background:#f3f4f6;border-bottom:2px solid #e5e7eb">
                 <th style="padding:9px 12px;text-align:left;font-size:12px;font-weight:600;color:#6b7280"></th>
