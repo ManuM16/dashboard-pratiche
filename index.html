@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.59.0 · 01/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.60.0 · 01/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -5356,10 +5356,13 @@ calcPolizza();
     document.getElementById('agent-modal-name').textContent = agentName;
     document.getElementById('agent-modal-sub').textContent = finLabel + ' · ' + periodoLabel;
 
+    const ticketMedio = nPratiche > 0 ? totErogato / nPratiche : null;
+
     // Popola KPI strip
     document.getElementById('agent-modal-kpis').innerHTML = [
       {label:'Erogato totale', value:'€ '+fe(totErogato), sub:nPratiche+' pratiche', color:'var(--blue)'},
       {label:'N° Pratiche', value:nPratiche+'', sub:'nel periodo', color:'var(--teal)'},
+      {label:'Ticket medio', value:ticketMedio!=null?'€ '+fe(ticketMedio):'—', sub:'erogato / pratica', color:'var(--blue-m)'},
       {label:'Polizze', value:withPol.length+'', sub:totPremio>0?'€ '+fe(totPremio)+' premi':'—', color:'var(--purple)'},
       {label:'TAN medio (p.p.)', value:tanMedio!=null?tanMedio.toFixed(2)+'%':'—', sub:'escl. CQ', color:'var(--amber)'},
     ].map(k=>`<div class="agent-modal-kpi">
