@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.54.0 · 01/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.55.0 · 01/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -4785,8 +4785,17 @@ calcPolizza();
 
     // Intestazioni colonne metriche
     const COLS=[
-      {key:'erogato',  label:'Erogato',        color:'var(--blue)',   fmt:d=>'€ '+fe(d.importoTot),                         val:d=>d.importoTot},
-      {key:'pratiche', label:'N° Pratiche',     color:'var(--teal)',   fmt:d=>d.n+'',                                        val:d=>d.n},
+      {key:'erogato',  label:'Erogato',        color:'var(--blue)',   fmt:d=>'€ '+fe(d.importoTot),  val:d=>d.importoTot},
+      {key:'pratiche', label:'N° Pratiche',     color:'var(--teal)',
+        fmt:d=>{
+          const gar=d.nGar||0; const non=d.nNonGar!==undefined?d.nNonGar:(d.n-gar);
+          const sub=d.n>0?`<span style="font-size:10.5px;color:var(--ink3);font-weight:400;display:block;line-height:1.3">${gar} gar · ${non} non-gar</span>`:'';
+          return d.n+sub;
+        },
+        val:d=>d.n},
+      {key:'ticket',   label:'Ticket medio',   color:'var(--blue-m)',
+        fmt:d=>d.n>0?'€ '+fe(d.importoTot/d.n):'—',
+        val:d=>d.n>0?d.importoTot/d.n:0},
       {key:'polizze',  label:'Polizze / p.p.',  color:'var(--purple)', fmt:d=>d.conPolizza+' / '+(d.nPP||0)+' p.p. ('+(d.nPP?Math.round(d.conPolizza/(d.nPP)*100):0)+'%)', val:d=>d.conPolizza},
       {key:'premi',    label:'Premi polizza',   color:'var(--amber)',  fmt:d=>d.totPolizza>0?'€ '+fe(d.totPolizza):'—',      val:d=>d.totPolizza},
       {key:'tan',      label:'TAN medio p.p. (escl. CQ)',  color:'var(--blue-m)', fmt:d=>d.tanCount?(Math.round(d.tanSum/d.tanCount*100)/100).toFixed(2)+'%':'—', val:d=>d.tanCount?d.tanSum/d.tanCount:0},
@@ -4838,17 +4847,18 @@ calcPolizza();
       return `<div style="margin-bottom:16px;background:var(--surface);border-radius:12px;border:2px solid ${f.color};overflow:hidden;box-shadow:var(--shadow)">
         <table style="width:100%;border-collapse:collapse;table-layout:fixed">
           <colgroup>
-            <col style="width:220px">
-            <col style="width:140px">
-            <col style="width:100px">
-            <col style="width:180px">
+            <col style="width:210px">
             <col style="width:130px">
-            <col style="width:155px">
+            <col style="width:120px">
+            <col style="width:120px">
+            <col style="width:170px">
+            <col style="width:120px">
+            <col style="width:145px">
           </colgroup>
           ${thead}
           <tbody>
             ${totRow}
-            ${agents.length ? agentRows : '<tr><td colspan="6" style="padding:10px 20px;font-size:12px;color:var(--ink3);font-style:italic">Nessuna pratica assegnata nel periodo.</td></tr>'}
+            ${agents.length ? agentRows : '<tr><td colspan="7" style="padding:10px 20px;font-size:12px;color:var(--ink3);font-style:italic">Nessuna pratica assegnata nel periodo.</td></tr>'}
           </tbody>
         </table>
       </div>`;
@@ -4900,6 +4910,8 @@ calcPolizza();
     const n=pratiche.length;
     const importoTot=pratiche.reduce((a,r)=>a+(r.importo||0),0);
     const isGarFn=r=>(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO'&&r.codProdotto>0&&r.codProdotto!==6;
+    const nGar=pratiche.filter(r=>isGarFn(r)).length;
+    const nNonGar=n-nGar;
     const withPol=pratiche.filter(r=>r.polizza!=null&&!isGarFn(r));
     const totPolizza=withPol.reduce((a,r)=>a+(r.polizza||0),0);
     const nPP=pratiche.filter(r=>!isGarFn(r)).length;
@@ -4907,7 +4919,8 @@ calcPolizza();
     const withTan=pratiche.filter(r=>r.tan!=null);
     const tanMedio=withTan.length?(withTan.reduce((a,r)=>a+r.tan,0)/withTan.length):null;
     const nAssegnate=pratiche.filter(r=>commAssign[r.__id]).length;
-    return {n,importoTot,totPolizza,nPol:withPol.length,nPP,penPol,tanMedio,nAssegnate};
+    const ticketMedio=n>0?importoTot/n:0;
+    return {n,nGar,nNonGar,importoTot,totPolizza,nPol:withPol.length,nPP,penPol,tanMedio,nAssegnate,ticketMedio};
   }
 
   function commYoyDelta(curr,prev,key){
@@ -5193,9 +5206,10 @@ calcPolizza();
       // Totali financial: include TUTTE le pratiche, assegnate e non
       const isGarantito=(r.prodotto||'').toUpperCase().trim()==='ALIFIN GARANTITO' && r.codProdotto>0 && r.codProdotto!==6;
 
-      if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,tanSum:0,tanCount:0};
+      if(!finStats[finKey]) finStats[finKey]={key:finKey,label:finLabel,color:FINANCIAL_MAP[finKey]?.color||'#999',n:0,nGar:0,nNonGar:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,tanSum:0,tanCount:0};
       const f=finStats[finKey];
       f.n++;f.importoTot+=r.importo||0;
+      if(isGarantito) f.nGar++; else f.nNonGar++;
       if(agent) f.nAssegnate++;
       if(!isGarantito) f.nPP++;
       if(r.polizza!=null&&!isGarantito){f.conPolizza++;f.totPolizza+=r.polizza;}else f.senzaPolizza++;
@@ -5205,9 +5219,10 @@ calcPolizza();
       if(!agent) return;
       const agentFinKey=AGENT_TO_FIN[agent]||finKey;
       const agentFinLabel=FINANCIAL_MAP[agentFinKey]?FINANCIAL_MAP[agentFinKey].label:agentFinKey;
-      if(!agentStats[agent]) agentStats[agent]={name:agent,finKey:agentFinKey,finLabel:agentFinLabel,n:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,prodotti:{},tanSum:0,tanCount:0};
+      if(!agentStats[agent]) agentStats[agent]={name:agent,finKey:agentFinKey,finLabel:agentFinLabel,n:0,nGar:0,nNonGar:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,prodotti:{},tanSum:0,tanCount:0};
       const s=agentStats[agent];
       s.n++;s.importoTot+=r.importo||0;
+      if(isGarantito) s.nGar++; else s.nNonGar++;
       if(!isGarantito) s.nPP++;
       if(r.polizza!=null&&!isGarantito){s.conPolizza++;s.totPolizza+=r.polizza;}else s.senzaPolizza++;
       s.prodotti[r.prodotto||'N/D']=(s.prodotti[r.prodotto||'N/D']||0)+1;
