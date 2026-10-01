@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-01T15:22:49.593Z",
+  "exportedAt": "2026-10-01T15:22:51.750Z",
   "panels": [
     {
       "id": 1,
@@ -20,7 +20,7 @@
         },
         {
           "desc": "Findomestic",
-          "importo": "200",
+          "importo": "",
           "scadenza": "",
           "debitoRes": ""
         },
