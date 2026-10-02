@@ -258,7 +258,7 @@ tr:hover td{background:var(--surface3)}
 .drmc-panel-del{border:none;background:none;cursor:pointer;color:var(--ink3);font-size:17px;padding:3px 7px;border-radius:4px;transition:.12s}
 .drmc-panel-del:hover{background:var(--red-l);color:var(--red)}
 /* Corpo: tabella unica a due colonne (redditi | rate) */
-.drmc-body{display:grid;grid-template-columns:1fr 1.6fr;border-bottom:1px solid var(--border)}
+.drmc-body{display:grid;grid-template-columns:1fr 2.2fr;border-bottom:1px solid var(--border)}
 .drmc-col{padding:16px 18px}
 .drmc-col+.drmc-col{border-left:1px solid var(--border)}
 .drmc-col-label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3);margin-bottom:10px}
@@ -279,10 +279,10 @@ tr:hover td{background:var(--surface3)}
 .drmc-del-r:hover{color:var(--red);background:var(--red-l)}
 /* Footer KPI */
 .drmc-footer{display:flex;align-items:stretch;gap:0}
-.drmc-kpi-box{flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:4px}
+.drmc-kpi-box{flex:1;padding:12px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
 .drmc-kpi-box+.drmc-kpi-box{border-left:1px solid var(--border)}
 .drmc-kpi-lbl{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)}
-.drmc-kpi-val{font-size:28px;font-weight:700;font-family:'Syne',sans-serif;line-height:1.1}
+.drmc-kpi-val{font-size:24px;font-weight:700;font-family:'Syne',sans-serif;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .drmc-pos{color:var(--green)}.drmc-neg{color:var(--red)}
 .drmc-neutral{color:var(--ink)}
 .drmc-mesi-auto{font-size:13px;color:var(--ink3)}
@@ -357,7 +357,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.69.0 · 02/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.70.0 · 02/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -3121,10 +3121,10 @@ calcPolizza();
     upd('[data-dti-lbl]', el=>{ el.textContent='DTI '+dtiIcon; });
 
     // Mesi alla scadenza
-    panel.querySelectorAll('.drmc-mesi-span').forEach((span,i)=>{
+    panel.querySelectorAll('.drmc-mesi-span').forEach((td,i)=>{
       const r=p.rate[i]; if(!r) return;
       const m=mesiAlla(r.scadenza);
-      span.textContent = m!==null ? m+' mesi' : '';
+      td.textContent = m!==null ? m+'' : '';
     });
   }
 
@@ -3155,19 +3155,13 @@ calcPolizza();
     const m = mesiAlla(r.scadenza);
     const tr = document.createElement('tr');
     tr.innerHTML=`
-      <td style="width:60px">${mkSel(TIPO_OPTS, r.tipo||'', 'drmc-tipo-sel')}</td>
       <td><input class="drmc-ci" value="${esc(r.istituto||'')}" placeholder="Istituto"></td>
-      <td style="width:65px">${mkSel(RUOLO_OPTS, r.ruolo||'intestatario', 'drmc-ruolo-sel')}</td>
-      <td class="r" style="width:72px"><input class="drmc-ci r" value="${esc(r.importo)}" placeholder="0,00"></td>
-      <td style="width:110px">
-        <input class="drmc-ci drmc-ci-date" type="date" value="${esc(r.scadenza||'')}">
-        <span class="drmc-mesi-span drmc-mesi-auto">${m!==null?m+' mesi':''}</span>
-      </td>
-      <td class="r" style="width:80px"><input class="drmc-ci r" value="${esc(r.debitoRes||'')}" placeholder="—"></td>
+      <td class="r" style="width:80px"><input class="drmc-ci r" value="${esc(r.importo)}" placeholder="0,00"></td>
+      <td style="width:110px"><input class="drmc-ci drmc-ci-date" type="date" value="${esc(r.scadenza||'')}"></td>
+      <td class="r drmc-mesi-span" style="width:52px;font-size:13px;color:var(--ink3);white-space:nowrap">${m!==null?m+'':''}</td>
+      <td class="r" style="width:90px"><input class="drmc-ci r" value="${esc(r.debitoRes||'')}" placeholder="—"></td>
       <td style="width:22px"><button class="drmc-del-r" type="button">✕</button></td>`;
-    tr.querySelector('.drmc-tipo-sel').addEventListener('change', function(){ const p=findPanel(pid); if(p){p.rate[i].tipo=this.value; savePanels(); updateResults(pid);} });
     tr.querySelectorAll('input')[0].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].istituto=this.value; savePanels();} });
-    tr.querySelector('.drmc-ruolo-sel').addEventListener('change', function(){ const p=findPanel(pid); if(p){p.rate[i].ruolo=this.value; savePanels(); updateResults(pid);} });
     tr.querySelectorAll('input')[1].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].importo=this.value; savePanels(); updateResults(pid);} });
     tr.querySelectorAll('input')[2].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].scadenza=this.value; savePanels(); updateResults(pid);} });
     tr.querySelectorAll('input')[3].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].debitoRes=this.value; savePanels(); updateResults(pid);} });
@@ -3196,9 +3190,9 @@ calcPolizza();
       <div class="drmc-body">
         <!-- SINISTRA: redditi -->
         <div class="drmc-col">
-          <div class="drmc-col-label">💰 Redditi mensili netti</div>
+          <div class="drmc-col-label">💰 Redditi</div>
           <table class="drmc-t">
-            <thead><tr><th>Fonte</th><th class="r">€/mese</th><th></th></tr></thead>
+            <thead><tr><th>Fonte</th><th class="r">Rata</th><th></th></tr></thead>
             <tbody class="drmc-red-body"></tbody>
           </table>
           <button class="drmc-add-r drmc-add-red" type="button">＋ Reddito</button>
@@ -3208,8 +3202,8 @@ calcPolizza();
           <div class="drmc-col-label">📋 Impegni / rate in corso</div>
           <table class="drmc-t">
             <thead><tr>
-              <th>Tipo</th><th>Istituto</th><th>Ruolo</th>
-              <th class="r">€/mese</th><th>Scadenza</th>
+              <th>Istituto</th>
+              <th class="r">Rata</th><th>Scadenza</th><th class="r">Mesi</th>
               <th class="r">Deb. res.</th><th></th>
             </tr></thead>
             <tbody class="drmc-rate-body"></tbody>
