@@ -249,40 +249,40 @@ tr:hover td{background:var(--surface3)}
 
 /* ── DRM/DTI Calculator — layout compatto ── */
 .drmc-panel{background:#fff;border:1px solid #C8C8C8;border-radius:var(--r);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)}
-.drmc-panel-head{background:#4472C4;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:none}
-.drmc-panel-name{flex:1;border:none;background:transparent;font-size:19px;font-weight:700;font-family:'Syne',sans-serif;color:#fff;outline:none;min-width:120px}
-.drmc-panel-name::placeholder{color:rgba(255,255,255,.6);font-weight:400}
-.drmc-panel-num{width:180px;border:1px solid rgba(255,255,255,.4);border-radius:5px;background:rgba(255,255,255,.18);font-size:14px;font-family:'Outfit',sans-serif;color:#fff;padding:4px 9px;outline:none}
-.drmc-panel-num:focus{border-color:#fff;background:rgba(255,255,255,.28)}
-.drmc-panel-num::placeholder{color:rgba(255,255,255,.55)}
-.drmc-panel-del{border:none;background:rgba(255,255,255,.15);cursor:pointer;color:#fff;font-size:15px;padding:4px 8px;border-radius:4px;transition:.12s}
+.drmc-panel-head{background:#BDD7EE;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:none}
+.drmc-panel-name{flex:1;border:none;background:transparent;font-size:19px;font-weight:700;font-family:'Syne',sans-serif;color:#1A3D6B;outline:none;min-width:120px}
+.drmc-panel-name::placeholder{color:rgba(26,61,107,.45);font-weight:400}
+.drmc-panel-num{width:180px;border:1px solid rgba(26,61,107,.3);border-radius:5px;background:rgba(255,255,255,.5);font-size:14px;font-family:'Outfit',sans-serif;color:#1A3D6B;padding:4px 9px;outline:none}
+.drmc-panel-num:focus{border-color:#4472C4;background:#fff}
+.drmc-panel-num::placeholder{color:rgba(26,61,107,.4)}
+.drmc-panel-del{border:none;background:rgba(26,61,107,.12);cursor:pointer;color:#1A3D6B;font-size:15px;padding:4px 8px;border-radius:4px;transition:.12s}
 .drmc-panel-del:hover{background:rgba(220,50,50,.7)}
 /* Corpo: tabella unica a due colonne (redditi | rate) */
 .drmc-body{display:grid;grid-template-columns:1fr 2.4fr;border-bottom:1px solid #D8D8D8}
 .drmc-col{padding:14px 16px}
 .drmc-col+.drmc-col{border-left:1px solid #E0E0E0}
-.drmc-col-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#fff;background:#B4C7E8;padding:5px 8px;border-radius:4px;margin-bottom:10px;display:inline-block}
+.drmc-col-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#1A3D6B;background:#BDD7EE;padding:5px 8px;border-radius:4px;margin-bottom:10px;display:inline-block}
 /* Tabella interna compatta */
 .drmc-t{width:100%;border-collapse:collapse;font-size:14.5px;table-layout:fixed}
-.drmc-t th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#fff;background:#B4C7E8;padding:7px 8px;white-space:nowrap;overflow:hidden}
+.drmc-t th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#1A3D6B;background:#BDD7EE;padding:7px 8px;white-space:nowrap;overflow:hidden}
 .drmc-t th.r{text-align:right}
 .drmc-t td{padding:4px 5px;border-bottom:1px solid #EEEEEE;vertical-align:middle}
 .drmc-t td.r{text-align:right}
 .drmc-t tr:last-child td{border-bottom:none}
 .drmc-t tr:nth-child(even) td{background:#FFF2CC}
 .drmc-ci{width:100%;border:1px solid transparent;border-radius:4px;padding:5px 7px;font-size:14px;font-family:'Outfit',sans-serif;color:var(--ink);background:transparent;outline:none;box-sizing:border-box;min-width:0}
-.drmc-ci:focus{background:#DAE3F7;border-color:#4472C4}
+.drmc-ci:focus{background:#DEEBF7;border-color:#5B9BD5}
 .drmc-ci.r{text-align:right}
 .drmc-ci-date{font-size:13px}
-.drmc-add-r{border:1px dashed #4472C4;background:rgba(68,114,196,.06);cursor:pointer;color:#4472C4;font-size:13.5px;padding:5px 10px;border-radius:4px;font-family:'Outfit',sans-serif;margin-top:6px;transition:.12s;display:block;width:fit-content}
-.drmc-add-r:hover{background:rgba(68,114,196,.14)}
+.drmc-add-r{border:1px dashed #5B9BD5;background:rgba(91,155,213,.08);cursor:pointer;color:#1A3D6B;font-size:16px;font-weight:700;padding:4px 12px;border-radius:4px;font-family:'Outfit',sans-serif;margin-top:6px;transition:.12s;display:inline-block;width:fit-content;line-height:1}
+.drmc-add-r:hover{background:rgba(91,155,213,.18)}
 .drmc-del-r{border:none;background:none;cursor:pointer;color:#AAAAAA;font-size:14px;padding:3px 6px;border-radius:3px;line-height:1;transition:.12s}
 .drmc-del-r:hover{color:#C0392B;background:#FDEAEA}
 /* Footer KPI */
-.drmc-footer{display:flex;align-items:stretch;gap:0;background:#DAE3F7;border-top:2px solid #B4C7E8}
+.drmc-footer{display:flex;align-items:stretch;gap:0;background:#DAE3F3;border-top:2px solid #BDD7EE}
 .drmc-kpi-box{flex:1;padding:12px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.drmc-kpi-box+.drmc-kpi-box{border-left:1px solid #B4C7E8}
-.drmc-kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#4472C4}
+.drmc-kpi-box+.drmc-kpi-box{border-left:1px solid #BDD7EE}
+.drmc-kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#52514E}
 .drmc-kpi-val{font-size:22px;font-weight:700;font-family:'Syne',sans-serif;line-height:1.15;white-space:nowrap;overflow:visible}
 .drmc-pos{color:#4A8C28}.drmc-neg{color:#C0392B}
 .drmc-neutral{color:#B8860B}
@@ -358,7 +358,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.72.0 · 02/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.73.0 · 02/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -3113,7 +3113,7 @@ calcPolizza();
       el.textContent='€ '+fe(drm);
       el.classList.remove('drmc-pos','drmc-neg','drmc-neutral'); el.classList.add(drmCls);
       const box=el.closest('.drmc-kpi-box');
-      if(box){ box.style.background=drm>=0?'#DAE3F7':'#FDEAEA'; box.style.borderLeft='3px solid '+(drm>=0?'#4472C4':'#C0392B'); }
+      if(box){ box.style.background=drm>=0?'#DAE3F3':'#FDEAEA'; box.style.borderLeft='3px solid '+(drm>=0?'#5B9BD5':'#C0392B'); }
     });
     upd('[data-dti]', el=>{
       el.textContent=(dti*100).toFixed(1).replace('.',',')+' %';
@@ -3199,7 +3199,7 @@ calcPolizza();
             <thead><tr><th>Fonte</th><th class="r">€/mese</th><th></th></tr></thead>
             <tbody class="drmc-red-body"></tbody>
           </table>
-          <button class="drmc-add-r drmc-add-red" type="button">＋ Reddito</button>
+          <button class="drmc-add-r drmc-add-red" type="button">＋</button>
         </div>
         <!-- DESTRA: rate/impegni -->
         <div class="drmc-col">
@@ -3220,7 +3220,7 @@ calcPolizza();
             </tr></thead>
             <tbody class="drmc-rate-body"></tbody>
           </table>
-          <button class="drmc-add-r drmc-add-rate" type="button">＋ Impegno</button>
+          <button class="drmc-add-r drmc-add-rate" type="button">＋</button>
         </div>
       </div>
       <!-- Footer KPI -->
@@ -3237,11 +3237,11 @@ calcPolizza();
           <div class="drmc-kpi-lbl">Deb. residui</div>
           <div style="font-size:16px;font-weight:700;color:#666;white-space:nowrap" data-debit-tot>${totDebit>0?'€ '+fe(totDebit):'—'}</div>
         </div>
-        <div class="drmc-kpi-box" style="flex:1.6;background:${drm>=0?'#DAE3F7':'#FDEAEA'};border-left:3px solid ${drm>=0?'#4472C4':'#C0392B'}">
+        <div class="drmc-kpi-box" style="flex:1.6;background:${drm>=0?'#DAE3F3':'#FDEAEA'};border-left:3px solid ${drm>=0?'#5B9BD5':'#C0392B'}">
           <div class="drmc-kpi-lbl">DRM — Disponibilità mensile</div>
           <div class="drmc-kpi-val ${drmCls}" data-drm>€ ${fe(drm)}</div>
         </div>
-        <div class="drmc-kpi-box" style="flex:1.2;background:${dti<=0.35?'#DAE3F7':(dti<=0.50?'#FFF2CC':'#FDEAEA')};border-left:3px solid ${dti<=0.35?'#4472C4':(dti<=0.50?'#FFC000':'#C0392B')}">
+        <div class="drmc-kpi-box" style="flex:1.2;background:${dti<=0.35?'#DAE3F3':(dti<=0.50?'#FFF2CC':'#FDEAEA')};border-left:3px solid ${dti<=0.35?'#4472C4':(dti<=0.50?'#FFC000':'#C0392B')}">
           <div class="drmc-kpi-lbl" data-dti-lbl>DTI ${dtiIcon}</div>
           <div class="drmc-kpi-val ${dtiCls}" data-dti>${(dti*100).toFixed(1).replace('.',',')} %</div>
         </div>
