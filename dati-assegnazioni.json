@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-02T16:13:51.218Z",
+  "exportedAt": "2026-10-02T16:14:00.339Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-01": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -363,7 +363,8 @@
       "5031195301|TOMESCU MARIAN|14500|2026-10-02": "Noemi Ricciu",
       "5030140301|CURRAO GAETANO|5177|2026-10-02": "Eleonora Lupi",
       "5030020301|LAI CRISTINA|7430.8|2026-10-02": "Stefania Preiata",
-      "5028848301|SIGNORINI LISA|13000|2026-10-02": "Jonathan Zampa"
+      "5028848301|SIGNORINI LISA|13000|2026-10-02": "Jonathan Zampa",
+      "5024180301|BONANNI SONIA|5500|2026-10-02": "Jonathan Zampa"
     },
     "comm_assign_range_2023-01-05__2026-09-30": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -724,6 +725,7 @@
     "5031195301|TOMESCU MARIAN|14500|2026-10-02": "Noemi Ricciu",
     "5030140301|CURRAO GAETANO|5177|2026-10-02": "Eleonora Lupi",
     "5030020301|LAI CRISTINA|7430.8|2026-10-02": "Stefania Preiata",
-    "5028848301|SIGNORINI LISA|13000|2026-10-02": "Jonathan Zampa"
+    "5028848301|SIGNORINI LISA|13000|2026-10-02": "Jonathan Zampa",
+    "5024180301|BONANNI SONIA|5500|2026-10-02": "Jonathan Zampa"
   }
 }
