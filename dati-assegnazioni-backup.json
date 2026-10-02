@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-02T16:12:40.491Z",
+  "exportedAt": "2026-10-02T16:13:27.599Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-01": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -359,7 +359,8 @@
       "5027946301|PIGA MATTEO|8552.6|2026-10-01": "Giada Boccia",
       "5027902301|DAVOLI VALENTINA|7185.1|2026-10-01": "Laura Balestrino",
       "5019186301|ORUNE ALESSANDRO|29919.2|2026-10-01": "Antonella Sanna",
-      "5031505301|BORGHERESI ANDREA|7000|2026-10-02": "Daria Danzini"
+      "5031505301|BORGHERESI ANDREA|7000|2026-10-02": "Daria Danzini",
+      "5031195301|TOMESCU MARIAN|14500|2026-10-02": "Noemi Ricciu"
     },
     "comm_assign_range_2023-01-05__2026-09-30": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -716,6 +717,7 @@
     "5027946301|PIGA MATTEO|8552.6|2026-10-01": "Giada Boccia",
     "5027902301|DAVOLI VALENTINA|7185.1|2026-10-01": "Laura Balestrino",
     "5019186301|ORUNE ALESSANDRO|29919.2|2026-10-01": "Antonella Sanna",
-    "5031505301|BORGHERESI ANDREA|7000|2026-10-02": "Daria Danzini"
+    "5031505301|BORGHERESI ANDREA|7000|2026-10-02": "Daria Danzini",
+    "5031195301|TOMESCU MARIAN|14500|2026-10-02": "Noemi Ricciu"
   }
 }
