@@ -5321,8 +5321,8 @@ calcPolizza();
     });
 
     // Assicura che TUTTE le filiali compaiano sempre, anche con 0 pratiche
-    FILIALI.forEach(fk=>{
-      if(!finStats[fk] && FINANCIAL_MAP[fk]){
+    Object.keys(FINANCIAL_MAP).forEach(fk=>{
+      if(!finStats[fk]){
         finStats[fk]={key:fk,label:FINANCIAL_MAP[fk].label,color:FINANCIAL_MAP[fk].color,n:0,nGar:0,nNonGar:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,tanSum:0,tanCount:0};
       }
     });
