@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.63.0 · 02/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.64.0 · 02/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -4865,7 +4865,7 @@ calcPolizza();
       : Object.keys(_lastFinStats).filter(k=>k===commKpiView);
 
     if(!finsToShow.length){
-      container.innerHTML='<div class="comm-empty"><div class="comm-empty-icon">🔍</div><div>Nessuna pratica assegnata per il periodo/filiale selezionati.</div></div>';
+      container.innerHTML='<div class="comm-empty"><div class="comm-empty-icon">🔍</div><div>Nessun dato disponibile per il periodo selezionato.</div></div>';
       return;
     }
 
@@ -5320,14 +5320,16 @@ calcPolizza();
       if(r.tan!=null){s.tanSum+=r.tan;s.tanCount++;}
     });
 
+    // Assicura che TUTTE le filiali compaiano sempre, anche con 0 pratiche
+    FILIALI.forEach(fk=>{
+      if(!finStats[fk]){
+        const finLabel=FIL_LABELS[fk]||fk;
+        finStats[fk]={key:fk,label:finLabel,color:FINANCIAL_MAP[fk]?.color||'#999',n:0,nGar:0,nNonGar:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,tanSum:0,tanCount:0};
+      }
+    });
+
     const section=document.getElementById('comm-kpi-section');
     const cards=document.getElementById('comm-kpi-cards');
-
-    if(!Object.keys(agentStats).length){
-      cards.innerHTML='<div class="comm-empty"><div class="comm-empty-icon">🔍</div><div>Nessuna pratica assegnata per il periodo selezionato</div></div>';
-      section.style.display='';
-      return;
-    }
 
     // Salva per renderKpiCards
     _lastAgentStats=agentStats;
