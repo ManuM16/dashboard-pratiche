@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-02T13:51:52.247Z",
+  "exportedAt": "2026-10-02T13:53:13.234Z",
   "panels": [
     {
       "id": 1,
@@ -14,13 +14,7 @@
       "rate": [
         {
           "desc": "Agos",
-          "importo": "",
-          "scadenza": "",
-          "debitoRes": ""
-        },
-        {
-          "desc": "Findomestic",
-          "importo": "223",
+          "importo": "75",
           "scadenza": "",
           "debitoRes": ""
         }
