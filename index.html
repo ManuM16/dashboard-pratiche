@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.64.0 · 02/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.65.0 · 02/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1001,12 +1001,10 @@ tr:hover td{background:var(--surface3)}
         <div class="comm-kpi-section" id="comm-kpi-section" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:14px">
           <!-- Top control bar (full width) -->
           <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border)">
-            <!-- Periodo -->
-            <div style="display:flex;align-items:center;gap:8px">
-              <span style="font-size:12px;font-weight:600;color:var(--ink2)">📅 Periodo:</span>
-              <select id="kpi-month-filter" onchange="commRegenKPI()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
-                <option value="">Tutto il file</option>
-              </select>
+            <!-- Periodo — visual month picker -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-size:12px;font-weight:600;color:var(--ink2);white-space:nowrap">📅 Periodo:</span>
+              <div id="kpi-period-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"></div>
               <span id="kpi-period-info" style="font-size:11px;color:var(--ink3)"></span>
             </div>
             <!-- Separator -->
@@ -3449,7 +3447,7 @@ calcPolizza();
   }
 
   function _getRefYear(){
-    const selMonth = document.getElementById('kpi-month-filter')?.value || '';
+    const selMonth = window._kpiSelectedMonth || '';
     return selMonth ? parseInt(selMonth.split('-')[0]) : new Date().getFullYear();
   }
 
@@ -4957,34 +4955,105 @@ calcPolizza();
   }
 
   /* ---- Popola select mesi KPI ---- */
+  // Stato picker periodo (window.* per accesso cross-script)
+  window._kpiSelectedMonth=''; // '' = tutto, 'YYYY-MM' = mese specifico
+  window._kpiSelectedYear='';  // anno attivo nei tab
+
   function populateKpiMonthFilter(){
-    const sel=document.getElementById('kpi-month-filter');
-    if(!sel) return;
-    // Raccoglie tutti i mesi YYYY-MM presenti in commPratiche
-    const months=[...new Set(commPratiche.map(r=>r.__dateStr?r.__dateStr.slice(0,7):null).filter(Boolean))].sort().reverse();
-    sel.innerHTML='<option value="">Tutto il file ('+commPratiche.length+' pratiche)</option>';
-    months.forEach(m=>{
-      const [y,mo]=m.split('-');
-      const label=new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});
-      const n=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(m)).length;
-      sel.innerHTML+=`<option value="${m}">${label} (${n} pratiche)</option>`;
+    const picker=document.getElementById('kpi-period-picker');
+    if(!picker) return;
+
+    // Raccoglie tutti i mesi YYYY-MM presenti
+    const allMonths=[...new Set(commPratiche.map(r=>r.__dateStr?r.__dateStr.slice(0,7):null).filter(Boolean))].sort().reverse();
+    if(!allMonths.length){ picker.innerHTML=''; return; }
+
+    // Anni disponibili
+    const years=[...new Set(allMonths.map(m=>m.slice(0,4)))].sort().reverse();
+
+    // Se l'anno selezionato non è più valido, prende il più recente
+    if(!years.includes(window._kpiSelectedYear)) window._kpiSelectedYear=years[0];
+    // Se il mese selezionato non appartiene all'anno attivo, deseleziona
+    if(window._kpiSelectedMonth && !window._kpiSelectedMonth.startsWith(window._kpiSelectedYear)) window._kpiSelectedMonth='';
+    // Auto-seleziona il mese più recente al primo caricamento
+    if(window._kpiSelectedMonth==='' && allMonths.length){
+      window._kpiSelectedMonth=allMonths[0];
+      window._kpiSelectedYear=allMonths[0].slice(0,4);
+    }
+
+    const MESI_BREVI=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+
+    let html='';
+
+    // Bottone "Tutto"
+    const tuttoActive=(window._kpiSelectedMonth==='');
+    html+=`<button onclick="commKpiSelectAll()" style="padding:4px 11px;border-radius:20px;border:1px solid ${tuttoActive?'var(--blue)':'var(--border2)'};background:${tuttoActive?'var(--blue)':'var(--surface)'};color:${tuttoActive?'#fff':'var(--ink2)'};font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap">Tutto</button>`;
+
+    // Separatore
+    html+=`<div style="width:1px;height:18px;background:var(--border2);flex-shrink:0"></div>`;
+
+    // Tab anni
+    html+=`<div style="display:flex;gap:2px;border:1px solid var(--border2);border-radius:8px;overflow:hidden">`;
+    years.forEach(y=>{
+      const active=(y===window._kpiSelectedYear);
+      html+=`<button onclick="commKpiSelectYear('${y}')" style="padding:4px 10px;border:none;border-right:1px solid var(--border2);background:${active?'var(--blue)':'var(--surface)'};color:${active?'#fff':'var(--ink2)'};font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap">${y}</button>`;
     });
-    // Seleziona automaticamente il mese più recente
-    if(months.length) sel.value=months[0];
+    html+='</div>';
+
+    // Pills mesi per l'anno attivo
+    html+=`<div style="display:flex;gap:4px;flex-wrap:wrap">`;
+    const monthsOfYear=allMonths.filter(m=>m.startsWith(window._kpiSelectedYear));
+    // Mostra tutti i 12 mesi, grigio se non hanno dati
+    for(let mo=1;mo<=12;mo++){
+      const key=`${window._kpiSelectedYear}-${String(mo).padStart(2,'0')}`;
+      const n=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(key)).length;
+      const active=(window._kpiSelectedMonth===key);
+      const hasData=n>0;
+      const bg=active?'var(--blue)':(hasData?'var(--surface)':'var(--surface2)');
+      const col=active?'#fff':(hasData?'var(--ink)':'var(--ink3)');
+      const border=active?'var(--blue)':(hasData?'var(--border2)':'var(--border)');
+      const cursor=hasData?'pointer':'default';
+      const title=hasData?`${MESI_BREVI[mo-1]}: ${n} pratiche`:`${MESI_BREVI[mo-1]}: nessuna pratica`;
+      const click=hasData?`commKpiSelectMonth('${key}')`:'void(0)';
+      html+=`<button onclick="${click}" title="${title}" style="padding:3px 8px;border-radius:16px;border:1px solid ${border};background:${bg};color:${col};font-size:11px;font-weight:${active?700:500};cursor:${cursor};font-family:'Outfit',sans-serif;min-width:32px">${MESI_BREVI[mo-1]}${active&&n?`<span style="font-size:9.5px;opacity:.8;margin-left:2px">${n}</span>`:''}${!active&&hasData?`<span style="font-size:9px;opacity:.6;margin-left:1px">${n}</span>`:''}</button>`;
+    }
+    html+='</div>';
+
+    picker.innerHTML=html;
   }
+
+  /* ---- Helpers picker periodo ---- */
+  window.commKpiSelectAll=function(){
+    window._kpiSelectedMonth='';
+    populateKpiMonthFilter();
+    commRegenKPI();
+  };
+  window.commKpiSelectYear=function(y){
+    window._kpiSelectedYear=y;
+    // Auto-seleziona il mese più recente di quell'anno
+    const months=commPratiche.map(r=>r.__dateStr?r.__dateStr.slice(0,7):null).filter(Boolean);
+    const ofYear=[...new Set(months.filter(m=>m.startsWith(y)))].sort().reverse();
+    window._kpiSelectedMonth=ofYear.length?ofYear[0]:'';
+    populateKpiMonthFilter();
+    commRegenKPI();
+  };
+  window.commKpiSelectMonth=function(key){
+    window._kpiSelectedMonth=key;
+    window._kpiSelectedYear=key.slice(0,4);
+    populateKpiMonthFilter();
+    commRegenKPI();
+  };
 
   /* ---- Rigenera KPI con il filtro mese selezionato ---- */
   window.commRegenKPI=function(){
-    const sel=document.getElementById('kpi-month-filter');
-    const month=sel?sel.value:'';
+    const month=window._kpiSelectedMonth||'';
     const info=document.getElementById('kpi-period-info');
     let kpiData;
     if(month){
       kpiData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(month));
-      if(info) info.textContent=kpiData.length+' pratiche nel periodo selezionato';
+      if(info) info.textContent=kpiData.length+' pratiche nel periodo';
     } else {
       kpiData=commPratiche;
-      if(info) info.textContent=kpiData.length+' pratiche totali nel file';
+      if(info) info.textContent=kpiData.length+' pratiche totali';
     }
     commBuildKPI(kpiData);
     commBuildYoyPanel(month);
@@ -5267,15 +5336,15 @@ calcPolizza();
 
   /* ---- KPI generation ---- */
   window.commGenerateKPI=function(){
-    // Popola il selettore mesi e avvia l'analisi sul mese più recente
+    // Popola il picker mesi e avvia l'analisi sul mese più recente
+    window._kpiSelectedMonth=''; // reset per auto-selezione
     populateKpiMonthFilter();
-    const sel=document.getElementById('kpi-month-filter');
-    const month=sel?sel.value:'';
+    const month=window._kpiSelectedMonth||'';
     let kpiData;
     if(month){
       kpiData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(month));
       const info=document.getElementById('kpi-period-info');
-      if(info) info.textContent=kpiData.length+' pratiche nel periodo selezionato';
+      if(info) info.textContent=kpiData.length+' pratiche nel periodo';
     } else {
       kpiData=commPratiche;
     }
@@ -5358,7 +5427,7 @@ calcPolizza();
 
   /* ---- Lista pratiche non assegnate per filiale ---- */
   window.commShowUnassignedList=function(finKey){
-    const selMonth=document.getElementById('kpi-month-filter')?.value||'';
+    const selMonth=window._kpiSelectedMonth||'';
     const srcData=selMonth?commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(selMonth)):commPratiche;
     const list=srcData.filter(r=>r.finKey===finKey&&!commAssign[r.__id]);
     if(!list.length){alert('Nessuna pratica non assegnata per questa filiale nel periodo selezionato.');return;}
@@ -5415,7 +5484,7 @@ calcPolizza();
   /* ---- Dettaglio pratiche per agente ---- */
   window.commOpenAgentDetail = function(agentName){
     // Determina periodo filtro KPI corrente
-    const selMonth = document.getElementById('kpi-month-filter')?.value || '';
+    const selMonth = window._kpiSelectedMonth || '';
     let pratiche = commPratiche.filter(r => commAssign[r.__id] === agentName);
     if(selMonth) pratiche = pratiche.filter(r => r.__dateStr && r.__dateStr.startsWith(selMonth));
 
@@ -5695,8 +5764,7 @@ calcPolizza();
     if(!commPratiche.length){alert('Nessuna pratica caricata.');return;}
     if(document.getElementById('report-builder-modal')) return;
 
-    const sel=document.getElementById('kpi-month-filter');
-    const month=sel?sel.value:'';
+    const month=window._kpiSelectedMonth||'';
     const periodLabel=month?(()=>{const [y,mo]=month.split('-');return new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});})():'Tutto il file';
 
     const cols=[
@@ -5780,8 +5848,7 @@ calcPolizza();
     document.getElementById('report-builder-modal').remove();
 
     const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia'];
-    const sel=document.getElementById('kpi-month-filter');
-    const month=sel?sel.value:'';
+    const month=window._kpiSelectedMonth||'';
     const srcData=month?commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(month)):commPratiche;
     const periodLabel=month?(()=>{const [y,mo]=month.split('-');return new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});})():'Tutto il file';
 
