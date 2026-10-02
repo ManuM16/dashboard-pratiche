@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-02T16:13:35.052Z",
+  "exportedAt": "2026-10-02T16:13:43.070Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-01": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -361,7 +361,8 @@
       "5019186301|ORUNE ALESSANDRO|29919.2|2026-10-01": "Antonella Sanna",
       "5031505301|BORGHERESI ANDREA|7000|2026-10-02": "Daria Danzini",
       "5031195301|TOMESCU MARIAN|14500|2026-10-02": "Noemi Ricciu",
-      "5030140301|CURRAO GAETANO|5177|2026-10-02": "Eleonora Lupi"
+      "5030140301|CURRAO GAETANO|5177|2026-10-02": "Eleonora Lupi",
+      "5030020301|LAI CRISTINA|7430.8|2026-10-02": "Stefania Preiata"
     },
     "comm_assign_range_2023-01-05__2026-09-30": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -720,6 +721,7 @@
     "5019186301|ORUNE ALESSANDRO|29919.2|2026-10-01": "Antonella Sanna",
     "5031505301|BORGHERESI ANDREA|7000|2026-10-02": "Daria Danzini",
     "5031195301|TOMESCU MARIAN|14500|2026-10-02": "Noemi Ricciu",
-    "5030140301|CURRAO GAETANO|5177|2026-10-02": "Eleonora Lupi"
+    "5030140301|CURRAO GAETANO|5177|2026-10-02": "Eleonora Lupi",
+    "5030020301|LAI CRISTINA|7430.8|2026-10-02": "Stefania Preiata"
   }
 }
