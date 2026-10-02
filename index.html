@@ -349,7 +349,7 @@ tr:hover td{background:var(--surface3)}
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.65.0 · 02/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.66.0 · 02/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1005,7 +1005,6 @@ tr:hover td{background:var(--surface3)}
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
               <span style="font-size:12px;font-weight:600;color:var(--ink2);white-space:nowrap">📅 Periodo:</span>
               <div id="kpi-period-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"></div>
-              <span id="kpi-period-info" style="font-size:11px;color:var(--ink3)"></span>
             </div>
             <!-- Separator -->
             <div style="width:1px;height:20px;background:var(--border2)"></div>
@@ -4967,8 +4966,8 @@ calcPolizza();
     const allMonths=[...new Set(commPratiche.map(r=>r.__dateStr?r.__dateStr.slice(0,7):null).filter(Boolean))].sort().reverse();
     if(!allMonths.length){ picker.innerHTML=''; return; }
 
-    // Anni disponibili
-    const years=[...new Set(allMonths.map(m=>m.slice(0,4)))].sort().reverse();
+    // Anni disponibili (ordine crescente)
+    const years=[...new Set(allMonths.map(m=>m.slice(0,4)))].sort();
 
     // Se l'anno selezionato non è più valido, prende il più recente
     if(!years.includes(window._kpiSelectedYear)) window._kpiSelectedYear=years[0];
@@ -5014,7 +5013,7 @@ calcPolizza();
       const cursor=hasData?'pointer':'default';
       const title=hasData?`${MESI_BREVI[mo-1]}: ${n} pratiche`:`${MESI_BREVI[mo-1]}: nessuna pratica`;
       const click=hasData?`commKpiSelectMonth('${key}')`:'void(0)';
-      html+=`<button onclick="${click}" title="${title}" style="padding:3px 8px;border-radius:16px;border:1px solid ${border};background:${bg};color:${col};font-size:11px;font-weight:${active?700:500};cursor:${cursor};font-family:'Outfit',sans-serif;min-width:32px">${MESI_BREVI[mo-1]}${active&&n?`<span style="font-size:9.5px;opacity:.8;margin-left:2px">${n}</span>`:''}${!active&&hasData?`<span style="font-size:9px;opacity:.6;margin-left:1px">${n}</span>`:''}</button>`;
+      html+=`<button onclick="${click}" title="${title}" style="padding:3px 8px;border-radius:16px;border:1px solid ${border};background:${bg};color:${col};font-size:11px;font-weight:${active?700:500};cursor:${cursor};font-family:'Outfit',sans-serif;min-width:32px">${MESI_BREVI[mo-1]}</button>`;
     }
     html+='</div>';
 
@@ -5022,38 +5021,46 @@ calcPolizza();
   }
 
   /* ---- Helpers picker periodo ---- */
+  function _kpiRunWithScrollLock(fn){
+    const sy=window.scrollY;
+    fn();
+    // Ripristina scroll dopo il reflow causato dal rebuild delle card
+    requestAnimationFrame(()=>{ window.scrollTo({top:sy,behavior:'instant'}); });
+  }
   window.commKpiSelectAll=function(){
-    window._kpiSelectedMonth='';
-    populateKpiMonthFilter();
-    commRegenKPI();
+    _kpiRunWithScrollLock(()=>{
+      window._kpiSelectedMonth='';
+      populateKpiMonthFilter();
+      commRegenKPI();
+    });
   };
   window.commKpiSelectYear=function(y){
-    window._kpiSelectedYear=y;
-    // Auto-seleziona il mese più recente di quell'anno
-    const months=commPratiche.map(r=>r.__dateStr?r.__dateStr.slice(0,7):null).filter(Boolean);
-    const ofYear=[...new Set(months.filter(m=>m.startsWith(y)))].sort().reverse();
-    window._kpiSelectedMonth=ofYear.length?ofYear[0]:'';
-    populateKpiMonthFilter();
-    commRegenKPI();
+    _kpiRunWithScrollLock(()=>{
+      window._kpiSelectedYear=y;
+      const months=commPratiche.map(r=>r.__dateStr?r.__dateStr.slice(0,7):null).filter(Boolean);
+      const ofYear=[...new Set(months.filter(m=>m.startsWith(y)))].sort().reverse();
+      window._kpiSelectedMonth=ofYear.length?ofYear[0]:'';
+      populateKpiMonthFilter();
+      commRegenKPI();
+    });
   };
   window.commKpiSelectMonth=function(key){
-    window._kpiSelectedMonth=key;
-    window._kpiSelectedYear=key.slice(0,4);
-    populateKpiMonthFilter();
-    commRegenKPI();
+    _kpiRunWithScrollLock(()=>{
+      window._kpiSelectedMonth=key;
+      window._kpiSelectedYear=key.slice(0,4);
+      populateKpiMonthFilter();
+      commRegenKPI();
+    });
   };
 
   /* ---- Rigenera KPI con il filtro mese selezionato ---- */
   window.commRegenKPI=function(){
     const month=window._kpiSelectedMonth||'';
-    const info=document.getElementById('kpi-period-info');
     let kpiData;
     if(month){
       kpiData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(month));
-      if(info) info.textContent=kpiData.length+' pratiche nel periodo';
     } else {
       kpiData=commPratiche;
-      if(info) info.textContent=kpiData.length+' pratiche totali';
     }
     commBuildKPI(kpiData);
     commBuildYoyPanel(month);
@@ -5343,8 +5350,6 @@ calcPolizza();
     let kpiData;
     if(month){
       kpiData=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(month));
-      const info=document.getElementById('kpi-period-info');
-      if(info) info.textContent=kpiData.length+' pratiche nel periodo';
     } else {
       kpiData=commPratiche;
     }
