@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-05T15:29:48.524Z",
+  "exportedAt": "2026-10-05T15:29:57.181Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-01": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -367,7 +367,8 @@
       "5024180301|BONANNI SONIA|5500|2026-10-02": "Jonathan Zampa",
       "5035087301|GIULIANO CHRISTIAN|8619.8|2026-10-05": "Eleonora Lupi",
       "5034983301|IDDA ANNA RITA|23415.2|2026-10-05": "Antonella Sanna",
-      "5031395301|QUARTU CHRISTIAN|24800|2026-10-05": "Carlo Zamuner"
+      "5031395301|QUARTU CHRISTIAN|24800|2026-10-05": "Carlo Zamuner",
+      "5017571301|BIAVA JAMINA GERONZIA|18585.8|2026-10-05": "Monica Caocci"
     },
     "comm_assign_range_2023-01-05__2026-10-02": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -917,6 +918,7 @@
     "5024180301|BONANNI SONIA|5500|2026-10-02": "Jonathan Zampa",
     "5035087301|GIULIANO CHRISTIAN|8619.8|2026-10-05": "Eleonora Lupi",
     "5034983301|IDDA ANNA RITA|23415.2|2026-10-05": "Antonella Sanna",
-    "5031395301|QUARTU CHRISTIAN|24800|2026-10-05": "Carlo Zamuner"
+    "5031395301|QUARTU CHRISTIAN|24800|2026-10-05": "Carlo Zamuner",
+    "5017571301|BIAVA JAMINA GERONZIA|18585.8|2026-10-05": "Monica Caocci"
   }
 }
