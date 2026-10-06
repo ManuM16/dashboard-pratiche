@@ -376,7 +376,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.79.0 · 06/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.80.0 · 06/10/2026</div>
     
     <div style="display:flex;flex-direction:column;gap:14px">
       <!-- Pulsante Admin -->
@@ -507,6 +507,13 @@ body.guest-mode .comm-sel{
     
     if(role === 'guest'){
       applyGuestMode();
+    } else {
+      // Admin: apre Analisi Erogato e carica tutto in automatico (Excel, assegnazioni, analisi)
+      setTimeout(()=>{
+        const b = document.querySelector('.sb-item[onclick*="commerciali"]');
+        if(b) b.click();
+        guestAutoLoad();
+      }, 300);
     }
   };
   
@@ -629,7 +636,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.79.0 · 06/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.80.0 · 06/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
