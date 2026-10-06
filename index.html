@@ -376,7 +376,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.77.0 · 06/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.78.0 · 06/10/2026</div>
     
     <div style="display:flex;flex-direction:column;gap:14px">
       <!-- Pulsante Admin -->
@@ -474,6 +474,13 @@ body.guest-mode .comm-sel{
       document.getElementById('admin-pass').value = '';
       document.getElementById('admin-pass').focus();
     }
+  };
+
+  window.doLogout = function(){
+    const msg = window._userRole === 'admin'
+      ? 'Uscire e tornare alla schermata di login?\nLe modifiche non salvate andranno perse.'
+      : 'Uscire e tornare alla schermata di login?';
+    if(confirm(msg)) location.reload();
   };
 
   window.doLogin = function(role){
@@ -605,7 +612,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.77.0 · 06/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.78.0 · 06/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -659,6 +666,10 @@ body.guest-mode .comm-sel{
     <button onclick="exportHTML()" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.15s"
       onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
       <span style="font-size:14px">⬇</span> Salva file aggiornato
+    </button>
+    <button id="btn-logout" onclick="doLogout()" style="width:100%;margin-top:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:.15s"
+      onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='transparent'">
+      <span style="font-size:14px">⎋</span> Esci / Cambia utente
     </button>
   </div>
 </aside>
