@@ -350,15 +350,198 @@ tr:hover td{background:var(--surface3)}
   .grid2,.grid3,.mm-duo,.pratiche-layout{grid-template-columns:1fr}
   .prat-kpi-row{grid-template-columns:repeat(2,1fr)}
 }
+
+/* ── GUEST MODE ── */
+body.guest-mode .comm-sel{
+  pointer-events:none;border-color:transparent;background:transparent;
+  -webkit-appearance:none;appearance:none;font-weight:600
+}
 </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
+
+<!-- ══ LOGIN OVERLAY ══ -->
+<div id="login-overlay" style="
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,#1A1A2E 0%,#16213E 50%,#0F3460 100%);
+  display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif
+">
+  <div style="
+    background:#fff;border-radius:20px;padding:48px 44px;width:380px;max-width:90vw;
+    box-shadow:0 30px 80px rgba(0,0,0,.4);text-align:center
+  ">
+    <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:#18181A;margin-bottom:6px">
+      Dashboard Pratiche
+    </div>
+    <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
+    
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <button onclick="doLogin('admin')" style="
+        padding:16px 24px;border-radius:12px;border:none;cursor:pointer;
+        background:#18181A;color:#fff;font-family:'Outfit',sans-serif;
+        font-size:15px;font-weight:600;transition:.2s;text-align:left;
+        display:flex;align-items:center;gap:14px
+      " onmouseover="this.style.background='#2d2d2d'" onmouseout="this.style.background='#18181A'">
+        <span style="font-size:24px">🔑</span>
+        <span>
+          <div style="font-size:15px;font-weight:700">Accesso Admin</div>
+          <div style="font-size:12px;font-weight:400;opacity:.6;margin-top:2px">Tutte le funzionalità</div>
+        </span>
+      </button>
+      
+      <button onclick="doLogin('guest')" style="
+        padding:16px 24px;border-radius:12px;border:1.5px solid #E4E2DA;cursor:pointer;
+        background:#F9F8F5;color:#18181A;font-family:'Outfit',sans-serif;
+        font-size:15px;font-weight:600;transition:.2s;text-align:left;
+        display:flex;align-items:center;gap:14px
+      " onmouseover="this.style.background='#EDECE8'" onmouseout="this.style.background='#F9F8F5'">
+        <span style="font-size:24px">👁</span>
+        <span>
+          <div style="font-size:15px;font-weight:700">Accesso Ospite</div>
+          <div style="font-size:12px;font-weight:400;opacity:.55;margin-top:2px">Solo visualizzazione</div>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  window._userRole = null; // 'admin' | 'guest'
+  
+  window.doLogin = function(role){
+    window._userRole = role;
+    document.getElementById('login-overlay').style.display = 'none';
+    document.body.classList.add(role+'-mode');
+    
+    if(role === 'guest'){
+      applyGuestMode();
+    }
+  };
+  
+  function applyGuestMode(){
+    // Nascondi sezioni sidebar non ospite
+    const guestAllowedSections = ['commerciali','calc-prestito','calc-cqs','calc-polizza','calc-drm'];
+    
+    // Nascondi tutti i menù sidebar tranne Erogato e Calcolatori
+    document.querySelectorAll('.sb-section').forEach(el=>{
+      const txt = el.textContent.trim();
+      if(txt !== 'Erogato' && txt !== 'Calcolatori') el.style.display='none';
+    });
+    document.querySelectorAll('.sb-item').forEach(btn=>{
+      const onclick = btn.getAttribute('onclick')||'';
+      const allowed = guestAllowedSections.some(s=>onclick.includes("'"+s+"'"));
+      if(!allowed) btn.style.display='none';
+    });
+    
+    // Nascondi pulsante "Salva file aggiornato" nel footer sidebar
+    const sbFooter = document.querySelector('.sb-footer button');
+    if(sbFooter) sbFooter.style.display='none';
+    
+    // Nascondi year-switcher (non serve in guest)
+    // rimane visibile — OK per ospite
+    
+    // Avvia su Analisi Erogato
+    const commBtn = document.querySelector('.sb-item[onclick*="commerciali"]');
+    if(commBtn){ commBtn.classList.add('active'); }
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    const commSection = document.getElementById('s-commerciali');
+    if(commSection) commSection.classList.add('active');
+    document.getElementById('tb-title').textContent = 'Monitoraggio Commerciali';
+    document.getElementById('global-ys').style.display='none';
+    
+    // Nascondi elementi upload/azione nella sezione commerciali
+    const hideIds = [
+      'comm-upload-zone',
+      'comm-btn-gh-excel',
+      'comm-upload-filename'
+    ];
+    hideIds.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.style.display='none';
+    });
+    
+    // Nascondi i bottoni di azione (assegna, salva, carica, debug, report)
+    // La barra .comm-assign-actions contiene: Assegna a…, Salva, Carica, ⚙️ Altro, Report, Genera analisi
+    // Per ospite nascondiamo tutti tranne eventuali filtri di visualizzazione
+    const actionsBar = document.querySelector('.comm-assign-actions');
+    if(actionsBar){
+      Array.from(actionsBar.querySelectorAll('button,div')).forEach(el=>{
+        const txt = el.textContent.trim();
+        // Teniamo solo i filtri "Tutte" / "Non assegnate"
+        const isFilter = el.id==='qf-all' || el.id==='qf-unassigned';
+        if(!isFilter) el.style.display='none';
+      });
+      // Mostriamo comunque la barra ma senza padding eccessivo se vuota
+      actionsBar.style.gap='6px';
+    }
+    
+    // Nascondi il select assegnazione in ogni riga (colonna Commerciale)
+    document.querySelectorAll('.comm-sel').forEach(el=>el.style.pointerEvents='none');
+    
+    // Carica automaticamente: Excel da GH → assegnazioni GH → genera analisi
+    setTimeout(()=> guestAutoLoad(), 400);
+  }
+  
+  // Helper: wrappa commLoadFile in una Promise che risolve quando il caricamento è completo
+  function commLoadFileAsync(file){
+    return new Promise((resolve)=>{
+      // commLoadFile è sincrona nel parsing XLSX ma usa callbacks per GitHub
+      // La chiamiamo e aspettiamo 1.5s per essere sicuri
+      if(typeof commLoadFile === 'function') commLoadFile(file);
+      setTimeout(resolve, 1500);
+    });
+  }
+  
+  window.guestAutoLoad = async function(){
+    // Step 1: carica Excel da GitHub (silenzioso)
+    try{
+      if(typeof ghGetToken === 'function' && typeof ghGetFileRaw === 'function'){
+        const token = ghGetToken();
+        if(token){
+          const savedName = localStorage.getItem('gh_excel_name')||'dati-excel.xlsx';
+          // Usa la variabile globale per il nome file
+          const GH_FILE_EXCEL = window.GH_FILE_EXCEL || 'dati-excel.xlsx';
+          const ab = await ghGetFileRaw(token, GH_FILE_EXCEL);
+          if(ab){
+            const blob = new Blob([ab],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+            const file = new File([blob], savedName, {type:blob.type});
+            // Carica il file senza dialog
+            if(typeof commLoadFile === 'function'){
+              await commLoadFileAsync(file);
+            }
+          }
+        }
+      }
+    }catch(e){ console.warn('[guest] Errore caricamento Excel:',e.message); }
+    
+    // Step 2: carica assegnazioni da GitHub (silenzioso)
+    try{
+      if(typeof commImportGitHub === 'function'){
+        await commImportGitHub(true /* silent */);
+      }
+    }catch(e){ console.warn('[guest] Errore caricamento assegnazioni:',e.message); }
+    
+    // Step 3: genera analisi automaticamente
+    setTimeout(()=>{
+      try{
+        if(typeof commGenerateKPI === 'function'){
+          // Rendi visibile la sezione KPI prima
+          const kpiSec = document.getElementById('comm-kpi-section');
+          if(kpiSec) kpiSec.style.display='block';
+          commGenerateKPI();
+        }
+      }catch(e){ console.warn('[guest] Errore generazione KPI:',e.message); }
+    }, 600);
+  };
+})();
+</script>
+
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.73.0 · 02/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.74.0 · 06/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -4404,8 +4587,9 @@ calcPolizza();
   const GH_FILE_BACKUP='dati-assegnazioni-backup.json';
   const GH_FILE_PRATICHE='dati-pratiche.json';
   const GH_FILE_EXCEL='dati-excel.xlsx';
+  window.GH_FILE_EXCEL = 'dati-excel.xlsx';
 
-  function ghGetToken(){
+  window.ghGetToken=function ghGetToken(){
     let t=localStorage.getItem('gh_pat');
     if(!t){
       t=prompt('Inserisci il tuo GitHub Personal Access Token (verrà salvato localmente):');
