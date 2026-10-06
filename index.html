@@ -376,7 +376,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.78.0 · 06/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.79.0 · 06/10/2026</div>
     
     <div style="display:flex;flex-direction:column;gap:14px">
       <!-- Pulsante Admin -->
@@ -399,12 +399,18 @@ body.guest-mode .comm-sel{
           font-family:'Outfit',sans-serif;font-size:14px;outline:none;width:100%;
           transition:border-color .2s
         " onfocus="this.style.borderColor='#1A56DB'" onblur="this.style.borderColor='#E4E2DA'">
-        <input id="admin-pass" type="password" placeholder="Password" autocomplete="current-password" style="
-          padding:12px 14px;border-radius:10px;border:1.5px solid #E4E2DA;
-          font-family:'Outfit',sans-serif;font-size:14px;outline:none;width:100%;
-          transition:border-color .2s
-        " onfocus="this.style.borderColor='#1A56DB'" onblur="this.style.borderColor='#E4E2DA'"
-          onkeydown="if(event.key==='Enter') checkAdminCredentials()">
+        <div style="position:relative;width:100%">
+          <input id="admin-pass" type="password" placeholder="Password" autocomplete="current-password" style="
+            padding:12px 44px 12px 14px;border-radius:10px;border:1.5px solid #E4E2DA;
+            font-family:'Outfit',sans-serif;font-size:14px;outline:none;width:100%;
+            transition:border-color .2s
+          " onfocus="this.style.borderColor='#1A56DB'" onblur="this.style.borderColor='#E4E2DA'"
+            onkeydown="if(event.key==='Enter') checkAdminCredentials()">
+          <button type="button" id="admin-eye" onclick="togglePassVis()" title="Mostra/nascondi password" aria-label="Mostra password" style="
+            position:absolute;right:6px;top:50%;transform:translateY(-50%);
+            border:none;background:transparent;cursor:pointer;font-size:18px;
+            padding:6px 8px;line-height:1;opacity:.6" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">👁</button>
+        </div>
         <div id="admin-error" style="display:none;color:#B82525;font-size:12px;text-align:center;margin-top:-4px">
           ❌ Credenziali non valide
         </div>
@@ -454,7 +460,18 @@ body.guest-mode .comm-sel{
     document.getElementById('admin-error').style.display = 'none';
     document.getElementById('admin-user').value = '';
     document.getElementById('admin-pass').value = '';
+    document.getElementById('admin-pass').type = 'password';
+    document.getElementById('admin-eye').textContent = '👁';
     setTimeout(()=> document.getElementById('admin-user').focus(), 50);
+  };
+
+  window.togglePassVis = function(){
+    const p=document.getElementById('admin-pass'), b=document.getElementById('admin-eye');
+    const show = p.type==='password';
+    p.type = show ? 'text' : 'password';
+    b.textContent = show ? '🙈' : '👁';
+    b.setAttribute('aria-label', show ? 'Nascondi password' : 'Mostra password');
+    p.focus();
   };
 
   window.hideAdminForm = function(){
@@ -612,7 +629,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.78.0 · 06/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.79.0 · 06/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
