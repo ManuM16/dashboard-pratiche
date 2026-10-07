@@ -376,7 +376,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.80.0 · 06/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.81.0 · 07/10/2026</div>
     
     <div style="display:flex;flex-direction:column;gap:14px">
       <!-- Pulsante Admin -->
@@ -636,7 +636,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.80.0 · 06/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.81.0 · 07/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1379,6 +1379,12 @@ body.guest-mode .comm-sel{
               </select>
             </div>
             <div id="comm-agent-history-table"></div>
+          </div>
+          <!-- Ticket medio e tasso medio per anno -->
+          <div id="comm-yearstats-section" style="display:none;border-top:1px solid var(--border);padding:14px 16px">
+            <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">🎯 Ticket medio e tasso medio per anno</h3>
+            <div style="font-size:11.5px;color:var(--ink3);margin-bottom:12px">Ticket medio = erogato / n. pratiche · Tasso medio = TAN medio delle pratiche con tasso. Sempre su tutto il file, indipendente dal filtro mese.</div>
+            <div id="comm-yearstats-body"></div>
           </div>
         </div>
     </div><!-- /s-commerciali -->
@@ -5635,6 +5641,63 @@ calcPolizza();
     commBuildYoyPanel(month);
   };
 
+  /* ---- Ticket medio e tasso medio per anno: filiali, totale filiali, commerciali ---- */
+  function commBuildYearStats(){
+    const body=document.getElementById('comm-yearstats-body');
+    const sec=document.getElementById('comm-yearstats-section');
+    if(!body||!sec) return;
+    const all=(window.commPratiche||commPratiche||[]).filter(r=>r.__dateStr&&r.__dateStr.length>=4);
+    if(!all.length){sec.style.display='none';return;}
+    const years=[...new Set(all.map(r=>r.__dateStr.slice(0,4)))].sort();
+    const fE=v=>v!=null?'€ '+Math.round(v).toLocaleString('it-IT'):'—';
+    const fT=v=>v!=null?v.toFixed(2).replace('.',',')+'%':'—';
+    const st=list=>{
+      const n=list.length;
+      const tot=list.reduce((a,r)=>a+(r.importo||0),0);
+      const wt=list.filter(r=>r.tan!=null);
+      return {n,ticket:n?tot/n:null,tan:wt.length?wt.reduce((a,r)=>a+r.tan,0)/wt.length:null};
+    };
+    const th='padding:7px 10px;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;white-space:nowrap';
+    const head=`<tr style="background:var(--surface2)">
+        <th style="${th};text-align:left" rowspan="2">Nome</th>
+        ${years.map(y=>`<th style="${th};text-align:center;border-left:1px solid var(--border2)" colspan="3">${y}</th>`).join('')}
+      </tr><tr style="background:var(--surface3)">
+        ${years.map(()=>`<th style="${th};text-align:right;border-left:1px solid var(--border2)">Pratiche</th><th style="${th};text-align:right">Ticket medio</th><th style="${th};text-align:right">Tasso medio</th>`).join('')}
+      </tr>`;
+    const td='padding:7px 10px;font-size:12px;text-align:right;white-space:nowrap';
+    const rowHtml=(label,list,bold,sub)=>{
+      const cells=years.map(y=>{
+        const s=st(list.filter(r=>r.__dateStr.slice(0,4)===y));
+        return `<td style="${td};border-left:1px solid var(--border2);color:var(--ink3)">${s.n||'—'}</td><td style="${td}">${fE(s.ticket)}</td><td style="${td}">${fT(s.tan)}</td>`;
+      }).join('');
+      return `<tr style="border-top:1px solid var(--border);${bold?'background:var(--surface2);font-weight:700':''}">
+        <td style="padding:7px 10px;font-size:12px;font-weight:${bold?700:600};white-space:nowrap">${label}${sub?` <span style="font-weight:400;font-size:10.5px;color:var(--ink3)">${sub}</span>`:''}</td>${cells}</tr>`;
+    };
+    const tbl=(rows)=>`<div style="overflow-x:auto;margin-bottom:16px"><table style="width:100%;border-collapse:collapse;min-width:520px"><thead>${head}</thead><tbody>${rows}</tbody></table></div>`;
+    const sub=t=>`<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin:4px 0 6px">${t}</div>`;
+
+    // Filiali (+ totale)
+    const finKeys=Object.keys(FINANCIAL_MAP);
+    let finRows=finKeys.map(fk=>{
+      const list=all.filter(r=>(r.finKey||'altro')===fk);
+      return list.length?rowHtml(FINANCIAL_MAP[fk].label,list,false):'';
+    }).join('');
+    const altri=all.filter(r=>!FINANCIAL_MAP[r.finKey||'altro']);
+    if(altri.length) finRows+=rowHtml('Altro',altri,false);
+    finRows+=rowHtml('TOTALE FILIALI',all,true);
+
+    // Commerciali (solo pratiche assegnate)
+    const byAgent={};
+    all.forEach(r=>{const a=commAssign[r.__id]; if(a){(byAgent[a]=byAgent[a]||[]).push(r);}});
+    const agRows=Object.keys(byAgent).sort().map(a=>{
+      const fk=AGENT_TO_FIN[a];
+      return rowHtml(esc(a),byAgent[a],false,fk&&FINANCIAL_MAP[fk]?FINANCIAL_MAP[fk].label:'');
+    }).join('');
+
+    body.innerHTML=sub('Per filiale e totale')+tbl(finRows)+sub('Per commerciale')+(agRows?tbl(agRows):'<p style="color:var(--ink3);font-size:12.5px">Nessuna pratica assegnata ai commerciali.</p>');
+    sec.style.display='';
+  }
+
   function commBuildKPI(kpiData){
     // Build stats per agente e per financial
     const agentStats={};
@@ -5702,6 +5765,7 @@ calcPolizza();
     const agHistSection=document.getElementById('comm-agent-history-section');
     if(agHistSection) agHistSection.style.display='';
     commPopulateAgentHistorySelect();
+    try{commBuildYearStats();}catch(e){console.warn('[yearstats]',e.message);}
     // Se c'era già un agente selezionato, aggiorna il suo storico
     if(document.getElementById('agent-history-select')?.value) commBuildAgentHistory();
     section.scrollIntoView({behavior:'smooth',block:'start'});
