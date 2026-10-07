@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-07T07:26:50.881Z",
-  "fileName": "ALIFIN FILE EROGATO 2026 con ass (11).xlsx",
+  "exportedAt": "2026-10-07T07:30:11.880Z",
+  "fileName": "ALIFIN FILE EROGATO 2026 con ass (12).xlsx",
   "pratiche": [
     {
       "__id": "3094987301|SAMBUCETI ANTONIETTA|14250|2023-01-05",
@@ -103459,10 +103459,29 @@
       "cittaRaw": "ALIFIN S.R.L. - FS CAGLIARI"
     },
     {
-      "__id": "null||0|2026-10-05",
+      "__id": "5027413301|ARDUINO RICCARDO ARTURO|27371.4|2026-10-06",
+      "__num": 5027413301,
+      "__idx": 35280,
+      "__dateStr": "2026-10-06",
+      "cliente": "ARDUINO RICCARDO ARTURO",
+      "prodotto": " ALIFIN NN GARANTITO",
+      "codProdotto": 2,
+      "tipo": "CORTO",
+      "importo": 27371.4,
+      "netto": 5643.66,
+      "nRate": 104,
+      "rata": 391,
+      "polizza": 1871.4,
+      "tan": 9.76,
+      "financial": "FS Genova",
+      "finKey": "genova",
+      "cittaRaw": "ALIFIN SRL - FS GENOVA"
+    },
+    {
+      "__id": "null||0|2026-10-06",
       "__num": null,
-      "__idx": 35259,
-      "__dateStr": "2026-10-05",
+      "__idx": 35298,
+      "__dateStr": "2026-10-06",
       "cliente": null,
       "prodotto": " ALIFIN GARANTITO",
       "codProdotto": 15,
