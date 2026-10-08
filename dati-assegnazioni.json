@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-08T15:34:00.067Z",
+  "exportedAt": "2026-10-08T15:34:07.056Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-01": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1115,7 +1115,8 @@
       "5039452301|FASTELLI ELEONORA|5000|2026-10-08": "Manuel Manca",
       "5038660301|MURINU FABIO|18024.8|2026-10-08": "Alessio Dicati",
       "5035705301|CARTA DANILO|29377.2|2026-10-08": "Antonella Sanna",
-      "5035069301|MASSA ENRICO|3000|2026-10-08": "Giada Boccia"
+      "5035069301|MASSA ENRICO|3000|2026-10-08": "Giada Boccia",
+      "5029382301|VENTURI CINZIA|24500|2026-10-08": "Jonathan Zampa"
     }
   },
   "currentKey": "comm_assign_range_2023-01-05__2026-10-08",
@@ -1314,6 +1315,7 @@
     "5039452301|FASTELLI ELEONORA|5000|2026-10-08": "Manuel Manca",
     "5038660301|MURINU FABIO|18024.8|2026-10-08": "Alessio Dicati",
     "5035705301|CARTA DANILO|29377.2|2026-10-08": "Antonella Sanna",
-    "5035069301|MASSA ENRICO|3000|2026-10-08": "Giada Boccia"
+    "5035069301|MASSA ENRICO|3000|2026-10-08": "Giada Boccia",
+    "5029382301|VENTURI CINZIA|24500|2026-10-08": "Jonathan Zampa"
   }
 }
