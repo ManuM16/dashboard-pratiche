@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-09T15:34:09.775Z",
+  "exportedAt": "2026-10-09T15:34:15.111Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-05": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -761,7 +761,9 @@
       "null|PINNA VINCENZO|16112.32|2026-10-08": "Stefania Preiata",
       "5042468301|ORTU ROSA|15987|2026-10-09": "Valeria Muscas",
       "5040266301|PLOZZER FILIPPO|6418.2|2026-10-09": "Jonathan Zampa",
-      "5036426301|DE MURTAS ANDREA|18137|2026-10-09": "Martina Mascia"
+      "5036426301|DE MURTAS ANDREA|18137|2026-10-09": "Martina Mascia",
+      "5032369301|BAZZI ASIA|10000|2026-10-09": "Manuel Manca",
+      "4969925301|D'AGOSTINO GIUSEPPE|20000|2026-10-09": "Manuel Manca"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1526,6 +1528,8 @@
     "null|PINNA VINCENZO|16112.32|2026-10-08": "Stefania Preiata",
     "5042468301|ORTU ROSA|15987|2026-10-09": "Valeria Muscas",
     "5040266301|PLOZZER FILIPPO|6418.2|2026-10-09": "Jonathan Zampa",
-    "5036426301|DE MURTAS ANDREA|18137|2026-10-09": "Martina Mascia"
+    "5036426301|DE MURTAS ANDREA|18137|2026-10-09": "Martina Mascia",
+    "5032369301|BAZZI ASIA|10000|2026-10-09": "Manuel Manca",
+    "4969925301|D'AGOSTINO GIUSEPPE|20000|2026-10-09": "Manuel Manca"
   }
 }
