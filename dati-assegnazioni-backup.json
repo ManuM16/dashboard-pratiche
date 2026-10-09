@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-09T15:36:06.136Z",
+  "exportedAt": "2026-10-09T15:36:23.782Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-05": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -770,7 +770,8 @@
       "5043461301|FORTE FRANCESCO|9157.6|2026-10-09": "Carlo Zamuner",
       "5041831301|PIACENTINO MICHELE|40000|2026-10-09": "Valeria Muscas",
       "5038866301|GALDI STEFANO|3000|2026-10-09": "Giada Boccia",
-      "5035545301|ARCADU ANGELO|54215|2026-10-09": "Stefania Preiata"
+      "5035545301|ARCADU ANGELO|54215|2026-10-09": "Stefania Preiata",
+      "5030007301|FERRARO DANIELA|7603|2026-10-09": "Giada Boccia"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1544,6 +1545,7 @@
     "5043461301|FORTE FRANCESCO|9157.6|2026-10-09": "Carlo Zamuner",
     "5041831301|PIACENTINO MICHELE|40000|2026-10-09": "Valeria Muscas",
     "5038866301|GALDI STEFANO|3000|2026-10-09": "Giada Boccia",
-    "5035545301|ARCADU ANGELO|54215|2026-10-09": "Stefania Preiata"
+    "5035545301|ARCADU ANGELO|54215|2026-10-09": "Stefania Preiata",
+    "5030007301|FERRARO DANIELA|7603|2026-10-09": "Giada Boccia"
   }
 }
