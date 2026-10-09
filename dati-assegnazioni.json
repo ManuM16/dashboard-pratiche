@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-09T15:35:50.070Z",
+  "exportedAt": "2026-10-09T15:35:58.388Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-05": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -768,7 +768,8 @@
       "5044335301|MASTINO DANILO|4000|2026-10-09": "Monica Caocci",
       "5043605301|SERRA ANDREA|19810|2026-10-09": "Maria Teresa Meloni",
       "5043461301|FORTE FRANCESCO|9157.6|2026-10-09": "Carlo Zamuner",
-      "5041831301|PIACENTINO MICHELE|40000|2026-10-09": "Valeria Muscas"
+      "5041831301|PIACENTINO MICHELE|40000|2026-10-09": "Valeria Muscas",
+      "5038866301|GALDI STEFANO|3000|2026-10-09": "Giada Boccia"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1540,6 +1541,7 @@
     "5044335301|MASTINO DANILO|4000|2026-10-09": "Monica Caocci",
     "5043605301|SERRA ANDREA|19810|2026-10-09": "Maria Teresa Meloni",
     "5043461301|FORTE FRANCESCO|9157.6|2026-10-09": "Carlo Zamuner",
-    "5041831301|PIACENTINO MICHELE|40000|2026-10-09": "Valeria Muscas"
+    "5041831301|PIACENTINO MICHELE|40000|2026-10-09": "Valeria Muscas",
+    "5038866301|GALDI STEFANO|3000|2026-10-09": "Giada Boccia"
   }
 }
