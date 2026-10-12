@@ -351,6 +351,35 @@ tr:hover td{background:var(--surface3)}
   .prat-kpi-row{grid-template-columns:repeat(2,1fr)}
 }
 
+/* ── PRODUTTIVITA ── */
+.prod-lbl{font-size:11px;color:var(--ink3);margin-bottom:4px;font-weight:500}
+.prod-seg{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
+.prod-sel{padding:7px 10px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);font-family:'Outfit',sans-serif;font-size:12.5px;color:var(--ink);cursor:pointer;min-width:150px}
+.prod-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;margin-bottom:8px}
+.prod-strip>div{padding:14px 16px;border-left:1px solid var(--border)}
+.prod-strip>div:first-child{border-left:none}
+.prod-big{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--blue);line-height:1.15;word-break:break-word}
+.prod-big.sm{font-size:19px}
+.prod-cap{font-size:12.5px;color:var(--ink);margin-top:3px}
+.prod-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+.prod-h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px}
+.prod-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.prod-card{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:10px;padding:14px 16px}
+.prod-card-t{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--ink);margin-bottom:10px}
+.prod-card-r{display:flex;gap:18px}
+.prod-card-r>div{flex:1}
+.prod-card-p{font-size:10.5px;color:var(--ink3)}
+.prod-card-v{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--blue);margin-top:2px}
+.prod-badge{display:inline-block;padding:1px 7px;border-radius:5px;font-size:11px;font-weight:700}
+.prod-badge.up{background:var(--blue-l);color:var(--blue)}
+.prod-badge.dn{background:var(--red-l);color:var(--red)}
+.prod-t{width:100%;border-collapse:collapse;min-width:760px}
+.prod-t th{padding:8px 10px;font-size:10.5px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.3px;background:var(--surface2);text-align:right;white-space:nowrap}
+.prod-t th:first-child,.prod-t th:nth-child(2){text-align:left}
+.prod-t td{padding:8px 10px;font-size:12.5px;text-align:right;border-top:1px solid var(--border);white-space:nowrap}
+.prod-t td:first-child,.prod-t td:nth-child(2){text-align:left}
+.prod-t td.b{font-weight:700}
+
 /* ── GUEST MODE ── */
 body.guest-mode .comm-sel{
   pointer-events:none;border-color:transparent;background:transparent;
@@ -376,7 +405,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.81.0 · 07/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.82.0 · 12/10/2026</div>
     
     <div style="display:flex;flex-direction:column;gap:14px">
       <!-- Pulsante Admin -->
@@ -636,7 +665,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.81.0 · 07/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.82.0 · 12/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1362,6 +1391,40 @@ body.guest-mode .comm-sel{
             </div>
             <!-- Card risultati in riga -->
             <div id="obj-results"></div>
+          </div>
+
+          <!-- PRODUTTIVITA' — media giornaliera su giorni lavorativi -->
+          <div id="comm-prod-section" style="display:none;padding:16px 20px;border-bottom:1px solid var(--border);box-sizing:border-box">
+            <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">⚡ Produttività</h3>
+            <div style="font-size:11.5px;color:var(--ink3);margin-bottom:12px">Media giornaliera = erogato (o pezzi) del periodo diviso i giorni lavorativi. Confronto tra la media dell'anno e quella delle ultime tre settimane.</div>
+            <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+              <div><div class="prod-lbl">Financial</div>
+                <select id="prod-fin" onchange="commProdSet('fin',this.value)" class="prod-sel"></select></div>
+              <div><div class="prod-lbl">Misura</div>
+                <div class="prod-seg">
+                  <button class="dmode-btn" data-pk="misura" data-pv="fin" onclick="commProdSet('misura','fin')">Finanziato</button>
+                  <button class="dmode-btn" data-pk="misura" data-pv="pz" onclick="commProdSet('misura','pz')">Pezzi</button>
+                </div></div>
+              <div><div class="prod-lbl">Righe considerate</div>
+                <div class="prod-seg">
+                  <button class="dmode-btn" data-pk="righe" data-pv="all" onclick="commProdSet('righe','all')">Tutte</button>
+                  <button class="dmode-btn" data-pk="righe" data-pv="con" onclick="commProdSet('righe','con')">Con n. pratica</button>
+                  <button class="dmode-btn" data-pk="righe" data-pv="senza" onclick="commProdSet('righe','senza')">Senza n. pratica</button>
+                </div></div>
+              <div><div class="prod-lbl">Giorni</div>
+                <div class="prod-seg">
+                  <button class="dmode-btn" data-pk="giorni" data-pv="lv" onclick="commProdSet('giorni','lv')">Lun–Ven</button>
+                  <button class="dmode-btn" data-pk="giorni" data-pv="fest" onclick="commProdSet('giorni','fest')">Senza festivi</button>
+                </div></div>
+              <div><div class="prod-lbl">Periodo</div>
+                <select id="prod-period" onchange="commProdSet('period',this.value)" class="prod-sel"></select></div>
+            </div>
+            <div id="comm-prod-body"></div>
+            <details style="margin-top:10px">
+              <summary id="prod-excl-sum" style="cursor:pointer;font-size:12px;color:var(--ink2);font-weight:600">Commerciali esclusi dalle medie</summary>
+              <div style="font-size:11.5px;color:var(--ink3);margin:6px 0">Chi non è più in organico: esce dalla tabella e dalle medie per commerciale, ma la sua produzione resta nei totali di filiale e di canale.</div>
+              <div id="prod-excl-list" style="display:flex;flex-wrap:wrap;gap:6px 16px"></div>
+            </details>
           </div>
 
           <!-- KPI + YoY -->
@@ -5641,6 +5704,172 @@ calcPolizza();
     commBuildYoyPanel(month);
   };
 
+  /* ════════ PRODUTTIVITA' (v14.82) ════════ */
+  const PROD={fin:'all',misura:'fin',righe:'all',giorni:'lv',period:'',excl:[]};
+  try{PROD.excl=JSON.parse(localStorage.getItem('prod_excl')||'[]')||[];}catch(e){PROD.excl=[];}
+  const _utc=s=>{const p=s.split('-');return Date.UTC(+p[0],+p[1]-1,+p[2]);};
+  const _easterMon=y=>{const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),hh=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-hh-k)%7,m=Math.floor((a+11*hh+22*l)/451),mo=Math.floor((hh+l-7*m+114)/31),da=((hh+l-7*m+114)%31)+1;return Date.UTC(y,mo-1,da+1);};
+  const _hc={};
+  const _hol=y=>{if(!_hc[y]){const s=new Set();[[1,1],[1,6],[4,25],[5,1],[6,2],[8,15],[11,1],[12,8],[12,25],[12,26]].forEach(x=>s.add(Date.UTC(y,x[0]-1,x[1])));s.add(_easterMon(y));_hc[y]=s;}return _hc[y];};
+  function _workdays(a,b,fest){
+    if(b<a) return 0;
+    let n=0;
+    for(let t=a;t<=b;t+=864e5){
+      const d=new Date(t).getUTCDay();
+      if(d===0||d===6) continue;
+      if(fest&&_hol(new Date(t).getUTCFullYear()).has(t)) continue;
+      n++;
+    }
+    return n;
+  }
+  const _MESI=['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+  const _dl=ms=>{const d=new Date(ms);return d.getUTCDate()+' '+_MESI[d.getUTCMonth()];};
+
+  window.commProdSet=function(k,v){
+    PROD[k]=v;
+    commBuildProd();
+  };
+  window.commProdToggleExcl=function(name,on){
+    const s=new Set(PROD.excl);
+    if(on) s.add(name); else s.delete(name);
+    PROD.excl=[...s];
+    try{localStorage.setItem('prod_excl',JSON.stringify(PROD.excl));}catch(e){}
+    commBuildProd();
+  };
+
+  function commBuildProd(){
+    const sec=document.getElementById('comm-prod-section');
+    const body=document.getElementById('comm-prod-body');
+    if(!sec||!body) return;
+    const all=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.length>=10);
+    if(!all.length){sec.style.display='none';return;}
+    sec.style.display='';
+
+    // ── Periodi disponibili (un anno = gen → ultimo giorno con dati)
+    const years=[...new Set(all.map(r=>r.__dateStr.slice(0,4)))].sort();
+    const maxByYear={};
+    all.forEach(r=>{const y=r.__dateStr.slice(0,4);if(!maxByYear[y]||r.__dateStr>maxByYear[y]) maxByYear[y]=r.__dateStr;});
+    if(!PROD.period||!years.includes(PROD.period)) PROD.period=years[years.length-1];
+    const Y=PROD.period;
+    const selP=document.getElementById('prod-period');
+    selP.innerHTML=years.slice().reverse().map(y=>`<option value="${y}"${y===Y?' selected':''}>Gen-${_MESI[+maxByYear[y].slice(5,7)-1].replace(/^./,c=>c.toUpperCase())} ${y}</option>`).join('');
+    const selF=document.getElementById('prod-fin');
+    selF.innerHTML='<option value="all">Tutti i financial</option>'+Object.keys(FINANCIAL_MAP).map(k=>`<option value="${k}"${PROD.fin===k?' selected':''}>${FINANCIAL_MAP[k].label.replace(/^FS /,'')}</option>`).join('');
+    selF.value=PROD.fin;
+    document.querySelectorAll('#comm-prod-section [data-pk]').forEach(b=>b.classList.toggle('dmode-active',String(PROD[b.dataset.pk])===b.dataset.pv));
+
+    // ── Date e giorni lavorativi
+    const fest=PROD.giorni==='fest';
+    const startMs=Date.UTC(+Y,0,1), endMs=_utc(maxByYear[Y]);
+    const recMs=Math.max(startMs,endMs-20*864e5);          // ultime 3 settimane = 21 giorni di calendario
+    const wdY=_workdays(startMs,endMs,fest), wdR=_workdays(recMs,endMs,fest);
+    const isFin=PROD.misura==='fin';
+    const hasNum=r=>r.__num!=null&&String(r.__num).trim()!=='';
+
+    const yearAll=all.filter(r=>r.__dateStr.slice(0,4)===Y);
+    let rows=yearAll;
+    if(PROD.fin!=='all') rows=rows.filter(r=>r.finKey===PROD.fin);
+    if(PROD.righe==='con') rows=rows.filter(hasNum);
+    if(PROD.righe==='senza') rows=rows.filter(r=>!hasNum(r));
+    const isRec=r=>_utc(r.__dateStr)>=recMs;
+    const imp=l=>l.reduce((a,r)=>a+(r.importo||0),0);
+    const mv=l=>isFin?imp(l):l.length;
+
+    const fT=v=>isFin?'€ '+Math.round(v).toLocaleString('it-IT'):Math.round(v).toLocaleString('it-IT');
+    const fA=v=>v==null?'—':(isFin?'€ '+Math.round(v).toLocaleString('it-IT'):v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2}));
+    const delta=(a,b)=>b>0?(a/b-1)*100:null;
+    const badge=d=>d==null?'<span style="color:var(--ink3)">—</span>':`<span class="prod-badge ${d>=0?'up':'dn'}">${d>=0?'+':'−'}${Math.abs(d).toFixed(1).replace('.',',')}%</span>`;
+    const lblY=`1 gen - ${_dl(endMs)}`, lblR=`${_dl(recMs)} - ${_dl(endMs)}`;
+    const unit=isFin?'Erogato':'Pezzi';
+
+    // ── Riga KPI 1: canale
+    const rec=rows.filter(isRec);
+    const aY=wdY?mv(rows)/wdY:null, aR=wdR?mv(rec)/wdR:null, dCh=(aY&&aR!=null)?delta(aR,aY):null;
+    const cell=(big,cap,sub,sm)=>`<div><div class="prod-big${sm?' sm':''}">${big}</div><div class="prod-cap">${cap}</div><div class="prod-sub">${sub}</div></div>`;
+    const strip1=`<div class="prod-strip">
+      ${cell(fA(aY),`${unit} medio giornaliero`,`dal ${lblY}, ${wdY} giorni lavorativi`)}
+      ${cell(fA(aR),`${unit} medio giornaliero`,`dal ${lblR}, ${wdR} giorni lavorativi`)}
+      ${cell(dCh==null?'—':(dCh>=0?'+':'−')+Math.abs(dCh).toFixed(1).replace('.',',')+'%','Variazione','ultime tre settimane sulla media dell\'anno')}
+      ${cell(fT(mv(rec)),`${unit} dal ${lblR}`,`${rec.length} pratiche`)}
+    </div>`;
+
+    // ── Filiali
+    const finKeys=PROD.fin==='all'?Object.keys(FINANCIAL_MAP):[PROD.fin];
+    const cards=finKeys.map(fk=>{
+      const l=rows.filter(r=>r.finKey===fk), lr=l.filter(isRec);
+      const a=wdY?mv(l)/wdY:null, b=wdR?mv(lr)/wdR:null;
+      return `<div class="prod-card" style="border-top-color:${FINANCIAL_MAP[fk].color}">
+        <div class="prod-card-t">${esc(FINANCIAL_MAP[fk].label.replace(/^FS /,''))}</div>
+        <div class="prod-card-r">
+          <div><div class="prod-card-p">${lblY}</div><div class="prod-card-v">${fA(a)}</div></div>
+          <div><div class="prod-card-p">${lblR}</div><div class="prod-card-v">${fA(b)}</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:11.5px;color:var(--ink2)">${badge(a&&b!=null?delta(b,a):null)} sulla media dell'anno</div>
+      </div>`;
+    }).join('');
+
+    // ── Commerciali (solo pratiche assegnate, esclusi gli "usciti")
+    const firstMonth={};
+    yearAll.forEach(r=>{const a=commAssign[r.__id];if(!a) return;const m=+r.__dateStr.slice(5,7);if(!firstMonth[a]||m<firstMonth[a]) firstMonth[a]=m;});
+    const endM=+maxByYear[Y].slice(5,7);
+    const agents=Object.keys(firstMonth).filter(a=>!PROD.excl.includes(a)&&(PROD.fin==='all'||AGENT_TO_FIN[a]===PROD.fin)).map(a=>{
+      const l=rows.filter(r=>commAssign[r.__id]===a), lr=l.filter(isRec);
+      const sMs=Date.UTC(+Y,firstMonth[a]-1,1);
+      const wd=_workdays(sMs,endMs,fest), wdr=_workdays(Math.max(recMs,sMs),endMs,fest);
+      const months=endM-firstMonth[a]+1;
+      return {name:a,fk:AGENT_TO_FIN[a],tot:mv(l),totRec:mv(lr),nRec:lr.length,wd,wdr,late:sMs>startMs,
+        aY:wd?mv(l)/wd:null,aR:wdr?mv(lr)/wdr:null,
+        pmMain:mv(l)/months,pmImp:imp(l)/months,pmN:l.length/months,imp:imp(l),n:l.length};
+    }).sort((x,y)=>(y.aY||0)-(x.aY||0));
+
+    // ── Riga KPI 2: per commerciale
+    let strip2='';
+    if(agents.length){
+      const mean=k=>agents.reduce((a,x)=>a+x[k],0)/agents.length;
+      const mMain=mean('pmMain'), mOther=isFin?mean('pmN'):mean('pmImp');
+      const top=agents.slice().sort((x,y)=>y.pmMain-x.pmMain)[0];
+      const topO=agents.slice().sort((x,y)=>(isFin?y.pmN-x.pmN:y.pmImp-x.pmImp))[0];
+      const above=agents.filter(x=>x.pmMain>mMain).length;
+      const totN=agents.reduce((a,x)=>a+x.n,0), totI=agents.reduce((a,x)=>a+x.imp,0);
+      const ticket=totN?totI/totN:null;
+      const fO=v=>isFin?v.toLocaleString('it-IT',{minimumFractionDigits:1,maximumFractionDigits:1}):'€ '+Math.round(v).toLocaleString('it-IT');
+      strip2=`<div class="prod-strip">
+        ${cell(isFin?fA(mMain):mMain.toLocaleString('it-IT',{minimumFractionDigits:1,maximumFractionDigits:1}),isFin?'Finanziato medio al mese':'Pezzi medi al mese','per commerciale, media canale')}
+        ${cell(fO(mOther),isFin?'Pezzi medi al mese':'Finanziato medio al mese',`per commerciale, ticket medio canale ${ticket!=null?'€ '+Math.round(ticket).toLocaleString('it-IT'):'—'}`)}
+        ${cell(esc(top.name),'Più produttivo per '+(isFin?'finanziato':'pezzi'),`${isFin?fA(top.pmMain):top.pmMain.toLocaleString('it-IT',{minimumFractionDigits:1,maximumFractionDigits:1})} al mese, ${mMain>0?((top.pmMain/mMain-1)*100>=0?'+':'−')+Math.abs((top.pmMain/mMain-1)*100).toFixed(1).replace('.',',')+'% sulla media':'—'}`,true)}
+        ${cell(`${above} su ${agents.length}`,'Sopra la media del canale',`${isFin?'più pezzi':'più finanziato'} al mese: ${esc(topO.name)} (${isFin?topO.pmN.toLocaleString('it-IT',{minimumFractionDigits:1,maximumFractionDigits:1}):'€ '+Math.round(topO.pmImp).toLocaleString('it-IT')})`)}
+      </div>`;
+    }
+
+    const trs=agents.map(x=>`<tr>
+      <td style="font-weight:600">${esc(x.name)}</td>
+      <td style="color:var(--ink2)">${x.fk&&FINANCIAL_MAP[x.fk]?FINANCIAL_MAP[x.fk].label.replace(/^FS /,''):'—'}</td>
+      <td>${fT(x.tot)}</td>
+      <td>${x.wd}${x.late?' *':''}</td>
+      <td class="b">${fA(x.aY)}</td>
+      <td>${fT(x.totRec)}</td>
+      <td>${x.nRec}</td>
+      <td class="b">${fA(x.aR)}</td>
+      <td>${badge(x.aY&&x.aR!=null?delta(x.aR,x.aY):null)}</td>
+    </tr>`).join('');
+    const tbl=agents.length?`<div style="overflow-x:auto;border:1px solid var(--border);border-radius:10px"><table class="prod-t">
+      <thead><tr><th>Commerciale</th><th>Filiale</th><th>${unit} ${lblY}</th><th>Giorni lavorativi</th><th>Media giornaliera</th><th>${unit} ${lblR}</th><th>Pratiche</th><th>Media giornaliera</th><th>Variazione</th></tr></thead>
+      <tbody>${trs}</tbody></table></div>
+      <div style="font-size:11px;color:var(--ink3);margin-top:6px">* Per chi è entrato durante l'anno, la media parte dal primo mese con pratiche, per non penalizzarlo. Considerate solo le pratiche assegnate.</div>`
+      :'<p style="color:var(--ink3);font-size:12.5px">Nessuna pratica assegnata a commerciali nel periodo selezionato.</p>';
+
+    const wdNote=`<div style="font-size:11.5px;color:var(--ink3);margin:8px 0 0">Dal ${lblY} sono ${wdY} giorni lavorativi${fest?' (esclusi i festivi italiani)':' (lunedì-venerdì)'}, dal ${lblR} sono ${wdR}.</div>`;
+    body.innerHTML=strip1+wdNote+
+      `<div class="prod-h4">Filiali</div><div class="prod-cards">${cards}</div>`+
+      (strip2?`<div class="prod-h4">Commerciali — riepilogo</div>${strip2}`:'')+
+      `<div class="prod-h4">Commerciali — dettaglio</div>${tbl}`;
+
+    // ── elenco esclusi
+    const names=[...ALL_AGENTS].sort();
+    document.getElementById('prod-excl-list').innerHTML=names.map(n=>`<label style="font-size:12px;color:var(--ink2);cursor:pointer;white-space:nowrap"><input type="checkbox" ${PROD.excl.includes(n)?'checked':''} onchange="commProdToggleExcl(this.getAttribute('data-n'),this.checked)" data-n="${esc(n)}"> ${esc(n)}</label>`).join('');
+    document.getElementById('prod-excl-sum').textContent='Commerciali esclusi dalle medie'+(PROD.excl.length?` (${PROD.excl.length})`:'');
+  }
+
   /* ---- Ticket medio e tasso medio per anno: filiali, totale filiali, commerciali ---- */
   function commBuildYearStats(){
     const body=document.getElementById('comm-yearstats-body');
@@ -5766,6 +5995,7 @@ calcPolizza();
     if(agHistSection) agHistSection.style.display='';
     commPopulateAgentHistorySelect();
     try{commBuildYearStats();}catch(e){console.warn('[yearstats]',e.message);}
+    try{commBuildProd();}catch(e){console.warn('[prod]',e.message);}
     // Se c'era già un agente selezionato, aggiorna il suo storico
     if(document.getElementById('agent-history-select')?.value) commBuildAgentHistory();
     section.scrollIntoView({behavior:'smooth',block:'start'});
