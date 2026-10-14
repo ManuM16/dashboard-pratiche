@@ -354,6 +354,8 @@ tr:hover td{background:var(--surface3)}
 /* ── PRODUTTIVITA ── */
 .prod-lbl{font-size:11px;color:var(--ink3);margin-bottom:4px;font-weight:500}
 .prod-seg{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
+.dmode-btn:disabled{opacity:.4;cursor:default}
+.dmode-btn:disabled:hover{background:var(--surface2);color:var(--ink2)}
 .prod-sel{padding:7px 10px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);font-family:'Outfit',sans-serif;font-size:12.5px;color:var(--ink);cursor:pointer;min-width:150px}
 .prod-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;margin-bottom:8px}
 .prod-strip>div{padding:14px 16px;border-left:1px solid var(--border)}
@@ -363,8 +365,9 @@ tr:hover td{background:var(--surface3)}
 .prod-cap{font-size:12.5px;color:var(--ink);margin-top:3px}
 .prod-sub{font-size:11px;color:var(--ink3);margin-top:2px}
 .prod-h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px}
-.prod-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.prod-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
 .prod-card{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:10px;padding:14px 16px}
+.prod-card-n{font-size:10.5px;color:var(--ink3);margin-top:5px;line-height:1.3}
 .prod-card-t{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--ink);margin-bottom:10px}
 .prod-card-r{display:flex;gap:18px}
 .prod-card-r>div{flex:1}
@@ -405,7 +408,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.82.0 · 12/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.83.0 · 14/10/2026</div>
     
     <div style="display:flex;flex-direction:column;gap:14px">
       <!-- Pulsante Admin -->
@@ -665,7 +668,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.82.0 · 12/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.83.0 · 14/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1396,7 +1399,7 @@ body.guest-mode .comm-sel{
           <!-- PRODUTTIVITA' — media giornaliera su giorni lavorativi -->
           <div id="comm-prod-section" style="display:none;padding:16px 20px;border-bottom:1px solid var(--border);box-sizing:border-box">
             <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">⚡ Produttività</h3>
-            <div style="font-size:11.5px;color:var(--ink3);margin-bottom:12px">Media giornaliera = erogato (o pezzi) del periodo diviso i giorni lavorativi. Confronto tra la media dell'anno e quella delle ultime tre settimane.</div>
+            <div style="font-size:11.5px;color:var(--ink3);margin-bottom:12px">Media giornaliera = erogato (o pezzi) del periodo diviso i giorni lavorativi. Confronto tra la media dell'anno e quella del periodo di confronto scelto.</div>
             <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
               <div><div class="prod-lbl">Financial</div>
                 <select id="prod-fin" onchange="commProdSet('fin',this.value)" class="prod-sel"></select></div>
@@ -1416,8 +1419,20 @@ body.guest-mode .comm-sel{
                   <button class="dmode-btn" data-pk="giorni" data-pv="lv" onclick="commProdSet('giorni','lv')">Lun–Ven</button>
                   <button class="dmode-btn" data-pk="giorni" data-pv="fest" onclick="commProdSet('giorni','fest')">Senza festivi</button>
                 </div></div>
-              <div><div class="prod-lbl">Periodo</div>
-                <select id="prod-period" onchange="commProdSet('period',this.value)" class="prod-sel"></select></div>
+              <div><div class="prod-lbl">Anno</div>
+                <div class="prod-seg" id="prod-year-seg"></div></div>
+            </div>
+            <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
+              <div><div class="prod-lbl">Periodo di confronto</div>
+                <div class="prod-seg">
+                  <button class="dmode-btn" data-pk="win" data-pv="w1" onclick="commProdSet('win','w1')">Ultima settimana</button>
+                  <button class="dmode-btn" data-pk="win" data-pv="w2" onclick="commProdSet('win','w2')">2 settimane</button>
+                  <button class="dmode-btn" data-pk="win" data-pv="w3" onclick="commProdSet('win','w3')">3 settimane</button>
+                  <button class="dmode-btn" data-pk="win" data-pv="m" onclick="commProdSet('win','m')">Mese</button>
+                  <button class="dmode-btn" data-pk="win" data-pv="q" onclick="commProdSet('win','q')">Trimestre</button>
+                  <button class="dmode-btn" data-pk="win" data-pv="c" onclick="commProdSet('win','c')">Personalizzato</button>
+                </div></div>
+              <div id="prod-win-sub"></div>
             </div>
             <div id="comm-prod-body"></div>
             <details style="margin-top:10px">
@@ -5328,38 +5343,17 @@ calcPolizza();
     const MESI_BREVI=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
 
     let html='';
-
-    // Bottone "Tutto"
     const tuttoActive=(window._kpiSelectedMonth==='');
-    html+=`<button onclick="commKpiSelectAll()" style="padding:4px 11px;border-radius:20px;border:1px solid ${tuttoActive?'var(--blue)':'var(--border2)'};background:${tuttoActive?'var(--blue)':'var(--surface)'};color:${tuttoActive?'#fff':'var(--ink2)'};font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap">Tutto</button>`;
-
-    // Separatore
-    html+=`<div style="width:1px;height:18px;background:var(--border2);flex-shrink:0"></div>`;
-
-    // Tab anni
-    html+=`<div style="display:flex;gap:2px;border:1px solid var(--border2);border-radius:8px;overflow:hidden">`;
-    years.forEach(y=>{
-      const active=(y===window._kpiSelectedYear);
-      html+=`<button onclick="commKpiSelectYear('${y}')" style="padding:4px 10px;border:none;border-right:1px solid var(--border2);background:${active?'var(--blue)':'var(--surface)'};color:${active?'#fff':'var(--ink2)'};font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap">${y}</button>`;
-    });
-    html+='</div>';
-
-    // Pills mesi per l'anno attivo
-    html+=`<div style="display:flex;gap:4px;flex-wrap:wrap">`;
-    const monthsOfYear=allMonths.filter(m=>m.startsWith(window._kpiSelectedYear));
-    // Mostra tutti i 12 mesi, grigio se non hanno dati
+    html+=`<div class="prod-seg"><button class="dmode-btn${tuttoActive?' dmode-active':''}" onclick="commKpiSelectAll()">Tutto</button></div>`;
+    html+=`<div class="prod-seg">`+years.map(y=>`<button class="dmode-btn${y===window._kpiSelectedYear?' dmode-active':''}" onclick="commKpiSelectYear('${y}')">${y}</button>`).join('')+`</div>`;
+    html+=`<div class="prod-seg">`;
     for(let mo=1;mo<=12;mo++){
       const key=`${window._kpiSelectedYear}-${String(mo).padStart(2,'0')}`;
       const n=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(key)).length;
       const active=(window._kpiSelectedMonth===key);
       const hasData=n>0;
-      const bg=active?'var(--blue)':(hasData?'var(--surface)':'var(--surface2)');
-      const col=active?'#fff':(hasData?'var(--ink)':'var(--ink3)');
-      const border=active?'var(--blue)':(hasData?'var(--border2)':'var(--border)');
-      const cursor=hasData?'pointer':'default';
       const title=hasData?`${MESI_BREVI[mo-1]}: ${n} pratiche`:`${MESI_BREVI[mo-1]}: nessuna pratica`;
-      const click=hasData?`commKpiSelectMonth('${key}')`:'void(0)';
-      html+=`<button onclick="${click}" title="${title}" style="padding:3px 8px;border-radius:16px;border:1px solid ${border};background:${bg};color:${col};font-size:11px;font-weight:${active?700:500};cursor:${cursor};font-family:'Outfit',sans-serif;min-width:32px">${MESI_BREVI[mo-1]}</button>`;
+      html+=`<button class="dmode-btn${active?' dmode-active':''}"${hasData?` onclick="commKpiSelectMonth('${key}')"`:' disabled'} title="${title}">${MESI_BREVI[mo-1]}</button>`;
     }
     html+='</div>';
 
@@ -5705,7 +5699,7 @@ calcPolizza();
   };
 
   /* ════════ PRODUTTIVITA' (v14.82) ════════ */
-  const PROD={fin:'all',misura:'fin',righe:'all',giorni:'lv',period:'',excl:[]};
+  const PROD={fin:'all',misura:'fin',righe:'all',giorni:'lv',period:'',win:'w3',winM:0,winQ:0,cFrom:'',cTo:'',excl:[]};
   try{PROD.excl=JSON.parse(localStorage.getItem('prod_excl')||'[]')||[];}catch(e){PROD.excl=[];}
   const _utc=s=>{const p=s.split('-');return Date.UTC(+p[0],+p[1]-1,+p[2]);};
   const _easterMon=y=>{const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),hh=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-hh-k)%7,m=Math.floor((a+11*hh+22*l)/451),mo=Math.floor((hh+l-7*m+114)/31),da=((hh+l-7*m+114)%31)+1;return Date.UTC(y,mo-1,da+1);};
@@ -5726,7 +5720,9 @@ calcPolizza();
   const _dl=ms=>{const d=new Date(ms);return d.getUTCDate()+' '+_MESI[d.getUTCMonth()];};
 
   window.commProdSet=function(k,v){
+    if(k==='winM'||k==='winQ') v=+v;
     PROD[k]=v;
+    if(k==='period'){PROD.winM=0;PROD.winQ=0;PROD.cFrom='';PROD.cTo='';}
     commBuildProd();
   };
   window.commProdToggleExcl=function(name,on){
@@ -5751,18 +5747,50 @@ calcPolizza();
     all.forEach(r=>{const y=r.__dateStr.slice(0,4);if(!maxByYear[y]||r.__dateStr>maxByYear[y]) maxByYear[y]=r.__dateStr;});
     if(!PROD.period||!years.includes(PROD.period)) PROD.period=years[years.length-1];
     const Y=PROD.period;
-    const selP=document.getElementById('prod-period');
-    selP.innerHTML=years.slice().reverse().map(y=>`<option value="${y}"${y===Y?' selected':''}>Gen-${_MESI[+maxByYear[y].slice(5,7)-1].replace(/^./,c=>c.toUpperCase())} ${y}</option>`).join('');
+    document.getElementById('prod-year-seg').innerHTML=years.map(y=>`<button class="dmode-btn" data-pk="period" data-pv="${y}" onclick="commProdSet('period','${y}')">Gen-${_MESI[+maxByYear[y].slice(5,7)-1].replace(/^./,c=>c.toUpperCase())} ${y}</button>`).join('');
     const selF=document.getElementById('prod-fin');
     selF.innerHTML='<option value="all">Tutti i financial</option>'+Object.keys(FINANCIAL_MAP).map(k=>`<option value="${k}"${PROD.fin===k?' selected':''}>${FINANCIAL_MAP[k].label.replace(/^FS /,'')}</option>`).join('');
     selF.value=PROD.fin;
-    document.querySelectorAll('#comm-prod-section [data-pk]').forEach(b=>b.classList.toggle('dmode-active',String(PROD[b.dataset.pk])===b.dataset.pv));
 
     // ── Date e giorni lavorativi
     const fest=PROD.giorni==='fest';
     const startMs=Date.UTC(+Y,0,1), endMs=_utc(maxByYear[Y]);
-    const recMs=Math.max(startMs,endMs-20*864e5);          // ultime 3 settimane = 21 giorni di calendario
-    const wdY=_workdays(startMs,endMs,fest), wdR=_workdays(recMs,endMs,fest);
+    const endM=+maxByYear[Y].slice(5,7);
+    const _iso=ms=>new Date(ms).toISOString().slice(0,10);
+    const _MX=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+    // ── Periodo di confronto scelto
+    let recMs,recEnd,winName;
+    const W=PROD.win;
+    if(W==='w1'||W==='w2'||W==='w3'){
+      const n=+W[1];
+      recEnd=endMs; recMs=Math.max(startMs,endMs-(7*n-1)*864e5);
+      winName=n===1?'ultima settimana':`ultime ${n} settimane`;
+    } else if(W==='m'){
+      if(!(PROD.winM>=1&&PROD.winM<=endM)) PROD.winM=endM;
+      recMs=Date.UTC(+Y,PROD.winM-1,1); recEnd=Math.min(endMs,Date.UTC(+Y,PROD.winM,0));
+      winName=_MX[PROD.winM-1];
+    } else if(W==='q'){
+      const maxQ=Math.ceil(endM/3);
+      if(!(PROD.winQ>=1&&PROD.winQ<=maxQ)) PROD.winQ=maxQ;
+      recMs=Date.UTC(+Y,(PROD.winQ-1)*3,1); recEnd=Math.min(endMs,Date.UTC(+Y,PROD.winQ*3,0));
+      winName=PROD.winQ+'° trimestre';
+    } else {
+      if(!PROD.cFrom||!PROD.cTo){PROD.cFrom=_iso(Math.max(startMs,endMs-20*864e5));PROD.cTo=_iso(endMs);}
+      let a=Math.min(Math.max(_utc(PROD.cFrom),startMs),endMs), b=Math.min(Math.max(_utc(PROD.cTo),startMs),endMs);
+      if(b<a) b=a;
+      recMs=a; recEnd=b; winName='periodo personalizzato';
+    }
+    // ── Sotto-selettore (mese / trimestre / date)
+    const sub=document.getElementById('prod-win-sub');
+    if(W==='m'){
+      sub.innerHTML=`<div class="prod-lbl">Mese</div><div class="prod-seg">`+Array.from({length:endM},(_,k)=>`<button class="dmode-btn" data-pk="winM" data-pv="${k+1}" onclick="commProdSet('winM',${k+1})">${_MX[k].slice(0,3)}</button>`).join('')+`</div>`;
+    } else if(W==='q'){
+      sub.innerHTML=`<div class="prod-lbl">Trimestre</div><div class="prod-seg">`+Array.from({length:Math.ceil(endM/3)},(_,k)=>`<button class="dmode-btn" data-pk="winQ" data-pv="${k+1}" onclick="commProdSet('winQ',${k+1})">${k+1}° trim.</button>`).join('')+`</div>`;
+    } else if(W==='c'){
+      sub.innerHTML=`<div class="prod-lbl">Dal / al</div><div style="display:flex;gap:6px;align-items:center"><input type="date" class="prod-sel" style="min-width:0" min="${_iso(startMs)}" max="${_iso(endMs)}" value="${_iso(recMs)}" onchange="if(this.value)commProdSet('cFrom',this.value)"><span style="color:var(--ink3)">→</span><input type="date" class="prod-sel" style="min-width:0" min="${_iso(startMs)}" max="${_iso(endMs)}" value="${_iso(recEnd)}" onchange="if(this.value)commProdSet('cTo',this.value)"></div>`;
+    } else sub.innerHTML='';
+    document.querySelectorAll('#comm-prod-section [data-pk]').forEach(b=>b.classList.toggle('dmode-active',String(PROD[b.dataset.pk])===b.dataset.pv));
+    const wdY=_workdays(startMs,endMs,fest), wdR=_workdays(recMs,recEnd,fest);
     const isFin=PROD.misura==='fin';
     const hasNum=r=>r.__num!=null&&String(r.__num).trim()!=='';
 
@@ -5771,7 +5799,7 @@ calcPolizza();
     if(PROD.fin!=='all') rows=rows.filter(r=>r.finKey===PROD.fin);
     if(PROD.righe==='con') rows=rows.filter(hasNum);
     if(PROD.righe==='senza') rows=rows.filter(r=>!hasNum(r));
-    const isRec=r=>_utc(r.__dateStr)>=recMs;
+    const isRec=r=>{const t=_utc(r.__dateStr);return t>=recMs&&t<=recEnd;};
     const imp=l=>l.reduce((a,r)=>a+(r.importo||0),0);
     const mv=l=>isFin?imp(l):l.length;
 
@@ -5779,7 +5807,7 @@ calcPolizza();
     const fA=v=>v==null?'—':(isFin?'€ '+Math.round(v).toLocaleString('it-IT'):v.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2}));
     const delta=(a,b)=>b>0?(a/b-1)*100:null;
     const badge=d=>d==null?'<span style="color:var(--ink3)">—</span>':`<span class="prod-badge ${d>=0?'up':'dn'}">${d>=0?'+':'−'}${Math.abs(d).toFixed(1).replace('.',',')}%</span>`;
-    const lblY=`1 gen - ${_dl(endMs)}`, lblR=`${_dl(recMs)} - ${_dl(endMs)}`;
+    const lblY=`1 gen - ${_dl(endMs)}`, lblR=`${_dl(recMs)} - ${_dl(recEnd)}`;
     const unit=isFin?'Erogato':'Pezzi';
 
     // ── Riga KPI 1: canale
@@ -5788,9 +5816,9 @@ calcPolizza();
     const cell=(big,cap,sub,sm)=>`<div><div class="prod-big${sm?' sm':''}">${big}</div><div class="prod-cap">${cap}</div><div class="prod-sub">${sub}</div></div>`;
     const strip1=`<div class="prod-strip">
       ${cell(fA(aY),`${unit} medio giornaliero`,`dal ${lblY}, ${wdY} giorni lavorativi`)}
-      ${cell(fA(aR),`${unit} medio giornaliero`,`dal ${lblR}, ${wdR} giorni lavorativi`)}
-      ${cell(dCh==null?'—':(dCh>=0?'+':'−')+Math.abs(dCh).toFixed(1).replace('.',',')+'%','Variazione','ultime tre settimane sulla media dell\'anno')}
-      ${cell(fT(mv(rec)),`${unit} dal ${lblR}`,`${rec.length} pratiche`)}
+      ${cell(fA(aR),`${unit} medio giornaliero · ${winName}`,`dal ${lblR}, ${wdR} giorni lavorativi`)}
+      ${cell(dCh==null?'—':(dCh>=0?'+':'−')+Math.abs(dCh).toFixed(1).replace('.',',')+'%','Variazione',`${winName} sulla media dell'anno`)}
+      ${cell(fT(mv(rec)),`${unit} · ${winName}`,`${rec.length} pratiche, dal ${lblR}`)}
     </div>`;
 
     // ── Filiali
@@ -5798,24 +5826,24 @@ calcPolizza();
     const cards=finKeys.map(fk=>{
       const l=rows.filter(r=>r.finKey===fk), lr=l.filter(isRec);
       const a=wdY?mv(l)/wdY:null, b=wdR?mv(lr)/wdR:null;
+      const dl=a&&b!=null?delta(b,a):null;
       return `<div class="prod-card" style="border-top-color:${FINANCIAL_MAP[fk].color}">
         <div class="prod-card-t">${esc(FINANCIAL_MAP[fk].label.replace(/^FS /,''))}</div>
         <div class="prod-card-r">
           <div><div class="prod-card-p">${lblY}</div><div class="prod-card-v">${fA(a)}</div></div>
-          <div><div class="prod-card-p">${lblR}</div><div class="prod-card-v">${fA(b)}</div></div>
+          <div><div class="prod-card-p">${lblR}</div><div class="prod-card-v">${fA(b)}</div>
+            <div class="prod-card-n">${badge(dl)} sulla media dell'anno</div></div>
         </div>
-        <div style="margin-top:10px;font-size:11.5px;color:var(--ink2)">${badge(a&&b!=null?delta(b,a):null)} sulla media dell'anno</div>
       </div>`;
     }).join('');
 
     // ── Commerciali (solo pratiche assegnate, esclusi gli "usciti")
     const firstMonth={};
     yearAll.forEach(r=>{const a=commAssign[r.__id];if(!a) return;const m=+r.__dateStr.slice(5,7);if(!firstMonth[a]||m<firstMonth[a]) firstMonth[a]=m;});
-    const endM=+maxByYear[Y].slice(5,7);
     const agents=Object.keys(firstMonth).filter(a=>!PROD.excl.includes(a)&&(PROD.fin==='all'||AGENT_TO_FIN[a]===PROD.fin)).map(a=>{
       const l=rows.filter(r=>commAssign[r.__id]===a), lr=l.filter(isRec);
       const sMs=Date.UTC(+Y,firstMonth[a]-1,1);
-      const wd=_workdays(sMs,endMs,fest), wdr=_workdays(Math.max(recMs,sMs),endMs,fest);
+      const wd=_workdays(sMs,endMs,fest), wdr=_workdays(Math.max(recMs,sMs),recEnd,fest);
       const months=endM-firstMonth[a]+1;
       return {name:a,fk:AGENT_TO_FIN[a],tot:mv(l),totRec:mv(lr),nRec:lr.length,wd,wdr,late:sMs>startMs,
         aY:wd?mv(l)/wd:null,aR:wdr?mv(lr)/wdr:null,
