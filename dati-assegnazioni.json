@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:10:54.615Z",
+  "exportedAt": "2026-10-21T13:11:02.561Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -817,7 +817,8 @@
       "5057220301|MONTIN ANDREA|3144.6|2026-10-16": "Laura Balestrino",
       "5056710301|LITTERA MARCO|8000|2026-10-16": "Carlo Zamuner",
       "5056447301|SERRA LUIGINA|3000|2026-10-16": "Giada Boccia",
-      "5050503301|CATTE GUGLIELMINA|29000|2026-10-16": "Valeria Muscas"
+      "5050503301|CATTE GUGLIELMINA|29000|2026-10-16": "Valeria Muscas",
+      "5050490301|INNOCENTI DANIELE|50000|2026-10-16": "Lorenzo Fontanelli"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2015,6 +2016,8 @@
     "5057220301|MONTIN ANDREA|3144.6|2026-10-16": "Laura Balestrino",
     "5056710301|LITTERA MARCO|8000|2026-10-16": "Carlo Zamuner",
     "5056447301|SERRA LUIGINA|3000|2026-10-16": "Giada Boccia",
-    "5050503301|CATTE GUGLIELMINA|29000|2026-10-16": "Valeria Muscas"
+    "5050503301|CATTE GUGLIELMINA|29000|2026-10-16": "Valeria Muscas",
+    "5050490301|INNOCENTI DANIELE|50000|2026-10-16": "Lorenzo Fontanelli",
+    "5050137301|MILAN BRUNO|12624.24|2026-10-16": "Carlo Zamuner"
   }
 }
