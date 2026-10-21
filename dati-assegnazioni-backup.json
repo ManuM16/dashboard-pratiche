@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:06:23.416Z",
+  "exportedAt": "2026-10-21T13:06:51.857Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -797,7 +797,9 @@
       "5038866301|GALDI STEFANO|3000|2026-10-09": "Giada Boccia",
       "5035545301|ARCADU ANGELO|54215|2026-10-09": "Stefania Preiata",
       "5030007301|FERRARO DANIELA|7603|2026-10-09": "Giada Boccia",
-      "null|RAGHITTA SALVATORICA|15072.81|2026-10-13": "Giada Boccia"
+      "null|RAGHITTA SALVATORICA|15072.81|2026-10-13": "Giada Boccia",
+      "5062797301|ASOLE MARIA LOREDANA|7323|2026-10-20": "Noemi Ricciu",
+      "5060290301|MASTROMARINO LORENZO|8447|2026-10-20": "Valeria Del Vecchio"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1975,6 +1977,8 @@
     "5038866301|GALDI STEFANO|3000|2026-10-09": "Giada Boccia",
     "5035545301|ARCADU ANGELO|54215|2026-10-09": "Stefania Preiata",
     "5030007301|FERRARO DANIELA|7603|2026-10-09": "Giada Boccia",
-    "null|RAGHITTA SALVATORICA|15072.81|2026-10-13": "Giada Boccia"
+    "null|RAGHITTA SALVATORICA|15072.81|2026-10-13": "Giada Boccia",
+    "5062797301|ASOLE MARIA LOREDANA|7323|2026-10-20": "Noemi Ricciu",
+    "5060290301|MASTROMARINO LORENZO|8447|2026-10-20": "Valeria Del Vecchio"
   }
 }
