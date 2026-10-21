@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:17:13.755Z",
+  "exportedAt": "2026-10-21T13:17:20.051Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -845,7 +845,8 @@
       "null|GHISU FRANCESCO|28040.23|2026-10-13": "Stefania Preiata",
       "5048855301|SEDDA ALESSANDRO|16817|2026-10-12": "Monica Caocci",
       "5047278301|TOCCI SEVERINO|40123|2026-10-12": "Eleonora Lupi",
-      "5047246301|CASARINO GIOVANNI PASQUALE|8000|2026-10-12": "Alessio Dicati"
+      "5047246301|CASARINO GIOVANNI PASQUALE|8000|2026-10-12": "Alessio Dicati",
+      "4989252301|BALESTRINO ANGELO|15916.8|2026-10-12": "Laura Balestrino"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2071,6 +2072,7 @@
     "null|GHISU FRANCESCO|28040.23|2026-10-13": "Stefania Preiata",
     "5048855301|SEDDA ALESSANDRO|16817|2026-10-12": "Monica Caocci",
     "5047278301|TOCCI SEVERINO|40123|2026-10-12": "Eleonora Lupi",
-    "5047246301|CASARINO GIOVANNI PASQUALE|8000|2026-10-12": "Alessio Dicati"
+    "5047246301|CASARINO GIOVANNI PASQUALE|8000|2026-10-12": "Alessio Dicati",
+    "4989252301|BALESTRINO ANGELO|15916.8|2026-10-12": "Laura Balestrino"
   }
 }
