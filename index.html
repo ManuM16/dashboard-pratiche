@@ -408,7 +408,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.83.0 · 14/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.84.0 · 21/10/2026</div>
     
     <div style="display:flex;flex-direction:column;gap:14px">
       <!-- Pulsante Admin -->
@@ -668,7 +668,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.83.0 · 14/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.84.0 · 21/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1238,6 +1238,7 @@ body.guest-mode .comm-sel{
                   <option value="sassari">FS Sassari</option>
                   <option value="genova">FS Genova</option>
                   <option value="olbia">FS Olbia</option>
+                  <option value="empoli">FS Empoli</option>
                 </select>
               </div>
             </div>
@@ -1342,6 +1343,7 @@ body.guest-mode .comm-sel{
                 <button class="dmode-btn"              onclick="commSetKpiView('sassari')"    id="kvtab-sassari">Sassari</button>
                 <button class="dmode-btn"              onclick="commSetKpiView('genova')"     id="kvtab-genova">Genova</button>
                 <button class="dmode-btn"              onclick="commSetKpiView('olbia')"      id="kvtab-olbia">Olbia</button>
+                <button class="dmode-btn"              onclick="commSetKpiView('empoli')"     id="kvtab-empoli">Empoli</button>
               </div>
             </div>
           </div>
@@ -3695,8 +3697,8 @@ calcPolizza();
   const Q_MONTHS = {Q1:[0,1,2],Q2:[3,4,5],Q3:[6,7,8],Q4:[9,10,11]};
   const MONTH_LABELS = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
                         'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
-  const FILIALI = ['cagliari','firenze','nuoro','sassari','genova','olbia'];
-  const FIL_LABELS = {cagliari:'Cagliari',firenze:'Firenze',nuoro:'Nuoro',sassari:'Sassari',genova:'Genova',olbia:'Olbia'};
+  const FILIALI = ['cagliari','firenze','nuoro','sassari','genova','olbia','empoli'];
+  const FIL_LABELS = {cagliari:'Cagliari',firenze:'Firenze',nuoro:'Nuoro',sassari:'Sassari',genova:'Genova',olbia:'Olbia',empoli:'Empoli'};
 
   // Determina Q corrente dal mese di sistema (settembre 2026 → Q3)
   const _autoQ = (function(){
@@ -4010,12 +4012,23 @@ calcPolizza();
     'sassari':   { label:'FS Sassari',   color:'#92500A', agents:['Francesca Pipia','Antonella Sanna','Maria Teresa Meloni'] },
     'genova':    { label:'FS Genova',    color:'#B82525', agents:['Valeria Del Vecchio','Alessio Dicati','Eleonora Lupi'] },
     'olbia':     { label:'FS Olbia',     color:'#2563EB', agents:['Noemi Ricciu','Annamaria Esposito'] },
+    // Nuova filiale aperta il 1 ottobre 2026. Daria Danzini è anche in Firenze: lo storico pre-ottobre resta lì.
+    'empoli':    { label:'FS Empoli',    color:'#0891B2', opens:'2026-10-01', agents:['Daria Danzini','Andrea Ciappelli'] },
   };
   // Lista piatta di tutti i commerciali (per il select)
-  const ALL_AGENTS = Object.values(FINANCIAL_MAP).flatMap(f=>f.agents);
-  // Mappa inversa: nome commerciale → chiave financial
+  const ALL_AGENTS = [...new Set(Object.values(FINANCIAL_MAP).flatMap(f=>f.agents))];
+  // Mappa inversa: nome commerciale → chiave financial ATTUALE (l'ultima in cui compare)
   const AGENT_TO_FIN = {};
-  Object.entries(FINANCIAL_MAP).forEach(([k,f])=>f.agents.forEach(a=>{AGENT_TO_FIN[a]=k;}));
+  // Tutte le filiali in cui un commerciale compare (es. Daria Danzini: Firenze + Empoli)
+  const AGENT_FINS = {};
+  Object.entries(FINANCIAL_MAP).forEach(([k,f])=>f.agents.forEach(a=>{AGENT_TO_FIN[a]=k;(AGENT_FINS[a]=AGENT_FINS[a]||[]).push(k);}));
+  // Etichetta filiali di un commerciale in base alle sue pratiche (es. "Firenze + Empoli")
+  function agentFinText(list,fallbackKey,short){
+    const order=Object.keys(FINANCIAL_MAP);
+    const ks=order.filter(k=>list.some(r=>r.finKey===k));
+    const use=ks.length?ks:(fallbackKey&&FINANCIAL_MAP[fallbackKey]?[fallbackKey]:[]);
+    return use.map(k=>short?FINANCIAL_MAP[k].label.replace(/^FS /,''):FINANCIAL_MAP[k].label).join(' + ');
+  }
 
   function cityToFinKey(city){
     if(!city) return null;
@@ -5208,7 +5221,7 @@ calcPolizza();
     if(window.objCalc) setTimeout(window.objCalc, 50);
   };
 
-  let _lastAgentStats={}, _lastFinStats={};
+  let _lastAgentStats={}, _lastFinStats={}, _lastAgentFinStats={};
 
   let commKpiMetric='erogato';
   window.commSetKpiMetric=function(m){
@@ -5227,7 +5240,7 @@ calcPolizza();
       return;
     }
 
-    const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia'];
+    const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia','empoli'];
     finsToShow.sort((a,b)=>finOrder.indexOf(a)-finOrder.indexOf(b));
 
     // Intestazioni colonne metriche
@@ -5259,10 +5272,16 @@ calcPolizza();
 
     container.innerHTML=finsToShow.map(finKey=>{
       const f=_lastFinStats[finKey];
-      const agents=Object.values(_lastAgentStats).filter(s=>s.finKey===finKey);
+      const agents=Object.values(_lastAgentFinStats[finKey]||{});
       // Ordina per erogato
       agents.sort((a,b)=>b.importoTot-a.importoTot);
 
+      // Se il commerciale ha pratiche in più filiali nel periodo, mostra il totale complessivo
+      const multiHint=nm=>{
+        const ks=Object.keys(_lastAgentFinStats).filter(k=>_lastAgentFinStats[k][nm]);
+        if(ks.length<2||!_lastAgentStats[nm]) return '';
+        return `<div style="font-size:10px;color:var(--ink3);white-space:nowrap" title="Totale su tutte le filiali">tot. € ${fe(_lastAgentStats[nm].importoTot)} · ${ks.map(k=>FINANCIAL_MAP[k]?FINANCIAL_MAP[k].label.replace(/^FS /,''):k).join(' + ')}</div>`;
+      };
       const agentRows=agents.map((s,idx)=>{
         const initials=s.name.split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
         const col=AVATAR_COLORS[ALL_AGENTS.indexOf(s.name)%AVATAR_COLORS.length]||'#999';
@@ -5272,7 +5291,10 @@ calcPolizza();
           <td style="padding:7px 14px 7px 20px">
             <div style="display:flex;align-items:center;gap:8px">
               <div style="width:24px;height:24px;border-radius:50%;background:${col};color:#fff;font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif">${initials}</div>
-              <span style="font-size:12.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px">${esc(s.name)}</span>
+              <div style="min-width:0;max-width:150px">
+                <div style="font-size:12.5px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.name)}</div>
+                ${multiHint(s.name)}
+              </div>
               <button onclick="commOpenAgentDetail('${agentNameEsc}')" style="margin-left:6px;padding:3px 7px;border:1px solid var(--border2);border-radius:6px;background:var(--surface2);color:var(--ink2);font-size:13px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center" title="Vedi lista pratiche">🔍</button>
             </div>
           </td>
@@ -5823,14 +5845,20 @@ calcPolizza();
 
     // ── Filiali
     const finKeys=PROD.fin==='all'?Object.keys(FINANCIAL_MAP):[PROD.fin];
-    const cards=finKeys.map(fk=>{
+    // Per le filiali aperte durante l'anno la media parte dal primo mese con pratiche
+    const firstMonthFin={};
+    yearAll.forEach(r=>{const k=r.finKey;if(!k) return;const m=+r.__dateStr.slice(5,7);if(!firstMonthFin[k]||m<firstMonthFin[k]) firstMonthFin[k]=m;});
+    const cards=finKeys.filter(fk=>PROD.fin!=='all'||firstMonthFin[fk]).map(fk=>{
       const l=rows.filter(r=>r.finKey===fk), lr=l.filter(isRec);
-      const a=wdY?mv(l)/wdY:null, b=wdR?mv(lr)/wdR:null;
+      const sMsF=Date.UTC(+Y,(firstMonthFin[fk]||1)-1,1);
+      const wdF=_workdays(Math.max(sMsF,startMs),endMs,fest), wdFr=_workdays(Math.max(recMs,sMsF),recEnd,fest);
+      const lblYF=sMsF>startMs?`${_dl(sMsF)} - ${_dl(endMs)}`:lblY;
+      const a=wdF?mv(l)/wdF:null, b=wdFr?mv(lr)/wdFr:null;
       const dl=a&&b!=null?delta(b,a):null;
       return `<div class="prod-card" style="border-top-color:${FINANCIAL_MAP[fk].color}">
         <div class="prod-card-t">${esc(FINANCIAL_MAP[fk].label.replace(/^FS /,''))}</div>
         <div class="prod-card-r">
-          <div><div class="prod-card-p">${lblY}</div><div class="prod-card-v">${fA(a)}</div></div>
+          <div><div class="prod-card-p">${lblYF}</div><div class="prod-card-v">${fA(a)}</div></div>
           <div><div class="prod-card-p">${lblR}</div><div class="prod-card-v">${fA(b)}</div>
             <div class="prod-card-n">${badge(dl)} sulla media dell'anno</div></div>
         </div>
@@ -5840,12 +5868,16 @@ calcPolizza();
     // ── Commerciali (solo pratiche assegnate, esclusi gli "usciti")
     const firstMonth={};
     yearAll.forEach(r=>{const a=commAssign[r.__id];if(!a) return;const m=+r.__dateStr.slice(5,7);if(!firstMonth[a]||m<firstMonth[a]) firstMonth[a]=m;});
-    const agents=Object.keys(firstMonth).filter(a=>!PROD.excl.includes(a)&&(PROD.fin==='all'||AGENT_TO_FIN[a]===PROD.fin)).map(a=>{
+    // Con un filtro di filiale la media parte dal primo mese di lavoro in QUELLA filiale (es. Daria a Empoli da ottobre)
+    const firstMonthFA={};
+    if(PROD.fin!=='all') yearAll.forEach(r=>{const a=commAssign[r.__id];if(!a||r.finKey!==PROD.fin) return;const m=+r.__dateStr.slice(5,7);if(!firstMonthFA[a]||m<firstMonthFA[a]) firstMonthFA[a]=m;});
+    const agents=Object.keys(firstMonth).filter(a=>!PROD.excl.includes(a)&&(PROD.fin==='all'||((AGENT_FINS[a]||[]).includes(PROD.fin)&&(AGENT_TO_FIN[a]===PROD.fin||rows.some(r=>commAssign[r.__id]===a))))).map(a=>{
       const l=rows.filter(r=>commAssign[r.__id]===a), lr=l.filter(isRec);
-      const sMs=Date.UTC(+Y,firstMonth[a]-1,1);
+      const fmA=firstMonthFA[a]||firstMonth[a];
+      const sMs=Date.UTC(+Y,fmA-1,1);
       const wd=_workdays(sMs,endMs,fest), wdr=_workdays(Math.max(recMs,sMs),recEnd,fest);
-      const months=endM-firstMonth[a]+1;
-      return {name:a,fk:AGENT_TO_FIN[a],tot:mv(l),totRec:mv(lr),nRec:lr.length,wd,wdr,late:sMs>startMs,
+      const months=endM-fmA+1;
+      return {name:a,fl:agentFinText(l,AGENT_TO_FIN[a],true),tot:mv(l),totRec:mv(lr),nRec:lr.length,wd,wdr,late:sMs>startMs,
         aY:wd?mv(l)/wd:null,aR:wdr?mv(lr)/wdr:null,
         pmMain:mv(l)/months,pmImp:imp(l)/months,pmN:l.length/months,imp:imp(l),n:l.length};
     }).sort((x,y)=>(y.aY||0)-(x.aY||0));
@@ -5871,7 +5903,7 @@ calcPolizza();
 
     const trs=agents.map(x=>`<tr>
       <td style="font-weight:600">${esc(x.name)}</td>
-      <td style="color:var(--ink2)">${x.fk&&FINANCIAL_MAP[x.fk]?FINANCIAL_MAP[x.fk].label.replace(/^FS /,''):'—'}</td>
+      <td style="color:var(--ink2)">${x.fl||'—'}</td>
       <td>${fT(x.tot)}</td>
       <td>${x.wd}${x.late?' *':''}</td>
       <td class="b">${fA(x.aY)}</td>
@@ -5947,8 +5979,7 @@ calcPolizza();
     const byAgent={};
     all.forEach(r=>{const a=commAssign[r.__id]; if(a){(byAgent[a]=byAgent[a]||[]).push(r);}});
     const agRows=Object.keys(byAgent).sort().map(a=>{
-      const fk=AGENT_TO_FIN[a];
-      return rowHtml(esc(a),byAgent[a],false,fk&&FINANCIAL_MAP[fk]?FINANCIAL_MAP[fk].label:'');
+      return rowHtml(esc(a),byAgent[a],false,agentFinText(byAgent[a],AGENT_TO_FIN[a],false));
     }).join('');
 
     body.innerHTML=sub('Per filiale e totale')+tbl(finRows)+sub('Per commerciale')+(agRows?tbl(agRows):'<p style="color:var(--ink3);font-size:12.5px">Nessuna pratica assegnata ai commerciali.</p>');
@@ -5959,6 +5990,7 @@ calcPolizza();
     // Build stats per agente e per financial
     const agentStats={};
     const finStats={};
+    const agentFin={};   // { finKey: { agente: stats } } — solo pratiche di quella filiale
 
     kpiData.forEach(r=>{
       const agent=commAssign[r.__id];
@@ -5989,10 +6021,25 @@ calcPolizza();
       if(r.polizza!=null&&!isGarantito){s.conPolizza++;s.totPolizza+=r.polizza;}else s.senzaPolizza++;
       s.prodotti[r.prodotto||'N/D']=(s.prodotti[r.prodotto||'N/D']||0)+1;
       if(r.tan!=null){s.tanSum+=r.tan;s.tanCount++;}
+
+      // Stesse statistiche ma divise per filiale della pratica (blocchi per filiale coerenti coi totali)
+      const afk=FINANCIAL_MAP[finKey]?finKey:agentFinKey;
+      if(!agentFin[afk]) agentFin[afk]={};
+      if(!agentFin[afk][agent]) agentFin[afk][agent]={name:agent,finKey:afk,finLabel:FINANCIAL_MAP[afk]?FINANCIAL_MAP[afk].label:afk,n:0,nGar:0,nNonGar:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,prodotti:{},tanSum:0,tanCount:0};
+      const sf=agentFin[afk][agent];
+      sf.n++;sf.importoTot+=r.importo||0;
+      if(isGarantito) sf.nGar++; else sf.nNonGar++;
+      if(!isGarantito) sf.nPP++;
+      if(r.polizza!=null&&!isGarantito){sf.conPolizza++;sf.totPolizza+=r.polizza;}else sf.senzaPolizza++;
+      sf.prodotti[r.prodotto||'N/D']=(sf.prodotti[r.prodotto||'N/D']||0)+1;
+      if(r.tan!=null){sf.tanSum+=r.tan;sf.tanCount++;}
     });
 
     // Assicura che TUTTE le filiali compaiano sempre, anche con 0 pratiche
+    // (tranne quelle aperte di recente, per i periodi precedenti alla loro apertura)
     Object.keys(FINANCIAL_MAP).forEach(fk=>{
+      const opens=FINANCIAL_MAP[fk].opens;
+      if(!finStats[fk]&&opens&&!kpiData.some(r=>r.__dateStr&&r.__dateStr>=opens)) return;
       if(!finStats[fk]){
         finStats[fk]={key:fk,label:FINANCIAL_MAP[fk].label,color:FINANCIAL_MAP[fk].color,n:0,nGar:0,nNonGar:0,nAssegnate:0,importoTot:0,conPolizza:0,senzaPolizza:0,totPolizza:0,nPP:0,tanSum:0,tanCount:0};
       }
@@ -6004,6 +6051,7 @@ calcPolizza();
     // Salva per renderKpiCards
     _lastAgentStats=agentStats;
     _lastFinStats=finStats;
+    _lastAgentFinStats=agentFin;
 
     // Mostra/nascondi tab solo per financial con dati
     document.querySelectorAll('#kpi-view-tabs .dmode-btn').forEach(b=>{
@@ -6096,7 +6144,7 @@ calcPolizza();
     const s = _lastAgentStats[agentName] || {};
     const col = AVATAR_COLORS[ALL_AGENTS.indexOf(agentName)%AVATAR_COLORS.length]||'#1A56DB';
     const initials = agentName.split(' ').map(w=>w[0]||'').slice(0,2).join('').toUpperCase();
-    const finLabel = s.finLabel || '';
+    const finLabel = agentFinText(pratiche, s.finKey, false) || s.finLabel || '';
 
     // Periodo label
     let periodoLabel = 'tutto il file';
@@ -6451,7 +6499,7 @@ calcPolizza();
 
     document.getElementById('report-builder-modal').remove();
 
-    const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia'];
+    const finOrder=['cagliari','firenze','nuoro','sassari','genova','olbia','empoli'];
     const month=window._kpiSelectedMonth||'';
     const srcData=month?commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(month)):commPratiche;
     const periodLabel=month?(()=>{const [y,mo]=month.split('-');return new Date(y,mo-1,1).toLocaleDateString('it-IT',{month:'long',year:'numeric'});})():'Tutto il file';
