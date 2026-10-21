@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:09:22.455Z",
+  "exportedAt": "2026-10-21T13:09:55.381Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -813,7 +813,9 @@
       "5056758301|SOLLAI SALVATORE|10000|2026-10-19": "Valeria Muscas",
       "5052447301|ERITTU GIOVANNI LUIGI|7570|2026-10-19": "Antonella Sanna",
       "5051465301|MAMELI CESARE|22500|2026-10-19": "Manuel Manca",
-      "null|PIRAS SANDRO|25487.54|2026-10-19": "Laura Balestrino"
+      "null|PIRAS SANDRO|25487.54|2026-10-19": "Laura Balestrino",
+      "5057220301|MONTIN ANDREA|3144.6|2026-10-16": "Laura Balestrino",
+      "5056710301|LITTERA MARCO|8000|2026-10-16": "Carlo Zamuner"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2007,6 +2009,8 @@
     "5056758301|SOLLAI SALVATORE|10000|2026-10-19": "Valeria Muscas",
     "5052447301|ERITTU GIOVANNI LUIGI|7570|2026-10-19": "Antonella Sanna",
     "5051465301|MAMELI CESARE|22500|2026-10-19": "Manuel Manca",
-    "null|PIRAS SANDRO|25487.54|2026-10-19": "Laura Balestrino"
+    "null|PIRAS SANDRO|25487.54|2026-10-19": "Laura Balestrino",
+    "5057220301|MONTIN ANDREA|3144.6|2026-10-16": "Laura Balestrino",
+    "5056710301|LITTERA MARCO|8000|2026-10-16": "Carlo Zamuner"
   }
 }
