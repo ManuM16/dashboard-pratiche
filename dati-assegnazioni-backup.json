@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:07:27.971Z",
+  "exportedAt": "2026-10-21T13:07:38.501Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -803,7 +803,8 @@
       "5056620301|BANDINU MARIA PAOLA|26905|2026-10-20": "Stefania Preiata",
       "5054545301|PIREDDA GIUSEPPINA|10555|2026-10-20": "Francesca Pipia",
       "5054317301|MORETTI MARCO|11000|2026-10-20": "Alessio Dicati",
-      "5051302301|BARONTI MAURIZIO|3500|2026-10-20": "Jonathan Zampa"
+      "5051302301|BARONTI MAURIZIO|3500|2026-10-20": "Jonathan Zampa",
+      "5050332301|ORRU' SILVIA|29896.6|2026-10-20": "Martina Mascia"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1987,6 +1988,7 @@
     "5056620301|BANDINU MARIA PAOLA|26905|2026-10-20": "Stefania Preiata",
     "5054545301|PIREDDA GIUSEPPINA|10555|2026-10-20": "Francesca Pipia",
     "5054317301|MORETTI MARCO|11000|2026-10-20": "Alessio Dicati",
-    "5051302301|BARONTI MAURIZIO|3500|2026-10-20": "Jonathan Zampa"
+    "5051302301|BARONTI MAURIZIO|3500|2026-10-20": "Jonathan Zampa",
+    "5050332301|ORRU' SILVIA|29896.6|2026-10-20": "Martina Mascia"
   }
 }
