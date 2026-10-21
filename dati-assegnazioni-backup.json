@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:12:51.705Z",
+  "exportedAt": "2026-10-21T13:13:30.516Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -830,7 +830,8 @@
       "5048910301|FLORE GIORGIA|18361.4|2026-10-15": "Annamaria Esposito",
       "5047720301|D'IGNAZIO MATTEO|6500|2026-10-15": "Jonathan Zampa",
       "5044748301|ANGIUS GIOVANNI ANDREA|13670|2026-10-15": "Maria Teresa Meloni",
-      "5043543301|BARTOLACCINI DARIO|3600|2026-10-15": "Alessio Dicati"
+      "5043543301|BARTOLACCINI DARIO|3600|2026-10-15": "Alessio Dicati",
+      "null|COLLU ANDREA|33630.62|2026-10-15": "Monica Caocci"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2041,6 +2042,7 @@
     "5048910301|FLORE GIORGIA|18361.4|2026-10-15": "Annamaria Esposito",
     "5047720301|D'IGNAZIO MATTEO|6500|2026-10-15": "Jonathan Zampa",
     "5044748301|ANGIUS GIOVANNI ANDREA|13670|2026-10-15": "Maria Teresa Meloni",
-    "5043543301|BARTOLACCINI DARIO|3600|2026-10-15": "Alessio Dicati"
+    "5043543301|BARTOLACCINI DARIO|3600|2026-10-15": "Alessio Dicati",
+    "null|COLLU ANDREA|33630.62|2026-10-15": "Monica Caocci"
   }
 }
