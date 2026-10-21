@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:11:49.249Z",
+  "exportedAt": "2026-10-21T13:11:57.745Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -824,7 +824,8 @@
       "5048895301|GUZMAN JOHN ERIC|5000|2026-10-16": "Valentina Corsini",
       "5047592301|PUGGIONI ANTONINO|46315.24|2026-10-16": "Monica Caocci",
       "5047379301|BENCIVENNI SARA|41749|2026-10-16": "Valentina Corsini",
-      "5042709301|DEL CUOCO CRISTINA|54215|2026-10-16": "Maria Teresa Meloni"
+      "5042709301|DEL CUOCO CRISTINA|54215|2026-10-16": "Maria Teresa Meloni",
+      "4973859301|CAPPAI ALBERTO|10807|2026-10-16": "Monica Caocci"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2029,6 +2030,7 @@
     "5048895301|GUZMAN JOHN ERIC|5000|2026-10-16": "Valentina Corsini",
     "5047592301|PUGGIONI ANTONINO|46315.24|2026-10-16": "Monica Caocci",
     "5047379301|BENCIVENNI SARA|41749|2026-10-16": "Valentina Corsini",
-    "5042709301|DEL CUOCO CRISTINA|54215|2026-10-16": "Maria Teresa Meloni"
+    "5042709301|DEL CUOCO CRISTINA|54215|2026-10-16": "Maria Teresa Meloni",
+    "4973859301|CAPPAI ALBERTO|10807|2026-10-16": "Monica Caocci"
   }
 }
