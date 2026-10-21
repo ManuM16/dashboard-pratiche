@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:11:16.450Z",
+  "exportedAt": "2026-10-21T13:11:24.533Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -820,7 +820,8 @@
       "5050503301|CATTE GUGLIELMINA|29000|2026-10-16": "Valeria Muscas",
       "5050490301|INNOCENTI DANIELE|50000|2026-10-16": "Lorenzo Fontanelli",
       "5050137301|MILAN BRUNO|12624.24|2026-10-16": "Carlo Zamuner",
-      "5050031301|D'IZZIA CINZIA|7178.8|2026-10-16": "Alessio Dicati"
+      "5050031301|D'IZZIA CINZIA|7178.8|2026-10-16": "Alessio Dicati",
+      "5048895301|GUZMAN JOHN ERIC|5000|2026-10-16": "Valentina Corsini"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2021,6 +2022,7 @@
     "5050503301|CATTE GUGLIELMINA|29000|2026-10-16": "Valeria Muscas",
     "5050490301|INNOCENTI DANIELE|50000|2026-10-16": "Lorenzo Fontanelli",
     "5050137301|MILAN BRUNO|12624.24|2026-10-16": "Carlo Zamuner",
-    "5050031301|D'IZZIA CINZIA|7178.8|2026-10-16": "Alessio Dicati"
+    "5050031301|D'IZZIA CINZIA|7178.8|2026-10-16": "Alessio Dicati",
+    "5048895301|GUZMAN JOHN ERIC|5000|2026-10-16": "Valentina Corsini"
   }
 }
