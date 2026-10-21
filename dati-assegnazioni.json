@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:16:08.043Z",
+  "exportedAt": "2026-10-21T13:16:23.684Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -841,7 +841,8 @@
       "5047891301|SOLE FRANCESCA|15889.64|2026-10-13": "Laura Balestrino",
       "5047375301|SIDDI RITA|5351|2026-10-13": "Giada Boccia",
       "5039100301|SERRA SALVATORE ANTONIO|37955|2026-10-13": "Stefania Preiata",
-      "5033501301|BARRA MARCO|10000|2026-10-13": "Laura Balestrino"
+      "5033501301|BARRA MARCO|10000|2026-10-13": "Laura Balestrino",
+      "null|GHISU FRANCESCO|28040.23|2026-10-13": "Stefania Preiata"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2063,6 +2064,7 @@
     "5047891301|SOLE FRANCESCA|15889.64|2026-10-13": "Laura Balestrino",
     "5047375301|SIDDI RITA|5351|2026-10-13": "Giada Boccia",
     "5039100301|SERRA SALVATORE ANTONIO|37955|2026-10-13": "Stefania Preiata",
-    "5033501301|BARRA MARCO|10000|2026-10-13": "Laura Balestrino"
+    "5033501301|BARRA MARCO|10000|2026-10-13": "Laura Balestrino",
+    "null|GHISU FRANCESCO|28040.23|2026-10-13": "Stefania Preiata"
   }
 }
