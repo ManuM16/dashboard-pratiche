@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-21T13:14:12.360Z",
+  "exportedAt": "2026-10-21T13:14:20.321Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -834,7 +834,8 @@
       "null|COLLU ANDREA|33630.62|2026-10-15": "Monica Caocci",
       "5051742301|UGAS ATTILIO|20000|2026-10-14": "Carlo Zamuner",
       "5044921301|CADELANO FRANCESCA|16203|2026-10-14": "Manuel Manca",
-      "5042291301|AINI RICCARDO|30000|2026-10-14": "Martina Mascia"
+      "5042291301|AINI RICCARDO|30000|2026-10-14": "Martina Mascia",
+      "5042216301|VARRATTA SCILLA|18300.2|2026-10-14": "Jonathan Zampa"
     },
     "comm_assign_range_2023-01-05__2026-10-08": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2049,6 +2050,7 @@
     "null|COLLU ANDREA|33630.62|2026-10-15": "Monica Caocci",
     "5051742301|UGAS ATTILIO|20000|2026-10-14": "Carlo Zamuner",
     "5044921301|CADELANO FRANCESCA|16203|2026-10-14": "Manuel Manca",
-    "5042291301|AINI RICCARDO|30000|2026-10-14": "Martina Mascia"
+    "5042291301|AINI RICCARDO|30000|2026-10-14": "Martina Mascia",
+    "5042216301|VARRATTA SCILLA|18300.2|2026-10-14": "Jonathan Zampa"
   }
 }
