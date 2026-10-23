@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-23T09:33:21.235Z",
+  "exportedAt": "2026-10-23T09:33:39.578Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1052,7 +1052,8 @@
       "5065511301|TIVINIO SANTINO|7544.2|2026-10-22": "Carlo Zamuner",
       "5015618301|CARNESECCHI FRANCESCO|7000|2026-10-22": "Jonathan Zampa",
       "5061669301|STARA MARIA TERESA|6000|2026-10-22": "Laura Balestrino",
-      "null|SOTGIU BONARIA|32267.21|2026-10-22": "Francesca Pipia"
+      "null|SOTGIU BONARIA|32267.21|2026-10-22": "Francesca Pipia",
+      "null|LOMBARDO SIMONA ALESSANDRA|4615.68|2026-10-21": "Valeria Del Vecchio"
     },
     "comm_assign_range_2023-01-05__2026-10-20": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2350,6 +2351,7 @@
     "5065511301|TIVINIO SANTINO|7544.2|2026-10-22": "Carlo Zamuner",
     "5015618301|CARNESECCHI FRANCESCO|7000|2026-10-22": "Jonathan Zampa",
     "5061669301|STARA MARIA TERESA|6000|2026-10-22": "Laura Balestrino",
-    "null|SOTGIU BONARIA|32267.21|2026-10-22": "Francesca Pipia"
+    "null|SOTGIU BONARIA|32267.21|2026-10-22": "Francesca Pipia",
+    "null|LOMBARDO SIMONA ALESSANDRA|4615.68|2026-10-21": "Valeria Del Vecchio"
   }
 }
