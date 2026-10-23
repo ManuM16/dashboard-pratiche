@@ -408,11 +408,12 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.84.0 · 21/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.87.0 · 23/10/2026</div>
     
-    <div style="display:flex;flex-direction:column;gap:14px">
+    <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
+    <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
       <!-- Pulsante Admin -->
-      <button id="btn-admin-open" onclick="showAdminForm()" style="
+      <button id="btn-admin-open" onclick="adminEntry()" style="
         padding:16px 24px;border-radius:12px;border:none;cursor:pointer;
         background:#18181A;color:#fff;font-family:'Outfit',sans-serif;
         font-size:15px;font-weight:600;transition:.2s;text-align:left;
@@ -421,8 +422,9 @@ body.guest-mode .comm-sel{
         <span style="font-size:24px">🔑</span>
         <span>
           <div style="font-size:15px;font-weight:700">Accesso Admin</div>
-          <div style="font-size:12px;font-weight:400;opacity:.6;margin-top:2px">Tutte le funzionalità</div>
+          <div id="admin-sub" style="font-size:12px;font-weight:400;opacity:.6;margin-top:2px">Tutte le funzionalità</div>
         </span>
+        <span id="admin-chip" title="Rete riconosciuta: accesso senza password" style="display:none;margin-left:auto;flex-shrink:0;width:26px;height:26px;border-radius:50%;background:#16A87F;color:#fff;font-size:15px;font-weight:700;align-items:center;justify-content:center">✓</span>
       </button>
       <!-- Form credenziali Admin (inizialmente nascosto) -->
       <div id="admin-form" style="display:none;flex-direction:column;gap:10px">
@@ -446,6 +448,10 @@ body.guest-mode .comm-sel{
         <div id="admin-error" style="display:none;color:#B82525;font-size:12px;text-align:center;margin-top:-4px">
           ❌ Credenziali non valide
         </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#52514E;cursor:pointer;text-align:left">
+          <input type="checkbox" id="admin-remember" checked style="width:15px;height:15px;cursor:pointer">
+          Ricorda questa rete: la prossima volta accesso automatico
+        </label>
         <button onclick="checkAdminCredentials()" style="
           padding:13px 24px;border-radius:10px;border:none;cursor:pointer;
           background:#18181A;color:#fff;font-family:'Outfit',sans-serif;
@@ -474,6 +480,9 @@ body.guest-mode .comm-sel{
           <div style="font-size:12px;font-weight:400;opacity:.55;margin-top:2px">Solo visualizzazione</div>
         </span>
       </button>
+    </div>
+    <div id="forget-dev" style="display:none;margin-top:18px">
+      <button onclick="forgetThisDevice()" style="border:none;background:transparent;color:#9B9892;font-family:'Outfit',sans-serif;font-size:12px;cursor:pointer;text-decoration:underline">Dimentica questo dispositivo</button>
     </div>
   </div>
 </div>
@@ -516,6 +525,8 @@ body.guest-mode .comm-sel{
     const u = document.getElementById('admin-user').value.trim();
     const p = document.getElementById('admin-pass').value;
     if(u === _ADMIN_U && p === _ADMIN_P){
+      const rem=document.getElementById('admin-remember');
+      if(rem && rem.checked){ rememberThisNetwork().catch(()=>{}); }
       doLogin('admin');
     } else {
       const err = document.getElementById('admin-error');
@@ -523,6 +534,47 @@ body.guest-mode .comm-sel{
       document.getElementById('admin-pass').value = '';
       document.getElementById('admin-pass').focus();
     }
+  };
+
+  // ── Riconoscimento rete (IP pubblico) ──
+  // Il sito è statico: l'elenco delle reti fidate vive nel browser (localStorage), non su un server.
+  const TRUST_KEY='trusted_ips', TRUST_DAYS=30;
+  async function _hex(s){
+    try{
+      const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('alifin-dash|'+s));
+      return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+    }catch(e){ return 'raw:'+s; }
+  }
+  function _loadTrust(){
+    try{
+      const l=JSON.parse(localStorage.getItem(TRUST_KEY)||'[]');
+      const lim=Date.now()-TRUST_DAYS*864e5;
+      return (Array.isArray(l)?l:[]).filter(e=>e&&e.h&&e.t>lim);
+    }catch(e){ return []; }
+  }
+  function _saveTrust(l){ try{ localStorage.setItem(TRUST_KEY,JSON.stringify(l.slice(-10))); }catch(e){} }
+  async function _getIp(){
+    const srcs=[['https://api.ipify.org?format=json','json'],['https://icanhazip.com','text']];
+    for(const s of srcs){
+      try{
+        const c=new AbortController(); const to=setTimeout(()=>c.abort(),2500);
+        const r=await fetch(s[0],{signal:c.signal,cache:'no-store'}); clearTimeout(to);
+        if(!r.ok) continue;
+        const ip=(s[1]==='json'?(await r.json()).ip:(await r.text())).trim();
+        if(/^[0-9a-fA-F:.]{3,45}$/.test(ip)) return ip;
+      }catch(e){}
+    }
+    return null;
+  }
+  window.rememberThisNetwork=async function(){
+    const ip=await _getIp(); if(!ip) return false;
+    const h=await _hex(ip);
+    const l=_loadTrust().filter(e=>e.h!==h); l.push({h:h,t:Date.now()});
+    _saveTrust(l); return true;
+  };
+  window.forgetThisDevice=function(){
+    try{ localStorage.removeItem(TRUST_KEY); }catch(e){}
+    const el=document.getElementById('forget-dev'); if(el) el.style.display='none';
   };
 
   window.doLogout = function(){
@@ -662,13 +714,67 @@ body.guest-mode .comm-sel{
       }catch(e){ console.warn('[guest] Errore generazione KPI:',e.message); }
     }, 600);
   };
+
+  // ── Rete riconosciuta: il login resta visibile con le due scelte, ma "Admin" entra senza credenziali ──
+  window._netTrusted=false;
+  window._netPromise=null;
+  const _ADMIN_SUB='Tutte le funzionalità';
+  // Stato visivo della verifica rete: 'checking' | 'ok' | 'none'
+  function _netUI(state){
+    const box=document.getElementById('net-status'), chip=document.getElementById('admin-chip'),
+          sub=document.getElementById('admin-sub'), btn=document.getElementById('btn-admin-open');
+    if(!box) return;
+    if(state==='checking'){
+      box.style.cssText+=';display:flex;background:#F5F4F0;color:#52514E;border:1px solid #E4E2DA';
+      box.innerHTML='<span>🔎</span><span>Verifica della rete in corso…</span>';
+    } else if(state==='ok'){
+      box.style.cssText+=';display:flex;background:#E4F5EC;color:#1A7A45;border:1px solid #9AD5B4';
+      box.innerHTML='<span style="font-size:16px">✅</span><span>Rete riconosciuta<br><span style="font-weight:400;font-size:11.5px">Con «Accesso Admin» entri senza password</span></span>';
+      if(chip) chip.style.display='inline-flex';
+      if(btn) btn.style.boxShadow='0 0 0 2px #16A87F';
+    } else {
+      box.style.display='none';
+      if(chip) chip.style.display='none';
+      if(btn) btn.style.boxShadow='';
+    }
+  }
+  window.adminEntry=async function(){
+    const sub=document.getElementById('admin-sub');
+    if(window._netPromise){
+      try{ await window._netPromise; }catch(e){}
+      _netUI(window._netTrusted?'ok':'none');
+    }
+    if(window._netTrusted) doLogin('admin');
+    else showAdminForm();
+  };
+  (function(){
+    const list=_loadTrust();
+    if(!list.length) return;                       // nessuna rete ricordata: nessuna chiamata esterna
+    const forgetEl=document.getElementById('forget-dev');
+    if(forgetEl) forgetEl.style.display='block';
+    _netUI('checking');
+    window._netPromise=(async function(){
+      try{
+        if(document.readyState!=='complete') await new Promise(r=>window.addEventListener('load',r,{once:true}));
+        const ip=await _getIp();
+        if(!ip) return;
+        const hh=await _hex(ip);
+        const hit=list.find(e=>e.h===hh);
+        if(hit){
+          hit.t=Date.now(); _saveTrust(list);        // rinnova la scadenza
+          window._netTrusted=true;
+        }
+      }catch(e){}
+      finally{ window._netPromise=null; _netUI(window._netTrusted?'ok':'none'); }
+    })();
+  })();
 })();
 </script>
 
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.84.0 · 21/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.87.0 · 23/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
