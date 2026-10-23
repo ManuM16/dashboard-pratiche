@@ -355,6 +355,11 @@ tr:hover td{background:var(--surface3)}
 .prod-lbl{font-size:11px;color:var(--ink3);margin-bottom:4px;font-weight:500}
 .prod-seg{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
 .ktab-hide{display:none!important}
+body[data-cview="assegna"] #comm-kpi-section{display:none!important}
+body[data-cview="fil"] #comm-main-grid,body[data-cview="com"] #comm-main-grid,
+body[data-cview="fil"] .comm-header,body[data-cview="com"] .comm-header,
+body[data-cview="fil"] #gh-restore-banner,body[data-cview="com"] #gh-restore-banner,
+body[data-cview="fil"] #comm-banner-slot,body[data-cview="com"] #comm-banner-slot{display:none!important}
 .kt-tot td,.kt-tot:hover td{background:var(--ink)!important;color:#fff!important}
 .kt-intro{padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--border);font-size:12.5px;color:var(--ink2);line-height:1.5}
 .kt-intro b{color:var(--ink)}
@@ -419,7 +424,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.89.1 · 23/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.90.0 · 23/10/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -605,7 +610,7 @@ body.guest-mode .comm-sel{
     } else {
       // Admin: apre Analisi Erogato e carica tutto in automatico (Excel, assegnazioni, analisi)
       setTimeout(()=>{
-        const b = document.querySelector('.sb-item[onclick*="commerciali"]');
+        const b = document.querySelector('.sb-item[data-cv="fil"]');
         if(b) b.click();
         guestAutoLoad();
       }, 300);
@@ -614,16 +619,16 @@ body.guest-mode .comm-sel{
   
   function applyGuestMode(){
     // Nascondi sezioni sidebar non ospite
-    const guestAllowedSections = ['commerciali','calc-prestito','calc-cqs','calc-polizza','calc-drm'];
+    const guestAllowedSections = ['calc-prestito','calc-cqs','calc-polizza','calc-drm'];
     
     // Nascondi tutti i menù sidebar tranne Erogato e Calcolatori
     document.querySelectorAll('.sb-section').forEach(el=>{
       const txt = el.textContent.trim();
-      if(txt !== 'Erogato' && txt !== 'Calcolatori') el.style.display='none';
+      if(txt !== 'Analisi' && txt !== 'Assegnazione' && txt !== 'Calcolatori') el.style.display='none';
     });
     document.querySelectorAll('.sb-item').forEach(btn=>{
       const onclick = btn.getAttribute('onclick')||'';
-      const allowed = guestAllowedSections.some(s=>onclick.includes("'"+s+"'"));
+      const allowed = btn.hasAttribute('data-cv') || guestAllowedSections.some(s=>onclick.includes("'"+s+"'"));
       if(!allowed) btn.style.display='none';
     });
     
@@ -635,12 +640,8 @@ body.guest-mode .comm-sel{
     // rimane visibile — OK per ospite
     
     // Avvia su Analisi Erogato
-    const commBtn = document.querySelector('.sb-item[onclick*="commerciali"]');
-    if(commBtn){ commBtn.classList.add('active'); }
-    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-    const commSection = document.getElementById('s-commerciali');
-    if(commSection) commSection.classList.add('active');
-    document.getElementById('tb-title').textContent = 'Monitoraggio Commerciali';
+    const commBtn = document.querySelector('.sb-item[data-cv="fil"]');
+    if(window.commNav) commNav('fil', commBtn);
     document.getElementById('global-ys').style.display='none';
     
     // Nascondi elementi upload/azione nella sezione commerciali
@@ -785,12 +786,19 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.89.1 · 23/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.90.0 · 23/10/2026</div>
   </div>
   <nav class="sb-nav">
-    <div class="sb-section">Erogato</div>
-    <button class="sb-item" onclick="nav('commerciali',this)">
-      <span class="sb-icon">📊</span> Analisi Erogato
+    <div class="sb-section">Analisi</div>
+    <button class="sb-item" data-cv="fil" onclick="commNav('fil',this)">
+      <span class="sb-icon">🏢</span> Analisi Filiali
+    </button>
+    <button class="sb-item" data-cv="com" onclick="commNav('com',this)">
+      <span class="sb-icon">👤</span> Analisi Commerciali
+    </button>
+    <div class="sb-section">Assegnazione</div>
+    <button class="sb-item" data-cv="assegna" onclick="commNav('assegna',this)">
+      <span class="sb-icon">📋</span> Assegnazione pratiche
     </button>
     <div class="sb-section">Calcolatori</div>
     <button class="sb-item" onclick="nav('calc-prestito',this)">
@@ -805,7 +813,7 @@ body.guest-mode .comm-sel{
     <button class="sb-item" onclick="nav('calc-drm',this)">
       <span class="sb-icon">⚖️</span> DRM / DTI
     </button>
-    <div class="sb-section">Analisi</div>
+    <div class="sb-section">Analisi pratiche</div>
     <button class="sb-item active" onclick="nav('panoramica',this)">
       <span class="sb-icon">◈</span> Panoramica
     </button>
@@ -1291,6 +1299,12 @@ body.guest-mode .comm-sel{
       <!-- Banner ripristino assegnazioni (sopra la griglia, larghezza piena) -->
       <div id="comm-banner-slot" style="margin-bottom:0"></div>
 
+      <div id="comm-an-empty" style="display:none;background:var(--surface);border:1px dashed var(--border2);border-radius:14px;padding:36px 24px;text-align:center;margin-top:14px">
+        <div style="font-size:30px;margin-bottom:8px">📭</div>
+        <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px">Nessun dato da analizzare</div>
+        <div style="font-size:12.5px;color:var(--ink3);max-width:460px;margin:0 auto 14px;line-height:1.5">Il file erogato non è ancora stato caricato. Se sei Admin o Ospite i dati si caricano da soli: attendi qualche secondo. Altrimenti caricalo in «Assegnazione pratiche».</div>
+        <button class="btn-comm btn-comm-primary" onclick="commNav('assegna')">Vai ad Assegnazione pratiche →</button>
+      </div>
       <!-- Layout a due colonne: sinistra controlli, destra tabella pratiche -->
       <div id="comm-main-grid" style="display:flex;gap:14px;align-items:flex-start">
 
@@ -1431,7 +1445,7 @@ body.guest-mode .comm-sel{
               <button class="btn-comm btn-comm-secondary" id="comm-more-btn" onclick="commToggleMoreMenu()" style="white-space:nowrap" title="Altre azioni">⚙️ Altro ▾</button>
             </div>
             <button class="btn-comm btn-comm-secondary" onclick="commShowReportBuilder()" style="white-space:nowrap;flex-shrink:0">📊 Report</button>
-            <button class="btn-comm btn-comm-primary" onclick="commGenerateKPI()" id="comm-btn-kpi" style="white-space:nowrap;flex-shrink:0;margin-left:auto">Genera analisi →</button>
+            <button class="btn-comm btn-comm-primary" onclick="commNav('fil')" id="comm-btn-kpi" style="white-space:nowrap;flex-shrink:0;margin-left:auto">Vai alle analisi →</button>
           </div>
         </div>
 
@@ -1462,13 +1476,6 @@ body.guest-mode .comm-sel{
                 <button class="dmode-btn"              onclick="commSetKpiView('olbia')"      id="kvtab-olbia">Olbia</button>
                 <button class="dmode-btn"              onclick="commSetKpiView('empoli')"     id="kvtab-empoli">Empoli</button>
               </div>
-            </div>
-          </div>
-          <!-- Navigazione sezioni -->
-          <div style="padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto">
-            <div class="prod-seg" id="kt-bar" style="display:inline-flex">
-              <button class="dmode-btn dmode-active" data-kt-btn="fil" onclick="kSetTab('fil')">🏢 Analisi Filiali</button>
-              <button class="dmode-btn" data-kt-btn="com" onclick="kSetTab('com')">👤 Analisi Commerciali</button>
             </div>
           </div>
           <div class="kt-intro" id="kt-intro"></div>
@@ -5878,7 +5885,10 @@ calcPolizza();
   };
 
   /* ---- KPI generation ---- */
+  window.commHasData=function(){return !!(commPratiche&&commPratiche.length);};
   window.commGenerateKPI=function(){
+    window.__kGen=true;
+    const _e=document.getElementById('comm-an-empty'); if(_e) _e.style.display='none';
     // Popola il picker mesi e avvia l'analisi sul mese più recente
     window._kpiSelectedMonth=''; // reset per auto-selezione
     populateKpiMonthFilter();
@@ -6301,7 +6311,7 @@ calcPolizza();
 
   window.commGoAssignUnassigned=function(finKey){
     // Vai alla sezione commerciali e attiva il filtro solo non assegnate
-    document.querySelector('[data-s="commerciali"]')?.click();
+    if(window.commNav) commNav('assegna');
     setTimeout(()=>{
       commQFilter('unassigned');
       // Scrolla alla tabella
@@ -6895,6 +6905,27 @@ calcPolizza();
   var INTRO={
     fil:'<b>Analisi Filiali.</b> Come vanno le filiali, singole e nel totale: obiettivi, confronto col passato, produttività e ticket/tasso medio per anno. <b>Periodo</b> e <b>Filiale</b> in alto guidano obiettivi, confronti e dettaglio; la produttività ha filtri propri; ticket e tasso per anno sono su tutto il file.',
     com:'<b>Analisi Commerciali.</b> Le prestazioni delle singole persone, raggruppate per filiale: dettaglio del periodo, produttività giornaliera, storico mensile del singolo e ticket/tasso medio per anno. <b>Periodo</b> e <b>Filiale</b> in alto guidano il dettaglio; la produttività ha filtri propri; storico e medie sono su tutto il file.'
+  };
+  window.commNav=function(mode,btn){
+    btn=btn||document.querySelector('.sb-item[data-cv="'+mode+'"]');
+    document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+    document.querySelectorAll('.sb-item').forEach(function(b){b.classList.remove('active');});
+    document.getElementById('s-commerciali').classList.add('active');
+    if(btn) btn.classList.add('active');
+    var prev=document.body.getAttribute('data-cview');
+    document.body.setAttribute('data-cview',mode);
+    document.getElementById('tb-title').textContent={assegna:'Assegnazione pratiche',fil:'Analisi Filiali',com:'Analisi Commerciali'}[mode];
+    var ys=document.getElementById('global-ys'); if(ys) ys.style.display='none';
+    var tree=document.getElementById('sb-mo-tree'); if(tree) tree.style.display='none';
+    var empty=document.getElementById('comm-an-empty'), kpi=document.getElementById('comm-kpi-section');
+    if(mode==='assegna'){ if(empty) empty.style.display='none'; return; }
+    if(window.commHasData&&commHasData()){
+      if(empty) empty.style.display='none';
+      if(prev==='assegna'||!window.__kGen) commGenerateKPI();
+      if(kpi) kpi.style.display='block';
+    } else if(empty){ empty.style.display='block'; }
+    kSetTab(mode);
+    window.scrollTo(0,0);
   };
   window.kSetTab=function(t){
     var sec=document.getElementById('comm-kpi-section'); if(!sec) return;
