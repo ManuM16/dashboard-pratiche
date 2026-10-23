@@ -418,7 +418,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.88.0 · 23/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.89.0 · 23/10/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -784,7 +784,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.88.0 · 23/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.89.0 · 23/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Erogato</div>
@@ -1466,15 +1466,13 @@ body.guest-mode .comm-sel{
           <!-- Navigazione sezioni -->
           <div style="padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto">
             <div class="prod-seg" id="kt-bar" style="display:inline-flex">
-              <button class="dmode-btn dmode-active" data-kt-btn="sum"  onclick="kSetTab('sum')">📈 Riepilogo</button>
-              <button class="dmode-btn" data-kt-btn="prod" onclick="kSetTab('prod')">⚡ Produttività</button>
-              <button class="dmode-btn" data-kt-btn="obj"  onclick="kSetTab('obj')">🎯 Obiettivi</button>
-              <button class="dmode-btn" data-kt-btn="hist" onclick="kSetTab('hist')">📅 Storico e medie</button>
+              <button class="dmode-btn dmode-active" data-kt-btn="fil" onclick="kSetTab('fil')">🏢 Analisi Filiali</button>
+              <button class="dmode-btn" data-kt-btn="com" onclick="kSetTab('com')">👤 Analisi Commerciali</button>
             </div>
           </div>
           <div class="kt-intro" id="kt-intro"></div>
           <!-- OBIETTIVI — banda orizzontale sopra tutto -->
-          <div id="obj-widget" data-kt="obj" style="border-bottom:1px solid var(--border);padding:16px 20px;box-sizing:border-box;background:var(--surface2)">
+          <div id="obj-widget" data-kt="fil" style="border-bottom:1px solid var(--border);padding:16px 20px;box-sizing:border-box;background:var(--surface2)">
             <div class="k-note" style="margin-bottom:12px">Scrivi l'obiettivo di erogato (annuale, del trimestre scelto, oppure mese per mese). Sotto compaiono le schede con l'erogato <b>già raggiunto da tutte le filiali</b> nell'<b>anno scelto in «Periodo»</b> (se non scegli un mese, l'anno corrente): la percentuale è raggiunto ÷ obiettivo, la barra è <span style="color:var(--green);font-weight:600">verde</span> da 100%, <span style="color:var(--amber);font-weight:600">gialla</span> da 70%, <span style="color:var(--red);font-weight:600">rossa</span> sotto il 70%. Il filtro Filiale non si applica.</div>
             <!-- Riga controlli -->
             <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px">
@@ -1525,8 +1523,36 @@ body.guest-mode .comm-sel{
             <div id="obj-results"></div>
           </div>
 
+          <!-- KPI + YoY -->
+          <div data-kt="fil com" style="padding:14px 16px;box-sizing:border-box">
+            <details class="k-gloss">
+              <summary>ℹ️ Come leggere questi numeri</summary>
+              <dl>
+                <dt>Erogato</dt><dd>Somma degli importi finanziati delle pratiche del periodo.</dd>
+                <dt>N° pratiche</dt><dd>Quante pratiche sono state erogate. Sotto è diviso in «non gar» (tutti i prestiti diversi dall'Alifin Garantito) e «gar» (Alifin Garantito).</dd>
+                <dt>Ticket medio</dt><dd>Importo medio di una pratica: erogato ÷ n° pratiche.</dd>
+                <dt>Polizze / p.p.</dt><dd>Polizze collocate sui prestiti personali (p.p. = pratiche non garantite). La percentuale tra parentesi è la <b>penetrazione</b>: polizze ÷ p.p.</dd>
+                <dt>Premi polizza</dt><dd>Importo totale dei premi assicurativi incassati sulle polizze.</dd>
+                <dt>TAN medio</dt><dd>Tasso medio delle pratiche che hanno un tasso indicato (cessioni del quinto escluse nella tabella per filiale).</dd>
+                <dt>▲ ▼ con %</dt><dd>Variazione rispetto al periodo di confronto: <span style="color:var(--green);font-weight:700">▲ verde</span> = di più, <span style="color:var(--red);font-weight:700">▼ rosso</span> = di meno, «n/d» = nel periodo di confronto non ci sono dati.</dd>
+                <dt>Q1…Q4</dt><dd>Trimestri: Q1 gen–mar, Q2 apr–giu, Q3 lug–set, Q4 ott–dic.</dd>
+              </dl>
+            </details>
+            <div data-kt="fil">
+              <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">📈 Confronto nel tempo</h3>
+              <div id="comm-yoy-panel" style="display:none;margin-bottom:16px"></div>
+              <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">🏢 Dettaglio per filiale</h3>
+              <div class="k-note">Una riga per filiale, più il totale. Segue Periodo e Filiale scelti in alto.</div>
+              <div id="comm-kpi-cards"></div>
+            </div>
+            <div data-kt="com">
+              <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">👤 Dettaglio per commerciale</h3>
+              <div class="k-note">Le persone raggruppate per filiale in cui hanno lavorato. Segue Periodo e Filiale scelti in alto. La lente apre l'elenco delle pratiche del commerciale; chi ha lavorato in più filiali ha anche il totale complessivo.</div>
+              <div id="comm-kpi-agents"></div>
+            </div>
+          </div>
           <!-- PRODUTTIVITA' — media giornaliera su giorni lavorativi -->
-          <div id="comm-prod-section" data-kt="prod" style="display:none;padding:16px 20px;border-bottom:1px solid var(--border);box-sizing:border-box">
+          <div id="comm-prod-section" data-kt="fil com" style="display:none;padding:16px 20px;border-bottom:1px solid var(--border);box-sizing:border-box">
             <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">⚡ Produttività</h3>
             <div style="font-size:11.5px;color:var(--ink3);margin-bottom:12px">Media giornaliera = erogato (o pezzi) del periodo diviso i giorni lavorativi. Confronto tra la media dell'anno e quella del periodo di confronto scelto.</div>
             <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px">
@@ -1564,35 +1590,15 @@ body.guest-mode .comm-sel{
               <div id="prod-win-sub"></div>
             </div>
             <div id="comm-prod-body"></div>
-            <details style="margin-top:10px">
+            <details data-kt="com" style="margin-top:10px">
               <summary id="prod-excl-sum" style="cursor:pointer;font-size:12px;color:var(--ink2);font-weight:600">Commerciali esclusi dalle medie</summary>
               <div style="font-size:11.5px;color:var(--ink3);margin:6px 0">Chi non è più in organico: esce dalla tabella e dalle medie per commerciale, ma la sua produzione resta nei totali di filiale e di canale.</div>
               <div id="prod-excl-list" style="display:flex;flex-wrap:wrap;gap:6px 16px"></div>
             </details>
           </div>
 
-          <!-- KPI + YoY -->
-          <div data-kt="sum" style="padding:14px 16px;box-sizing:border-box">
-            <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">📈 Analisi Erogato</h3>
-            <div class="k-note">Prima i confronti nel tempo del periodo scelto in alto, poi il dettaglio per filiale e per commerciale.</div>
-            <details class="k-gloss">
-              <summary>ℹ️ Come leggere questi numeri</summary>
-              <dl>
-                <dt>Erogato</dt><dd>Somma degli importi finanziati delle pratiche del periodo.</dd>
-                <dt>N° pratiche</dt><dd>Quante pratiche sono state erogate. Sotto è diviso in «non gar» (tutti i prestiti diversi dall'Alifin Garantito) e «gar» (Alifin Garantito).</dd>
-                <dt>Ticket medio</dt><dd>Importo medio di una pratica: erogato ÷ n° pratiche.</dd>
-                <dt>Polizze / p.p.</dt><dd>Polizze collocate sui prestiti personali (p.p. = pratiche non garantite). La percentuale tra parentesi è la <b>penetrazione</b>: polizze ÷ p.p.</dd>
-                <dt>Premi polizza</dt><dd>Importo totale dei premi assicurativi incassati sulle polizze.</dd>
-                <dt>TAN medio</dt><dd>Tasso medio delle pratiche che hanno un tasso indicato (cessioni del quinto escluse nella tabella per filiale).</dd>
-                <dt>▲ ▼ con %</dt><dd>Variazione rispetto al periodo di confronto: <span style="color:var(--green);font-weight:700">▲ verde</span> = di più, <span style="color:var(--red);font-weight:700">▼ rosso</span> = di meno, «n/d» = nel periodo di confronto non ci sono dati.</dd>
-                <dt>Q1…Q4</dt><dd>Trimestri: Q1 gen–mar, Q2 apr–giu, Q3 lug–set, Q4 ott–dic.</dd>
-              </dl>
-            </details>
-            <div id="comm-yoy-panel" style="display:none;margin-bottom:16px"></div>
-            <div id="comm-kpi-cards"></div>
-          </div>
           <!-- Storico agente mensile — full width sotto il grid KPI -->
-          <div id="comm-agent-history-section" data-kt="hist" style="display:none;border-top:1px solid var(--border);padding:14px 16px">
+          <div id="comm-agent-history-section" data-kt="com" style="display:none;border-top:1px solid var(--border);padding:14px 16px">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
               <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0;color:var(--ink)">📅 Storico mensile per agente</h3>
               <select id="agent-history-select" onchange="commBuildAgentHistory()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:8px;font-size:12.5px;font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);cursor:pointer">
@@ -1603,7 +1609,7 @@ body.guest-mode .comm-sel{
             <div id="comm-agent-history-table"></div>
           </div>
           <!-- Ticket medio e tasso medio per anno -->
-          <div id="comm-yearstats-section" data-kt="hist" style="display:none;border-top:1px solid var(--border);padding:14px 16px">
+          <div id="comm-yearstats-section" data-kt="fil com" style="display:none;border-top:1px solid var(--border);padding:14px 16px">
             <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">🎯 Ticket medio e tasso medio per anno</h3>
             <div style="font-size:11.5px;color:var(--ink3);margin-bottom:12px">Ticket medio = erogato / n. pratiche · Tasso medio = TAN medio delle pratiche con tasso. Sempre su tutto il file, indipendente dal filtro mese.</div>
             <div id="comm-yearstats-body"></div>
@@ -5373,12 +5379,14 @@ calcPolizza();
   };
   function renderKpiCards(){
     const container=document.getElementById('comm-kpi-cards');
+    const cAg=document.getElementById('comm-kpi-agents');
     const finsToShow = commKpiView==='all'
       ? Object.keys(_lastFinStats)
       : Object.keys(_lastFinStats).filter(k=>k===commKpiView);
 
     if(!finsToShow.length){
-      container.innerHTML='<div class="comm-empty"><div class="comm-empty-icon">🔍</div><div>Nessun dato disponibile per il periodo selezionato.</div></div>';
+      const emp='<div class="comm-empty"><div class="comm-empty-icon">🔍</div><div>Nessun dato disponibile per il periodo selezionato.</div></div>';
+      container.innerHTML=emp; if(cAg) cAg.innerHTML=emp;
       return;
     }
 
@@ -5406,14 +5414,18 @@ calcPolizza();
     ];
 
     const COLSUB={erogato:'somma finanziato',pratiche:'non gar · gar',ticket:'erogato ÷ pratiche',polizze:'polizze ÷ p.p.',premi:'totale premi',tan:'media tassi, escl. CQ'};
+    const THFIRST='<th style="padding:7px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--ink2);white-space:nowrap"></th>';
     const thead=`<thead>
       <tr style="background:var(--surface2);border-bottom:1px solid var(--border)">
         <th style="padding:7px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--ink2);white-space:nowrap"></th>
         ${COLS.map(c=>`<th style="padding:7px 14px;text-align:right;font-size:11px;font-weight:600;color:${c.color};white-space:nowrap">${c.label}<div style="font-size:9.5px;font-weight:400;text-transform:none;color:var(--ink3)">${COLSUB[c.key]||''}</div></th>`).join('')}
       </tr>
     </thead>`;
+    const theadAg=thead.replace(THFIRST,THFIRST.replace('></th>','>Commerciale</th>'));
+    const theadFil=thead.replace(THFIRST,THFIRST.replace('></th>','>Filiale</th>'));
 
-    container.innerHTML=finsToShow.map(finKey=>{
+    const finRowsArr=[];
+    cAg.innerHTML=finsToShow.map(finKey=>{
       const f=_lastFinStats[finKey];
       const agents=Object.values(_lastAgentFinStats[finKey]||{});
       // Ordina per erogato
@@ -5458,6 +5470,8 @@ calcPolizza();
         ${COLS.map(c=>`<td style="padding:8px 14px;text-align:right;font-size:13px;font-weight:700;color:${c.color};font-family:'Syne',sans-serif">${c.fmt(f)}</td>`).join('')}
       </tr>`;
 
+      finRowsArr.push(totRow);
+      const headRow=`<tr style="background:${f.color}10;border-top:2px solid ${f.color}30"><td colspan="7" style="padding:8px 16px"><div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:50%;background:${f.color};flex-shrink:0"></div><span style="font-weight:700;font-size:13px;font-family:'Syne',sans-serif;color:${f.color}">${esc(f.label)}</span><span style="font-size:11px;color:var(--ink3)">${agents.length} ${agents.length===1?'commerciale':'commerciali'}</span></div></td></tr>`;
       return `<div style="margin-bottom:16px;background:var(--surface);border-radius:12px;border:2px solid ${f.color};overflow:hidden;box-shadow:var(--shadow)">
         <table style="width:100%;border-collapse:collapse;table-layout:fixed">
           <colgroup>
@@ -5469,14 +5483,29 @@ calcPolizza();
             <col style="width:120px">
             <col style="width:145px">
           </colgroup>
-          ${thead}
+          ${theadAg}
           <tbody>
-            ${totRow}
+            ${headRow}
             ${agents.length ? agentRows : '<tr><td colspan="7" style="padding:10px 20px;font-size:12px;color:var(--ink3);font-style:italic">Nessuna pratica assegnata nel periodo.</td></tr>'}
           </tbody>
         </table>
       </div>`;
     }).join('');
+
+    // Tabella riepilogo filiali (+ totale)
+    const T={n:0,nGar:0,nNonGar:0,importoTot:0,conPolizza:0,nPP:0,totPolizza:0,tanSum:0,tanCount:0};
+    finsToShow.forEach(k=>{const f=_lastFinStats[k];Object.keys(T).forEach(x=>{T[x]+=f[x]||0;});});
+    const totAll=finsToShow.length>1?`<tr style="background:var(--ink);color:#fff;border-top:2px solid var(--ink)">
+        <td style="padding:9px 16px"><span style="font-weight:700;font-size:13px;font-family:'Syne',sans-serif">TOTALE FILIALI</span> <span style="font-size:11px;opacity:.75">${T.n} pratiche</span></td>
+        ${COLS.map(c=>`<td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:700;font-family:'Syne',sans-serif">${c.fmt(T).replace(/color:var\(--ink3\)/g,'color:rgba(255,255,255,.7)')}</td>`).join('')}
+      </tr>`:'';
+    container.innerHTML=`<div style="margin-bottom:16px;background:var(--surface);border-radius:12px;border:1px solid var(--border2);overflow:hidden;box-shadow:var(--shadow)">
+        <table style="width:100%;border-collapse:collapse;table-layout:fixed">
+          <colgroup><col style="width:210px"><col style="width:130px"><col style="width:120px"><col style="width:120px"><col style="width:170px"><col style="width:120px"><col style="width:145px"></colgroup>
+          ${theadFil}
+          <tbody>${finRowsArr.join('')}${totAll}</tbody>
+        </table></div>`;
+    if(window.kSetTab) kSetTab(window.__ktab||'fil');
   }
 
   /* ---- Popola select mesi KPI ---- */
@@ -6063,15 +6092,16 @@ calcPolizza();
       :'<p style="color:var(--ink3);font-size:12.5px">Nessuna pratica assegnata a commerciali nel periodo selezionato.</p>';
 
     const wdNote=`<div style="font-size:11.5px;color:var(--ink3);margin:8px 0 0">Dal ${lblY} sono ${wdY} giorni lavorativi${fest?' (esclusi i festivi italiani)':' (lunedì-venerdì)'}, dal ${lblR} sono ${wdR}.</div>`;
-    body.innerHTML=strip1+wdNote+
-      `<div class="prod-h4">Filiali</div><div class="prod-cards">${cards}</div>`+
-      (strip2?`<div class="prod-h4">Commerciali — riepilogo</div>${strip2}`:'')+
-      `<div class="prod-h4">Commerciali — dettaglio</div>${tbl}`;
+    body.innerHTML=`<div data-kt="fil">`+strip1+wdNote+
+      `<div class="prod-h4">Filiali</div><div class="prod-cards">${cards}</div></div>`+
+      `<div data-kt="com">`+wdNote+(strip2?`<div class="prod-h4">Commerciali — riepilogo</div>${strip2}`:'')+
+      `<div class="prod-h4">Commerciali — dettaglio</div>${tbl}</div>`;
 
     // ── elenco esclusi
     const names=[...ALL_AGENTS].sort();
     document.getElementById('prod-excl-list').innerHTML=names.map(n=>`<label style="font-size:12px;color:var(--ink2);cursor:pointer;white-space:nowrap"><input type="checkbox" ${PROD.excl.includes(n)?'checked':''} onchange="commProdToggleExcl(this.getAttribute('data-n'),this.checked)" data-n="${esc(n)}"> ${esc(n)}</label>`).join('');
     document.getElementById('prod-excl-sum').textContent='Commerciali esclusi dalle medie'+(PROD.excl.length?` (${PROD.excl.length})`:'');
+    if(window.kSetTab) kSetTab(window.__ktab||'fil');
   }
 
   /* ---- Ticket medio e tasso medio per anno: filiali, totale filiali, commerciali ---- */
@@ -6126,8 +6156,9 @@ calcPolizza();
       return rowHtml(esc(a),byAgent[a],false,agentFinText(byAgent[a],AGENT_TO_FIN[a],false));
     }).join('');
 
-    body.innerHTML=sub('Per filiale e totale')+tbl(finRows)+sub('Per commerciale')+(agRows?tbl(agRows):'<p style="color:var(--ink3);font-size:12.5px">Nessuna pratica assegnata ai commerciali.</p>');
+    body.innerHTML=`<div data-kt="fil">`+sub('Per filiale e totale')+tbl(finRows)+`</div><div data-kt="com">`+sub('Per commerciale')+(agRows?tbl(agRows):'<p style="color:var(--ink3);font-size:12.5px">Nessuna pratica assegnata ai commerciali.</p>')+`</div>`;
     sec.style.display='';
+    if(window.kSetTab) kSetTab(window.__ktab||'fil');
   }
 
   function commBuildKPI(kpiData){
@@ -6861,19 +6892,17 @@ calcPolizza();
 <script>
 (function(){
   var INTRO={
-    sum:'<b>Riepilogo.</b> Quanto è stato erogato e come si confronta con il passato. Usa i filtri in alto: <b>Periodo</b> (mese/anno) e <b>Filiale</b> per le tabelle di dettaglio.',
-    prod:'<b>Produttività.</b> Erogato (o pezzi) <b>al giorno lavorativo</b>, per capire il ritmo. Ha filtri propri qui sotto (financial, anno, periodo di confronto); il filtro Filiale in alto non si applica.',
-    obj:'<b>Obiettivi.</b> Imposta i target di erogato e controlla a che punto sei. L\'anno segue il «Periodo» in alto; il filtro Filiale non si applica.',
-    hist:'<b>Storico e medie.</b> Andamento mese per mese di un singolo commerciale, e ticket medio / tasso medio per anno. Su tutto il file, indipendente dal filtro Periodo.'
+    fil:'<b>Analisi Filiali.</b> Come vanno le filiali, singole e nel totale: obiettivi, confronto col passato, produttività e ticket/tasso medio per anno. <b>Periodo</b> e <b>Filiale</b> in alto guidano obiettivi, confronti e dettaglio; la produttività ha filtri propri; ticket e tasso per anno sono su tutto il file.',
+    com:'<b>Analisi Commerciali.</b> Le prestazioni delle singole persone, raggruppate per filiale: dettaglio del periodo, produttività giornaliera, storico mensile del singolo e ticket/tasso medio per anno. <b>Periodo</b> e <b>Filiale</b> in alto guidano il dettaglio; la produttività ha filtri propri; storico e medie sono su tutto il file.'
   };
   window.kSetTab=function(t){
     var sec=document.getElementById('comm-kpi-section'); if(!sec) return;
-    sec.querySelectorAll('[data-kt]').forEach(function(el){ el.classList.toggle('ktab-hide', el.getAttribute('data-kt')!==t); });
+    sec.querySelectorAll('[data-kt]').forEach(function(el){ el.classList.toggle('ktab-hide', (el.getAttribute('data-kt')||'').split(' ').indexOf(t)<0); });
     sec.querySelectorAll('[data-kt-btn]').forEach(function(b){ b.classList.toggle('dmode-active', b.getAttribute('data-kt-btn')===t); });
     var i=document.getElementById('kt-intro'); if(i) i.innerHTML=INTRO[t]||'';
     window.__ktab=t;
   };
-  kSetTab('sum');
+  kSetTab('fil');
 })();
 </script>
 </body>
