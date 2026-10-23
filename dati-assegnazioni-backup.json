@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-23T15:43:26.284Z",
+  "exportedAt": "2026-10-23T15:43:34.595Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1132,7 +1132,8 @@
       "5064669301|ALLIATA GIULIA|5285|2026-10-21": "Valeria Del Vecchio",
       "5064312301|DI LIBERTO EDOARDO|21587|2026-10-21": "Carlo Zamuner",
       "5057676301|AMBU MONICA|21979|2026-10-21": "Monica Caocci",
-      "5067988301|D'ELIA WALTER|3000|2026-10-23": "Manuel Manca"
+      "5067988301|D'ELIA WALTER|3000|2026-10-23": "Manuel Manca",
+      "5064286301|UDA CARLO|9400|2026-10-23": "Martina Mascia"
     },
     "comm_assign_range_2023-01-05__2026-10-20": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2636,6 +2637,7 @@
     "5064669301|ALLIATA GIULIA|5285|2026-10-21": "Valeria Del Vecchio",
     "5064312301|DI LIBERTO EDOARDO|21587|2026-10-21": "Carlo Zamuner",
     "5057676301|AMBU MONICA|21979|2026-10-21": "Monica Caocci",
-    "5067988301|D'ELIA WALTER|3000|2026-10-23": "Manuel Manca"
+    "5067988301|D'ELIA WALTER|3000|2026-10-23": "Manuel Manca",
+    "5064286301|UDA CARLO|9400|2026-10-23": "Martina Mascia"
   }
 }
