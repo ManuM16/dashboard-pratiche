@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-26T16:51:43.455Z",
+  "exportedAt": "2026-10-26T16:51:51.155Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -864,7 +864,9 @@
       "5064206301|ESTRELLA PALMA VICTOR HUGO|12727.8|2026-10-23": "Valeria Del Vecchio",
       "5061457301|GIARRAFFA SIMONA|19678.2|2026-10-23": "Maria Teresa Meloni",
       "5060270301|FOIS GIOVANNI ANTONIO|15000|2026-10-23": "Francesca Pipia",
-      "null|LOCCI PAOLO|36319.28|2026-10-23": "Monica Caocci"
+      "null|LOCCI PAOLO|36319.28|2026-10-23": "Monica Caocci",
+      "5070254301|TUVERI GIORGIO|26573|2026-10-26": "Martina Mascia",
+      "5058155301|PUDDU SALVATORE|16275|2026-10-26": "Martina Mascia"
     },
     "comm_assign_range_2023-01-05__2026-10-22": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2930,6 +2932,7 @@
     "5061457301|GIARRAFFA SIMONA|19678.2|2026-10-23": "Maria Teresa Meloni",
     "5060270301|FOIS GIOVANNI ANTONIO|15000|2026-10-23": "Francesca Pipia",
     "null|LOCCI PAOLO|36319.28|2026-10-23": "Monica Caocci",
-    "5070254301|TUVERI GIORGIO|26573|2026-10-26": "Martina Mascia"
+    "5070254301|TUVERI GIORGIO|26573|2026-10-26": "Martina Mascia",
+    "5058155301|PUDDU SALVATORE|16275|2026-10-26": "Martina Mascia"
   }
 }
