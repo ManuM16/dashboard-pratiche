@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-26T16:54:49.392Z",
+  "exportedAt": "2026-10-26T16:54:59.283Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -868,7 +868,8 @@
       "5070254301|TUVERI GIORGIO|26573|2026-10-26": "Martina Mascia",
       "5058155301|PUDDU SALVATORE|16275|2026-10-26": "Martina Mascia",
       "5072875301|NERVI MAURO|6285|2026-10-26": "Alessio Dicati",
-      "5072415301|GURABARDHI SAJMIR|14500|2026-10-26": "Valeria Del Vecchio"
+      "5072415301|GURABARDHI SAJMIR|14500|2026-10-26": "Valeria Del Vecchio",
+      "5066403301|CRISTARELLA LUIGI|10700|2026-10-26": "Alessio Dicati"
     },
     "comm_assign_range_2023-01-05__2026-10-22": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2937,6 +2938,7 @@
     "5070254301|TUVERI GIORGIO|26573|2026-10-26": "Martina Mascia",
     "5058155301|PUDDU SALVATORE|16275|2026-10-26": "Martina Mascia",
     "5072875301|NERVI MAURO|6285|2026-10-26": "Alessio Dicati",
-    "5072415301|GURABARDHI SAJMIR|14500|2026-10-26": "Valeria Del Vecchio"
+    "5072415301|GURABARDHI SAJMIR|14500|2026-10-26": "Valeria Del Vecchio",
+    "5066403301|CRISTARELLA LUIGI|10700|2026-10-26": "Alessio Dicati"
   }
 }
