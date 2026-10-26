@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-26T16:56:16.009Z",
+  "exportedAt": "2026-10-26T16:56:45.444Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -874,7 +874,8 @@
       "5061521301|AMPA JAQUELYN|10000|2026-10-26": "Valentina Corsini",
       "5058325301|MANCONI ERIKA|16203|2026-10-26": "Annamaria Esposito",
       "5053870301|LIPPI GIANLUCA|7317.4|2026-10-26": "Laura Balestrino",
-      "5050737301|MARRAS FRANCESCO|21287|2026-10-26": "Carlo Zamuner"
+      "5050737301|MARRAS FRANCESCO|21287|2026-10-26": "Carlo Zamuner",
+      "null|CONCAS SANDRA|20087.48|2026-10-26": "Monica Caocci"
     },
     "comm_assign_range_2023-01-05__2026-10-22": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2949,6 +2950,7 @@
     "5061521301|AMPA JAQUELYN|10000|2026-10-26": "Valentina Corsini",
     "5058325301|MANCONI ERIKA|16203|2026-10-26": "Annamaria Esposito",
     "5053870301|LIPPI GIANLUCA|7317.4|2026-10-26": "Laura Balestrino",
-    "5050737301|MARRAS FRANCESCO|21287|2026-10-26": "Carlo Zamuner"
+    "5050737301|MARRAS FRANCESCO|21287|2026-10-26": "Carlo Zamuner",
+    "null|CONCAS SANDRA|20087.48|2026-10-26": "Monica Caocci"
   }
 }
