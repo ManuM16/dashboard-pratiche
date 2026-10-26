@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-26T16:55:26.425Z",
+  "exportedAt": "2026-10-26T16:55:39.600Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -872,7 +872,8 @@
       "5066403301|CRISTARELLA LUIGI|10700|2026-10-26": "Alessio Dicati",
       "5065622301|PIANA FRANCESCO ANTONIO|7484.8|2026-10-26": "Francesca Pipia",
       "5061521301|AMPA JAQUELYN|10000|2026-10-26": "Valentina Corsini",
-      "5058325301|MANCONI ERIKA|16203|2026-10-26": "Annamaria Esposito"
+      "5058325301|MANCONI ERIKA|16203|2026-10-26": "Annamaria Esposito",
+      "5053870301|LIPPI GIANLUCA|7317.4|2026-10-26": "Laura Balestrino"
     },
     "comm_assign_range_2023-01-05__2026-10-22": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2945,6 +2946,7 @@
     "5066403301|CRISTARELLA LUIGI|10700|2026-10-26": "Alessio Dicati",
     "5065622301|PIANA FRANCESCO ANTONIO|7484.8|2026-10-26": "Francesca Pipia",
     "5061521301|AMPA JAQUELYN|10000|2026-10-26": "Valentina Corsini",
-    "5058325301|MANCONI ERIKA|16203|2026-10-26": "Annamaria Esposito"
+    "5058325301|MANCONI ERIKA|16203|2026-10-26": "Annamaria Esposito",
+    "5053870301|LIPPI GIANLUCA|7317.4|2026-10-26": "Laura Balestrino"
   }
 }
