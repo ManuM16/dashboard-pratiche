@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-27T17:05:13.957Z",
+  "exportedAt": "2026-10-27T17:05:21.023Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-27": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -294,7 +294,8 @@
       "5050737301|MARRAS FRANCESCO|21287|2026-10-26": "Carlo Zamuner",
       "null|CONCAS SANDRA|20087.48|2026-10-26": "Monica Caocci",
       "5075853301|BIEDI CLAUDIA|18024.8|2026-10-27": "Eleonora Lupi",
-      "5075290301|CACCIABUE MARTINA|17359|2026-10-27": "Valeria Del Vecchio"
+      "5075290301|CACCIABUE MARTINA|17359|2026-10-27": "Valeria Del Vecchio",
+      "5075188301|D'AMATO DANIELA|28000|2026-10-27": "Valeria Del Vecchio"
     },
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -3248,6 +3249,7 @@
     "null|CONCAS SANDRA|20087.48|2026-10-26": "Monica Caocci",
     "5075853301|BIEDI CLAUDIA|18024.8|2026-10-27": "Eleonora Lupi",
     "5075290301|CACCIABUE MARTINA|17359|2026-10-27": "Valeria Del Vecchio",
-    "5075188301|D'AMATO DANIELA|28000|2026-10-27": "Valeria Del Vecchio"
+    "5075188301|D'AMATO DANIELA|28000|2026-10-27": "Valeria Del Vecchio",
+    "5073564301|MORELLI GIANLUCA|9549.6|2026-10-27": "Annamaria Esposito"
   }
 }
