@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-27T17:05:46.231Z",
+  "exportedAt": "2026-10-27T17:05:55.106Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-27": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -298,7 +298,8 @@
       "5075188301|D'AMATO DANIELA|28000|2026-10-27": "Valeria Del Vecchio",
       "5073564301|MORELLI GIANLUCA|9549.6|2026-10-27": "Annamaria Esposito",
       "5070211301|TILOCCA GIANFRANCO|16149|2026-10-27": "Laura Balestrino",
-      "5069077301|OGGIANO MASSIMILIANO|16496.4|2026-10-27": "Antonella Sanna"
+      "5069077301|OGGIANO MASSIMILIANO|16496.4|2026-10-27": "Antonella Sanna",
+      "5067521301|FRONTEDDU RICCARDO|35787|2026-10-27": "Stefania Preiata"
     },
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -3255,6 +3256,7 @@
     "5075188301|D'AMATO DANIELA|28000|2026-10-27": "Valeria Del Vecchio",
     "5073564301|MORELLI GIANLUCA|9549.6|2026-10-27": "Annamaria Esposito",
     "5070211301|TILOCCA GIANFRANCO|16149|2026-10-27": "Laura Balestrino",
-    "5069077301|OGGIANO MASSIMILIANO|16496.4|2026-10-27": "Antonella Sanna"
+    "5069077301|OGGIANO MASSIMILIANO|16496.4|2026-10-27": "Antonella Sanna",
+    "5067521301|FRONTEDDU RICCARDO|35787|2026-10-27": "Stefania Preiata"
   }
 }
