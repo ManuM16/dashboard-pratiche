@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-28T16:40:30.914Z",
+  "exportedAt": "2026-10-28T16:41:08.005Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -1376,7 +1376,10 @@
       "5069077301|OGGIANO MASSIMILIANO|16496.4|2026-10-27": "Antonella Sanna",
       "5067521301|FRONTEDDU RICCARDO|35787|2026-10-27": "Stefania Preiata",
       "4953309301|FOIS PIERA|6365.04|2026-10-27": "Francesca Pipia",
-      "null|SULIS MAURIZIO|28953.26|2026-10-27": "Monica Caocci"
+      "null|SULIS MAURIZIO|28953.26|2026-10-27": "Monica Caocci",
+      "5064784301|MENDOZA CHERYL|3042|2026-10-28": "Carlo Zamuner",
+      "5066165301|DRAHANCHUK OKSANA|10339|2026-10-28": "Valeria Muscas",
+      "5066252301|CROSARA FEDERICO|3000|2026-10-28": "Valentina Corsini"
     },
     "comm_assign_range_2023-01-05__2026-10-22": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -3562,6 +3565,9 @@
     "5069077301|OGGIANO MASSIMILIANO|16496.4|2026-10-27": "Antonella Sanna",
     "5067521301|FRONTEDDU RICCARDO|35787|2026-10-27": "Stefania Preiata",
     "4953309301|FOIS PIERA|6365.04|2026-10-27": "Francesca Pipia",
-    "null|SULIS MAURIZIO|28953.26|2026-10-27": "Monica Caocci"
+    "null|SULIS MAURIZIO|28953.26|2026-10-27": "Monica Caocci",
+    "5064784301|MENDOZA CHERYL|3042|2026-10-28": "Carlo Zamuner",
+    "5066165301|DRAHANCHUK OKSANA|10339|2026-10-28": "Valeria Muscas",
+    "5066252301|CROSARA FEDERICO|3000|2026-10-28": "Valentina Corsini"
   }
 }
