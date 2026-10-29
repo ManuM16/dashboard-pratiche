@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Pratiche Lavorate — 2025 / 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
@@ -355,6 +355,63 @@ tr:hover td{background:var(--surface3)}
 .prod-lbl{font-size:11px;color:var(--ink3);margin-bottom:4px;font-weight:500}
 .prod-seg{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
 .ktab-hide{display:none!important}
+#comm-kpi-section{--an-blue:#2C2C31;--an-ink:#18181A;--an-soft:#ECEBE7;--an-ok:#11743b;--an-bad:#b3261e;font-family:'Source Sans 3','Outfit',sans-serif}
+#comm-kpi-section h3{font-family:'Source Sans 3','Syne',sans-serif!important;color:var(--ink)!important;font-size:1.2rem!important;font-weight:700!important}
+#comm-kpi-section .k-note{font-size:13px;color:var(--ink2)}
+#obj-results{display:none!important}
+#comm-kpi-section .prod-h4,#comm-kpi-section .k-gloss summary{color:var(--ink)!important}
+.an-band{background:var(--an-blue);color:#fff;padding:18px 22px 16px}
+.an-band-top{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between}
+.an-title{font-size:1.6rem;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+.an-sub{color:#cfcfd4;font-size:.95rem;margin-top:3px}
+.an-actions{display:flex;gap:6px;flex-wrap:wrap}
+.an-actions button{font:inherit;font-weight:600;font-size:.85rem;border-radius:4px;padding:6px 12px;cursor:pointer;border:1px solid rgba(255,255,255,.6);background:transparent;color:#fff}
+.an-actions button.pri{background:#fff;color:var(--an-blue);border-color:#fff}
+.an-ctx{margin-top:10px;font-size:.92rem;color:#d9d9dd;line-height:1.5}
+.an-ctx b{color:#fff}
+.an-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:14px 16px 0;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.an-kpi{padding:14px 18px;border-left:1px solid var(--border)}
+.an-kpi:first-child{border-left:0}
+.an-kpi .v{font-size:1.7rem;font-weight:700;color:var(--an-ink);line-height:1.1}
+.an-kpi .l{font-size:.9rem;color:var(--ink2);margin-top:3px;font-weight:600}
+.an-kpi .h{font-size:.82rem;color:var(--ink3);margin-top:3px;line-height:1.45}
+.an-kpiscope{margin:12px 16px 0;font-size:.85rem;color:var(--ink3)}
+.an-kpiscope b{color:var(--ink)}
+.an-passo{padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface)}
+.an-hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:12px 0}
+.an-hcard{border:1px solid var(--border);border-top:4px solid var(--an-blue);border-radius:8px;padding:18px 22px;background:var(--surface)}
+.an-hcard .big{font-size:3rem;font-weight:700;line-height:1;color:var(--an-ink);letter-spacing:-.02em}
+.an-hcard .lbl{color:var(--ink2);margin-top:4px;font-size:.92rem}
+.an-hcard .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.an-hcard .dv{font-size:1.55rem;font-weight:700;line-height:1.1;color:var(--an-ink)}
+.an-hcard .dv.bad{color:var(--an-bad)}
+.an-track{position:relative;height:12px;background:var(--an-soft);border-radius:6px;margin:14px 0 4px}
+.an-track i{display:block;height:100%;background:var(--an-blue);border-radius:6px}
+.an-track b{position:absolute;top:-5px;width:2px;height:22px;background:var(--ink)}
+.an-track-l{font-size:.8rem;color:var(--ink3)}
+.an-chip{display:inline-block;font-weight:700;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;padding:2px 9px;border-radius:3px;margin-bottom:8px}
+.an-chip.g{background:#dff3e6;color:#11743b}.an-chip.y{background:#fff4c7;color:#8a6100}.an-chip.r{background:#fde3e1;color:#b3261e}.an-chip.n{background:var(--an-soft);color:var(--an-ink)}
+.an-leg{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+.an-leg span{font-size:.85rem;padding:3px 10px;border-radius:4px}
+.an-leg .g{background:#dff3e6;color:#11743b}.an-leg .y{background:#fff4c7;color:#8a6100}.an-leg .r{background:#fde3e1;color:#b3261e}
+.an-t{width:100%;border-collapse:collapse;font-size:.95rem}
+.an-t th{padding:8px 10px;text-align:right;font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3);border-bottom:1px solid var(--border);white-space:nowrap}
+.an-t th:first-child,.an-t td:first-child{text-align:left}
+.an-t td{padding:9px 10px;text-align:right;border-top:1px solid var(--border);white-space:nowrap}
+.an-t tr.tot td{font-weight:700;border-top:2px solid var(--ink);background:var(--an-soft)}
+.an-t td.g{background:#dff3e6;color:#11743b;font-weight:700}.an-t td.y{background:#fff4c7;color:#8a6100;font-weight:700}.an-t td.r{background:#fde3e1;color:#b3261e;font-weight:700}
+.an-t .neg{color:var(--an-bad)}.an-t .pos{color:var(--an-ok)}
+.an-mini{display:inline-block;width:70px;height:9px;background:var(--an-soft);border-radius:5px;vertical-align:middle;margin-right:8px;overflow:hidden}
+.an-mini i{display:block;height:100%;background:var(--an-blue)}
+.an-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:16px}
+.an-card{border:1px solid var(--border);border-radius:8px;padding:14px 16px;background:var(--surface)}
+.an-card .nm{font-weight:700;font-size:1.05rem;color:var(--an-ink)}
+.an-card .big{font-size:1.9rem;font-weight:700;line-height:1.1;color:var(--an-bad)}
+.an-card .big.ok{color:var(--an-ok)}
+.an-card dl{display:grid;grid-template-columns:1fr auto;gap:3px 10px;margin:10px 0 8px;font-size:.88rem}
+.an-card dt{color:var(--ink2)}.an-card dd{margin:0;font-weight:700;text-align:right}
+.an-card .ft{font-size:.82rem;color:var(--ink3);border-top:1px solid var(--border);padding-top:7px}
+@media print{.sidebar,.topbar,.an-actions,#kt-intro{display:none!important}.main{margin-left:0!important}#comm-kpi-section{zoom:1!important}.an-band,.an-chip,.an-t td,.an-leg span{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 body[data-cview="assegna"] #comm-kpi-section{display:none!important}
 body[data-cview="fil"] #comm-main-grid,body[data-cview="com"] #comm-main-grid,
 body[data-cview="fil"] .comm-header,body[data-cview="com"] .comm-header,
@@ -424,7 +481,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.90.1 · 26/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.91.1 · 29/10/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -786,7 +843,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.90.1 · 26/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.91.1 · 29/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -1454,6 +1511,13 @@ body.guest-mode .comm-sel{
 
         <!-- KPI section — full width, sotto il grid a 2 colonne -->
         <div class="comm-kpi-section" id="comm-kpi-section" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:14px">
+          <div class="an-band">
+            <div class="an-band-top">
+              <div><div class="an-title" id="an-title">Analisi Filiali</div><div class="an-sub" id="an-sub"></div></div>
+              <div class="an-actions"><button onclick="anZoom(-1)" title="Riduci il testo">A−</button><button onclick="anZoom(1)" title="Ingrandisci il testo">A+</button><button class="pri" onclick="window.print()" title="Stampa o salva in PDF">Esporta PDF</button></div>
+            </div>
+            <div class="an-ctx" id="an-ctx"></div>
+          </div>
           <!-- Top control bar (full width) -->
           <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border)">
             <!-- Periodo — visual month picker -->
@@ -1479,12 +1543,14 @@ body.guest-mode .comm-sel{
             </div>
           </div>
           <div class="kt-intro" id="kt-intro"></div>
+          <div id="an-kpiscope" class="an-kpiscope" data-kt="fil com"></div>
+          <div id="an-kpis" class="an-kpis" data-kt="fil com"></div>
           <!-- OBIETTIVI — banda orizzontale sopra tutto -->
           <div id="obj-widget" data-kt="fil" style="border-bottom:1px solid var(--border);padding:16px 20px;box-sizing:border-box;background:var(--surface2)">
             <div class="k-note" style="margin-bottom:12px">Scrivi l'obiettivo di erogato (annuale, del trimestre scelto, oppure mese per mese). Sotto compaiono le schede con l'erogato <b>già raggiunto da tutte le filiali</b> nell'<b>anno scelto in «Periodo»</b> (se non scegli un mese, l'anno corrente): la percentuale è raggiunto ÷ obiettivo, la barra è <span style="color:var(--green);font-weight:600">verde</span> da 100%, <span style="color:var(--amber);font-weight:600">gialla</span> da 70%, <span style="color:var(--red);font-weight:600">rossa</span> sotto il 70%. Il filtro Filiale non si applica.</div>
             <!-- Riga controlli -->
             <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px">
-              <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink2);white-space:nowrap">🎯 Obiettivi</span>
+              <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink);white-space:nowrap">🎯 Obiettivi</span>
               <!-- Input annuale -->
               <div style="display:flex;align-items:center;gap:6px">
                 <label style="font-size:11px;font-weight:600;color:var(--ink3);white-space:nowrap">Obiettivo annuale</label>
@@ -1530,6 +1596,9 @@ body.guest-mode .comm-sel{
             <!-- Card risultati in riga -->
             <div id="obj-results"></div>
           </div>
+
+          <!-- RISPETTO AL PASSO -->
+          <div id="an-passo" class="an-passo" data-kt="fil"></div>
 
           <!-- KPI + YoY -->
           <div data-kt="fil com" style="padding:14px 16px;box-sizing:border-box">
@@ -4056,7 +4125,13 @@ calcPolizza();
     }
   }
 
+  const _LS='obj_targets_v1';
+  function _persist(){try{localStorage.setItem(_LS,JSON.stringify({a:_objAnnuale,q:_objQTotal,d:_objData,f:_objDataFil}));}catch(e){}}
+  function _restore(){try{const s=JSON.parse(localStorage.getItem(_LS)||'null'); if(!s) return; _objAnnuale=s.a||0; Object.assign(_objQTotal,s.q||{}); Object.assign(_objData,s.d||{}); Object.assign(_objDataFil,s.f||{});}catch(e){}}
+  window.objGetTargets=function(){return {annuale:_objAnnuale,qTotal:_objQTotal,data:_objData,fil:_objDataFil};};
   window.objCalc = function(){
+    _persist();
+    if(window.anPasso) setTimeout(window.anPasso,0);
     objCheckMismatch();
     const res = document.getElementById('obj-results');
     if(!res) return;
@@ -4143,11 +4218,13 @@ calcPolizza();
   window.objSaveInput = objSaveInput;
 
   document.addEventListener('DOMContentLoaded', function(){
+    _restore();
     _initQTabs();
     objRenderInputs();
     objCalc();
   });
   if(document.readyState !== 'loading'){
+    _restore();
     _initQTabs();
     objRenderInputs();
     objCalc();
@@ -5513,6 +5590,7 @@ calcPolizza();
           ${theadFil}
           <tbody>${finRowsArr.join('')}${totAll}</tbody>
         </table></div>`;
+    if(window.anRefresh) anRefresh();
     if(window.kSetTab) kSetTab(window.__ktab||'fil');
   }
 
@@ -5885,6 +5963,161 @@ calcPolizza();
   };
 
   /* ---- KPI generation ---- */
+  /* ════════ v14.91 — contesto, KPI di periodo, rispetto al passo ════════ */
+  const _AN_MN=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+  const AN={per:'m'};
+  const anE=v=>'€ '+Math.round(v).toLocaleString('it-IT');
+  const anS=v=>(v>=0?'+':'−')+'€ '+Math.abs(Math.round(v)).toLocaleString('it-IT');
+  const anP=v=>(Math.round(v*10)/10).toLocaleString('it-IT',{minimumFractionDigits:0,maximumFractionDigits:1})+'%';
+  const anRefDate=()=>{let m='';commPratiche.forEach(r=>{if(r.__dateStr&&r.__dateStr>m) m=r.__dateStr;});return m;};
+  const anSum=l=>l.reduce((a,r)=>a+(r.importo||0),0);
+
+  window.anZoom=function(d){
+    let z=1; try{z=parseFloat(localStorage.getItem('an_zoom'))||1;}catch(e){}
+    z=Math.min(1.4,Math.max(0.9,Math.round((z+d*0.08)*100)/100));
+    try{localStorage.setItem('an_zoom',String(z));}catch(e){}
+    const s=document.getElementById('comm-kpi-section'); if(s) s.style.zoom=z;
+  };
+  (function(){let z=1;try{z=parseFloat(localStorage.getItem('an_zoom'))||1;}catch(e){} const s=document.getElementById('comm-kpi-section'); if(s&&z!==1) s.style.zoom=z;})();
+
+  function anCtx(){
+    const el=document.getElementById('an-ctx'); if(!el) return;
+    const ref=anRefDate(); if(!ref){el.textContent='';return;}
+    const Y=ref.slice(0,4), q=Math.ceil(+ref.slice(5,7)/3);
+    const yr=commPratiche.filter(r=>r.__dateStr&&r.__dateStr.startsWith(Y));
+    const qr=yr.filter(r=>Math.ceil(+r.__dateStr.slice(5,7)/3)===q);
+    const d=new Date(ref+'T00:00:00Z').toLocaleDateString('it-IT',{weekday:'short',day:'2-digit',month:'2-digit',timeZone:'UTC'});
+    const f=document.getElementById('comm-upload-filename'); const fn=f?(f.textContent||'').replace(/[^\w.\-() ]/g,'').trim():'';
+    el.innerHTML=`<b>Dati aggiornati al ${d}</b> · finanziato da gennaio ${Y}: <b>${anE(anSum(yr))}</b>, di cui Q${q}: <b>${anE(anSum(qr))}</b>${fn?` · file ${esc(fn)}`:''}`;
+  }
+
+  function anKpis(){
+    const box=document.getElementById('an-kpis'), sc=document.getElementById('an-kpiscope'); if(!box) return;
+    if(!commPratiche.length){box.innerHTML='';if(sc) sc.innerHTML='';return;}
+    const sel=window._kpiSelectedMonth||'';
+    const view=(typeof commKpiView!=='undefined')?commKpiView:'all';
+    const flt=r=>view==='all'||r.finKey===view;
+    const cur=commPratiche.filter(r=>flt(r)&&(!sel||(r.__dateStr||'').startsWith(sel)));
+    let pm=null,py=null,pmL='',pyL='';
+    if(sel){
+      const [y,m]=sel.split('-').map(Number);
+      const pmS=`${m===1?y-1:y}-${String(m===1?12:m-1).padStart(2,'0')}`, pyS=`${y-1}-${String(m).padStart(2,'0')}`;
+      const a=commPratiche.filter(r=>flt(r)&&(r.__dateStr||'').startsWith(pmS)), b=commPratiche.filter(r=>flt(r)&&(r.__dateStr||'').startsWith(pyS));
+      pm=a.length?commCalcStats(a):null; py=b.length?commCalcStats(b):null;
+      pmL=_AN_MN[(m+10)%12].toLowerCase(); pyL=`${_AN_MN[m-1].toLowerCase()} ${y-1}`;
+    }
+    const c=commCalcStats(cur);
+    const cell=(v,l,key,hint)=>{
+      const line=sel?`<div class="h">${commArrow(commYoyDelta(c,pm,key))} vs ${pmL}<br>${commArrow(commYoyDelta(c,py,key))} vs ${pyL}</div>`:`<div class="h">${hint}</div>`;
+      return `<div class="an-kpi"><div class="v">${v}</div><div class="l">${l}</div>${line}</div>`;
+    };
+    box.innerHTML=
+      cell(anE(c.importoTot),'Erogato','importoTot','somma degli importi finanziati')+
+      cell(c.n,'Pratiche','n','pratiche erogate')+
+      cell(c.n?anE(c.importoTot/c.n):'—','Ticket medio','ticketMedio','erogato ÷ pratiche')+
+      cell(c.penPol+'%','Penetrazione polizze','penPol','polizze ÷ prestiti personali')+
+      cell(c.tanMedio!=null?c.tanMedio.toFixed(2).replace('.',',')+'%':'—','TAN medio','tanMedio','media dei tassi delle pratiche');
+    const vl=view==='all'?'Tutte le filiali':(FINANCIAL_MAP[view]?FINANCIAL_MAP[view].label:view);
+    let pl='Tutto il periodo caricato'; if(sel){const [y,m]=sel.split('-').map(Number); pl=_AN_MN[m-1]+' '+y;}
+    if(sc) sc.innerHTML=`In evidenza: <b>${pl}</b> · <b>${vl}</b>. ${sel?'Le frecce confrontano con il mese precedente e con lo stesso mese dell\'anno scorso.':'Scegli un mese in «Periodo» per vedere i confronti.'}`;
+  }
+
+  window.anSetPer=function(p){AN.per=p;anPasso();};
+  function anPeriod(){
+    const ref=anRefDate(); if(!ref) return null;
+    const sel=window._kpiSelectedMonth||''; const anchor=sel||ref.slice(0,7);
+    const Y=+anchor.slice(0,4), M=+anchor.slice(5,7)-1;
+    let m0,m1,label;
+    if(AN.per==='m'){m0=m1=M;label=_AN_MN[M]+' '+Y;}
+    else if(AN.per==='q'){const q=Math.floor(M/3);m0=q*3;m1=q*3+2;label='Trimestre Q'+(q+1)+' '+Y;}
+    else{m0=0;m1=11;label='Anno '+Y;}
+    const start=Date.UTC(Y,m0,1); let end=Date.UTC(Y,m1+1,0);
+    if(m1===11) end=Math.min(end,Date.UTC(Y,11,24));
+    return {Y,m0,m1,label,start,end,ref,refMs:_utc(ref)};
+  }
+  function anObj(T,m0,m1,fk){
+    const Qs=['Q1','Q2','Q3','Q4']; let sum=0;
+    for(let mi=m0;mi<=m1;mi++){const q=Qs[Math.floor(mi/3)]; sum+=fk?((((T.fil[q]||{})[fk])||{})[mi]||0):((T.data[q]||{})[mi]||0);}
+    if(!fk){
+      if(m1-m0===2&&m0%3===0&&!sum) sum=T.qTotal[Qs[m0/3]]||0;
+      if(m0===0&&m1===11){
+        let s=0; Qs.forEach((q,qi)=>{let qs=0; for(let mi=qi*3;mi<qi*3+3;mi++) qs+=(T.data[q]||{})[mi]||0; s+=qs||T.qTotal[q]||0;});
+        sum=T.annuale||s;
+      }
+    }
+    return sum;
+  }
+  function anPasso(){
+    const box=document.getElementById('an-passo'); if(!box) return;
+    const T=window.objGetTargets?objGetTargets():null;
+    const P=commPratiche.length?anPeriod():null;
+    const head=`<h3 style="margin:0 0 4px">⏱ Avanzamento rispetto agli obiettivi</h3>`;
+    if(!T||!P){box.innerHTML=head+'<div class="k-note">Carica i dati per vedere l\'avanzamento.</div>';return;}
+    const seg=`<div class="prod-seg" style="display:inline-flex;margin:4px 0 10px">${[['m','Mese'],['q','Trimestre'],['a','Anno']].map(x=>`<button class="dmode-btn${AN.per===x[0]?' dmode-active':''}" onclick="anSetPer('${x[0]}')">${x[1]}</button>`).join('')}</div>`;
+    const view=(typeof commKpiView!=='undefined')?commKpiView:'all';
+    const fks=Object.keys(FINANCIAL_MAP);
+    const rows=commPratiche.filter(r=>r.__dateStr&&_utc(r.__dateStr)>=P.start&&_utc(r.__dateStr)<=P.end);
+    const finBy={}; rows.forEach(r=>{finBy[r.finKey]=(finBy[r.finKey]||0)+(r.importo||0);});
+    const finTot=anSum(rows);
+    const objBy={}; let objSumFil=0;
+    fks.forEach(k=>{objBy[k]=anObj(T,P.m0,P.m1,k); objSumFil+=objBy[k];});
+    let objTot=anObj(T,P.m0,P.m1,null)||objSumFil;
+    const note=`<div class="k-note">Confronta quanto è stato finanziato con quanto sarebbe dovuto essere a oggi per essere in linea con l'obiettivo. <b>Atteso a oggi</b> = obiettivo ÷ giorni lavorativi del periodo × giorni lavorativi già trascorsi (fino all'ultimo dato caricato). <b>Rispetto al passo</b> = finanziato ÷ atteso: da 100% in su sei in linea o avanti, sotto sei indietro. <b>Da erogare al giorno</b> = quanto manca ÷ giorni lavorativi rimasti. Giorni lavorativi: lunedì–venerdì senza i festivi italiani; a dicembre si conta fino al 24. Gli obiettivi sono quelli inseriti in «🎯 Obiettivi» qui sopra.</div>`;
+    if(!(objTot>0)){
+      box.innerHTML=head+note+seg+`<div class="k-note" style="background:var(--surface2);border:1px dashed var(--border2);border-radius:10px;padding:10px 14px">Per <b>${P.label}</b> non c'è ancora un obiettivo. Inseriscilo in «🎯 Obiettivi» (annuale, del trimestre o mese per mese) e qui comparirà l'avanzamento.</div>`;
+      return;
+    }
+    const wdTot=_workdays(P.start,P.end,true);
+    const upto=Math.min(P.refMs,P.end);
+    const wdEl=P.refMs<P.start?0:_workdays(P.start,upto,true);
+    const wdRem=Math.max(0,wdTot-wdEl);
+    const calc=(obj,fin)=>{
+      const att=wdTot?obj*wdEl/wdTot:0, manc=Math.max(0,obj-fin);
+      return {obj,fin,pct:obj?fin/obj*100:0,manc,att,scost:fin-att,passo:att>0?fin/att*100:null,perDay:(manc>0&&wdRem>0)?manc/wdRem:null};
+    };
+    const cls=p=>p==null?'':(p>=100?'g':(p>=85?'y':'r'));
+    const lbl=(c)=>c.manc===0?['n','Obiettivo raggiunto']:(c.passo==null?['n','Non ancora iniziato']:(c.passo>=100?['g','In linea']:(c.passo>=85?['y','Poco indietro']:['r','Indietro'])));
+    const T0=calc(objTot,finTot), l0=lbl(T0);
+    const dnote=`${wdEl} di ${wdTot} giorni lavorativi trascorsi${wdRem?`, ${wdRem} rimast${wdRem===1?'o':'i'}`:' · periodo concluso'} · dati fino al ${new Date(P.ref+'T00:00:00Z').toLocaleDateString('it-IT',{weekday:'short',day:'2-digit',month:'2-digit',timeZone:'UTC'})}`;
+    const hero=`<div class="an-hero">
+      <div class="an-hcard"><span class="an-chip ${l0[0]}">${l0[1]}</span>
+        <div style="color:var(--ink2);font-size:.92rem">Obiettivo <b style="color:var(--ink)">${anE(T0.obj)}</b> · ${P.label}</div>
+        <div class="big" style="margin-top:10px">${anP(T0.pct)}</div><div class="lbl">raggiungimento · finanziato ${anE(T0.fin)}</div>
+        <div class="an-track"><i style="width:${Math.min(100,T0.pct)}%"></i><b style="left:${Math.min(100,T0.obj?T0.att/T0.obj*100:0)}%"></b></div>
+        <div class="an-track-l">La linea nera è dove dovresti essere a oggi (${anE(T0.att)})</div></div>
+      <div class="an-hcard"><div class="two">
+        <div><div class="dv ${T0.manc>0?'bad':''}">${anE(T0.manc)}</div><div class="lbl">mancante all'obiettivo</div></div>
+        <div><div class="dv">${T0.perDay!=null?anE(T0.perDay):'—'}</div><div class="lbl">da erogare al giorno</div></div>
+        <div><div class="dv ${T0.scost<0?'bad':''}">${anS(T0.scost)}</div><div class="lbl">rispetto all'atteso a oggi</div></div>
+        <div><div class="dv">${T0.passo!=null?anP(T0.passo):'—'}</div><div class="lbl">rispetto al passo</div></div></div>
+        <div class="an-track-l" style="margin-top:12px">${dnote}</div></div>
+    </div>`;
+    const leg=`<div class="an-leg"><span class="g">Verde: in linea o avanti rispetto all'atteso a oggi</span><span class="y">Giallo: tra l'85% e il 100% dell'atteso, c'è ancora margine</span><span class="r">Rosso: sotto l'85% dell'atteso, serve accelerare</span></div>`;
+    const showF=fks.filter(k=>objBy[k]>0&&(view==='all'||view===k));
+    let table='',cards='';
+    if(showF.length){
+      const C=showF.map(k=>({k,c:calc(objBy[k],finBy[k]||0)}));
+      const tr=(name,c,tot)=>`<tr${tot?' class="tot"':''}><td>${name}</td><td>${anE(c.obj)}</td><td>${anE(c.fin)}</td>
+        <td><span class="an-mini"><i style="width:${Math.min(100,c.pct)}%"></i></span>${anP(c.pct)}</td><td>${anE(c.manc)}</td><td>${anE(c.att)}</td>
+        <td class="${c.scost<0?'neg':'pos'}">${anS(c.scost)}</td><td class="${cls(c.passo)}">${c.passo!=null?anP(c.passo):'—'}</td><td>${c.perDay!=null?anE(c.perDay):'—'}</td></tr>`;
+      table=`<div style="overflow-x:auto"><table class="an-t"><thead><tr><th>Filiale</th><th>Obiettivo</th><th>Finanziato</th><th>Avanzamento</th><th>Mancante</th><th>Atteso a oggi</th><th>Scostamento</th><th>Rispetto al passo</th><th>Da erogare al giorno</th></tr></thead><tbody>
+        ${C.map(x=>tr(esc(FINANCIAL_MAP[x.k].label),x.c,false)).join('')}${view==='all'?tr('TOTALE',T0,true):''}</tbody></table></div>`;
+      cards=`<div class="an-cards">${C.map(x=>{
+        const c=x.c,l=lbl(c);
+        const ahead=c.scost>=0;
+        return `<div class="an-card"><div class="nm">${esc(FINANCIAL_MAP[x.k].label)}</div><span class="an-chip ${l[0]}" style="margin-top:6px">${l[1]}</span>
+          ${c.manc>0?`<div class="big">${anE(c.manc)}</div><div class="lbl" style="font-size:.85rem;color:var(--ink2)">mancano all'obiettivo</div>`:`<div class="big ok">Fatto</div><div class="lbl" style="font-size:.85rem;color:var(--ink2)">finanziato ${anE(c.fin)} su ${anE(c.obj)}</div>`}
+          <dl><dt>Finanziato</dt><dd>${anE(c.fin)}</dd><dt>Obiettivo</dt><dd>${anE(c.obj)}</dd><dt>A oggi dovevi essere a</dt><dd>${anE(c.att)}</dd>
+          <dt>${ahead?'Sei avanti di':'Sei indietro di'}</dt><dd style="color:${ahead?'var(--an-ok)':'var(--an-bad)'}">${anE(Math.abs(c.scost))}</dd></dl>
+          <div class="ft">${c.perDay!=null?`Da oggi servono <b>${anE(c.perDay)}</b> al giorno · `:''}${c.passo!=null?anP(c.passo)+' del passo':'—'} · ${anP(c.pct)} dell'obiettivo</div></div>`;}).join('')}</div>`;
+    } else {
+      table=`<div class="k-note">Per vedere il passo di ogni filiale inserisci gli obiettivi per filiale («Per filiale» dentro 🎯 Obiettivi).</div>`;
+    }
+    box.innerHTML=head+note+seg+hero+leg+table+cards;
+  }
+  window.anPasso=anPasso;
+  window.anRefresh=function(){try{anCtx();anKpis();anPasso();}catch(e){console.warn('[an]',e.message);}};
+
   window.commHasData=function(){return !!(commPratiche&&commPratiche.length);};
   window.commGenerateKPI=function(){
     window.__kGen=true;
@@ -6932,6 +7165,8 @@ calcPolizza();
     sec.querySelectorAll('[data-kt]').forEach(function(el){ el.classList.toggle('ktab-hide', (el.getAttribute('data-kt')||'').split(' ').indexOf(t)<0); });
     sec.querySelectorAll('[data-kt-btn]').forEach(function(b){ b.classList.toggle('dmode-active', b.getAttribute('data-kt-btn')===t); });
     var i=document.getElementById('kt-intro'); if(i) i.innerHTML=INTRO[t]||'';
+    var a1=document.getElementById('an-title'); if(a1) a1.textContent={fil:'Analisi Filiali',com:'Analisi Commerciali'}[t]||'';
+    var a2=document.getElementById('an-sub'); if(a2) a2.textContent={fil:'Erogato, obiettivi e produttività per filiale',com:'Erogato e produttività per singolo commerciale'}[t]||'';
     window.__ktab=t;
   };
   kSetTab('fil');
