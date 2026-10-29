@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-29T16:22:34.617Z",
+  "exportedAt": "2026-10-29T16:22:38.199Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-13": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -2707,7 +2707,8 @@
       "null|BARONE MILKO|20065.33|2026-10-29": "Monica Caocci",
       "5078023301|SHESTAKOVYCH MYKOLA|3000|2026-10-29": "Valeria Del Vecchio",
       "5077703301|SERRA ADALGISA|7561.36|2026-10-29": "Carlo Zamuner",
-      "5077278301|MARKOWSKA ELZBIETA ROZALIA|20000|2026-10-29": "Jonathan Zampa"
+      "5077278301|MARKOWSKA ELZBIETA ROZALIA|20000|2026-10-29": "Jonathan Zampa",
+      "5074226301|SOLINAS RICCARDO|29283|2026-10-29": "Manuel Manca"
     },
     "comm_assign_range_2023-01-05__2026-09-30": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -3889,6 +3890,7 @@
     "null|BARONE MILKO|20065.33|2026-10-29": "Monica Caocci",
     "5078023301|SHESTAKOVYCH MYKOLA|3000|2026-10-29": "Valeria Del Vecchio",
     "5077703301|SERRA ADALGISA|7561.36|2026-10-29": "Carlo Zamuner",
-    "5077278301|MARKOWSKA ELZBIETA ROZALIA|20000|2026-10-29": "Jonathan Zampa"
+    "5077278301|MARKOWSKA ELZBIETA ROZALIA|20000|2026-10-29": "Jonathan Zampa",
+    "5074226301|SOLINAS RICCARDO|29283|2026-10-29": "Manuel Manca"
   }
 }
