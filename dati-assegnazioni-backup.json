@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-10-30T16:17:07.907Z",
+  "exportedAt": "2026-10-30T16:17:52.163Z",
   "assignments": {
     "comm_assign_range_2023-01-05__2026-10-22": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -3689,7 +3689,8 @@
       "null|PIANA VANESSA|27268.07|2026-10-29": "Francesca Pipia",
       "5079772301|TASSI DANIELA|18000|2026-10-30": "Annamaria Esposito",
       "5078466301|SPINA MATTEO|29500|2026-10-30": "Martina Mascia",
-      "5069507301|NIOI EFISIO THOMAS|47711|2026-10-30": "Carlo Zamuner"
+      "5069507301|NIOI EFISIO THOMAS|47711|2026-10-30": "Carlo Zamuner",
+      "5079836301|PISANO ELISABETTA|26031|2026-10-30": "Noemi Ricciu"
     },
     "comm_assign_range_2023-01-05__2026-10-09": {
       "5017162301|PASTORE ROBERTO|22345.4|2026-09-24": "Carlo Zamuner",
@@ -4224,6 +4225,7 @@
     "null|PIANA VANESSA|27268.07|2026-10-29": "Francesca Pipia",
     "5079772301|TASSI DANIELA|18000|2026-10-30": "Annamaria Esposito",
     "5078466301|SPINA MATTEO|29500|2026-10-30": "Martina Mascia",
-    "5069507301|NIOI EFISIO THOMAS|47711|2026-10-30": "Carlo Zamuner"
+    "5069507301|NIOI EFISIO THOMAS|47711|2026-10-30": "Carlo Zamuner",
+    "5079836301|PISANO ELISABETTA|26031|2026-10-30": "Noemi Ricciu"
   }
 }
