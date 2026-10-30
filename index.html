@@ -355,6 +355,7 @@ tr:hover td{background:var(--surface3)}
 .prod-lbl{font-size:11px;color:var(--ink3);margin-bottom:4px;font-weight:500}
 .prod-seg{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
 .ktab-hide{display:none!important}
+body[data-cview="fil"] .main>.topbar,body[data-cview="com"] .main>.topbar{display:none!important}
 #comm-kpi-section{--an-blue:#2C2C31;--an-ink:#18181A;--an-soft:#ECEBE7;--an-ok:#11743b;--an-bad:#b3261e;font-family:'Source Sans 3','Outfit',sans-serif}
 #comm-kpi-section h3{font-family:'Source Sans 3','Syne',sans-serif!important;color:var(--ink)!important;font-size:1.2rem!important;font-weight:700!important}
 #comm-kpi-section .k-note{font-size:13px;color:var(--ink2)}
@@ -369,7 +370,7 @@ tr:hover td{background:var(--surface3)}
 .an-actions button.pri{background:#fff;color:var(--an-blue);border-color:#fff}
 .an-ctx{margin-top:10px;font-size:.92rem;color:#d9d9dd;line-height:1.5}
 .an-ctx b{color:#fff}
-.an-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:14px 16px 0;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.an-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin:14px 16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
 .an-kpi{padding:14px 18px;border-left:1px solid var(--border)}
 .an-kpi:first-child{border-left:0}
 .an-kpi .v{font-size:1.7rem;font-weight:700;color:var(--an-ink);line-height:1.1}
@@ -481,7 +482,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.91.2 · 30/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.92.2 · 30/10/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -843,7 +844,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.91.2 · 30/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.92.2 · 30/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -1547,16 +1548,17 @@ body.guest-mode .comm-sel{
           <div id="an-kpis" class="an-kpis" data-kt="fil com"></div>
           <!-- OBIETTIVI — banda orizzontale sopra tutto -->
           <div id="obj-widget" data-kt="fil" style="border-bottom:1px solid var(--border);padding:16px 20px;box-sizing:border-box;background:var(--surface2)">
-            <div class="k-note" style="margin-bottom:12px">Scrivi l'obiettivo di erogato (annuale, del trimestre scelto, oppure mese per mese). Sotto compaiono le schede con l'erogato <b>già raggiunto da tutte le filiali</b> nell'<b>anno scelto in «Periodo»</b> (se non scegli un mese, l'anno corrente): la percentuale è raggiunto ÷ obiettivo, la barra è <span style="color:var(--green);font-weight:600">verde</span> da 100%, <span style="color:var(--amber);font-weight:600">gialla</span> da 70%, <span style="color:var(--red);font-weight:600">rossa</span> sotto il 70%. Il filtro Filiale non si applica.</div>
+            <div class="k-note" style="margin-bottom:12px">Scrivi l'obiettivo di erogato (annuale, del trimestre scelto, oppure mese per mese). Più sotto, in «Avanzamento rispetto agli obiettivi», trovi l'erogato <b>già raggiunto da tutte le filiali</b> nell'<b>anno scelto in «Periodo»</b> (se non scegli un mese, l'anno corrente): la percentuale è raggiunto ÷ obiettivo. Il filtro Filiale non si applica.</div>
             <!-- Riga controlli -->
             <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px">
               <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink);white-space:nowrap">🎯 Obiettivi</span>
+              <span id="obj-save-status" style="font-size:11px;color:var(--ink3);white-space:nowrap"></span>
               <!-- Input annuale -->
               <div style="display:flex;align-items:center;gap:6px">
                 <label style="font-size:11px;font-weight:600;color:var(--ink3);white-space:nowrap">Obiettivo annuale</label>
                 <input type="text" inputmode="decimal" id="obj-annual-total"
                   class="obj-month-input" style="width:140px;font-size:14px;font-weight:700"
-                  placeholder="es. 8.000.000"
+                  placeholder="es. 8.000.000,00"
                   oninput="objSetAnnuale(this.value)">
               </div>
               <!-- Separator -->
@@ -1573,7 +1575,7 @@ body.guest-mode .comm-sel{
                 <label style="font-size:11px;font-weight:600;color:var(--ink3);white-space:nowrap">Obiettivo trimestrale</label>
                 <input type="text" inputmode="decimal" id="obj-q-total"
                   class="obj-month-input" style="width:140px;font-size:14px;font-weight:700"
-                  placeholder="es. 2.000.000"
+                  placeholder="es. 2.000.000,00"
                   oninput="objSetQTotal(this.value)">
                 <button onclick="objRipartisciMesi()" style="padding:5px 10px;border:1px solid var(--border2);border-radius:7px;background:var(--surface);font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);white-space:nowrap;font-family:'Outfit',sans-serif" title="Ripartisci equamente sui 3 mesi">÷ mesi</button>
                 <span id="obj-q-mismatch" style="display:none;font-size:11px;font-weight:700;color:var(--amber);background:#fff7e6;border:1px solid var(--amber);border-radius:6px;padding:3px 9px;white-space:nowrap" title="La somma dei mesi non corrisponde all'obiettivo trimestrale">⚠ mesi ≠ Q</span>
@@ -2110,6 +2112,7 @@ const TITLES = {
   'commerciali':'Monitoraggio Commerciali'
 };
 function nav(id, btn){
+  document.body.removeAttribute('data-cview');
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('s-'+id).classList.add('active');
@@ -4055,14 +4058,14 @@ calcPolizza();
     // Livello 0: campo annuale
     const annInput = document.getElementById('obj-annual-total');
     if(annInput){
-      annInput.value = _objAnnuale ? _objAnnuale.toLocaleString('it-IT') : '';
+      annInput.value = _objAnnuale ? fe2(_objAnnuale) : '';
     }
 
     // Livello 1: campo Q totale
     const qtInput = document.getElementById('obj-q-total');
     if(qtInput){
       const stored = _objQTotal[_currentQ] || '';
-      qtInput.value = stored ? stored.toLocaleString('it-IT') : '';
+      qtInput.value = stored ? fe2(stored) : '';
     }
 
     // Livello 2: input per mese — colonnine orizzontali
@@ -4071,12 +4074,12 @@ calcPolizza();
       let html = '';
       for(const mi of months){
         const stored = (_objData[_currentQ]||{})[mi] || '';
-        const storedStr = stored ? stored.toLocaleString('it-IT') : '';
+        const storedStr = stored ? fe2(stored) : '';
         html += `<div style="display:flex;flex-direction:column;gap:3px">
           <div style="font-size:10px;color:var(--ink3);font-weight:700;text-transform:uppercase;letter-spacing:.4px">${MONTH_LABELS[mi]}</div>
           <input type="text" inputmode="decimal" class="obj-month-input" style="width:130px"
             data-q="${_currentQ}" data-mi="${mi}"
-            placeholder="0"
+            placeholder="0,00"
             value="${storedStr}"
             oninput="objSaveInput(this.dataset.q,+this.dataset.mi,null,this.value)">
         </div>`;
@@ -4096,10 +4099,10 @@ calcPolizza();
         html += `<div class="obj-fil-label">${FIL_LABELS[fk]}</div>`;
         for(const mi of months){
           const stored = ((_objDataFil[_currentQ]||{})[fk]||{})[mi] || '';
-          const storedStr = stored ? stored.toLocaleString('it-IT') : '';
+          const storedStr = stored ? fe2(stored) : '';
           html += `<input type="text" inputmode="decimal" class="obj-fil-input"
             data-q="${_currentQ}" data-mi="${mi}" data-fk="${fk}"
-            placeholder="0" value="${storedStr}"
+            placeholder="0,00" value="${storedStr}"
             oninput="objSaveInput(this.dataset.q,+this.dataset.mi,this.dataset.fk,this.value)">`;
         }
       }
@@ -4126,9 +4129,58 @@ calcPolizza();
     }
   }
 
-  const _LS='obj_targets_v1';
-  function _persist(){try{localStorage.setItem(_LS,JSON.stringify({a:_objAnnuale,q:_objQTotal,d:_objData,f:_objDataFil}));}catch(e){}}
-  function _restore(){try{const s=JSON.parse(localStorage.getItem(_LS)||'null'); if(!s) return; _objAnnuale=s.a||0; Object.assign(_objQTotal,s.q||{}); Object.assign(_objData,s.d||{}); Object.assign(_objDataFil,s.f||{});}catch(e){}}
+  const _LS='obj_targets_v1', GH_OBJ='dati-obiettivi.json';
+  let _ts=0, _last='', _ghTimer=null, _ghLoaded=false;
+  function _snap(){return JSON.stringify({a:_objAnnuale,q:_objQTotal,d:_objData,f:_objDataFil});}
+  function _body(){return {version:1,ts:_ts,a:_objAnnuale,q:_objQTotal,d:_objData,f:_objDataFil};}
+  function _status(t,title){const el=document.getElementById('obj-save-status'); if(el){el.textContent=t; el.title=title||'';}}
+  function _hasToken(){try{return !!localStorage.getItem('gh_pat');}catch(e){return false;}}
+  function _persist(){
+    const s=_snap(); if(s===_last) return;     // salva solo se è cambiato qualcosa
+    _last=s; _ts=Date.now();
+    try{localStorage.setItem(_LS,JSON.stringify(_body()));}catch(e){}
+    if(_hasToken()){ _status('⏳ Salvataggio…'); clearTimeout(_ghTimer); _ghTimer=setTimeout(_ghPush,1200); }
+    else _status('💾 Salvato su questo browser','Per salvare anche su GitHub e ritrovarli da altri dispositivi serve il collegamento GitHub (token), lo stesso usato per le assegnazioni.');
+  }
+  function _restore(){
+    try{const s=JSON.parse(localStorage.getItem(_LS)||'null'); if(s){ _objAnnuale=s.a||0; Object.assign(_objQTotal,s.q||{}); Object.assign(_objData,s.d||{}); Object.assign(_objDataFil,s.f||{}); _ts=s.ts||0; }}catch(e){}
+    _last=_snap();   // stato di partenza: non è una modifica dell'utente
+  }
+  const _GH_URL='https://api.github.com/repos/ManuM16/dashboard-pratiche/contents/'+GH_OBJ;
+  async function _ghPush(){
+    try{
+      const token=localStorage.getItem('gh_pat'); if(!token) return;
+      const hdr={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'};
+      let sha=null;
+      try{const r=await fetch(_GH_URL,{cache:'no-store',headers:hdr}); if(r.ok){const j=await r.json(); sha=j.sha||null;}}catch(e){}
+      const content=btoa(unescape(encodeURIComponent(JSON.stringify(_body(),null,2))));
+      const body={message:'Autosave obiettivi '+new Date().toISOString().slice(0,10),content}; if(sha) body.sha=sha;
+      const r=await fetch(_GH_URL,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},hdr),body:JSON.stringify(body)});
+      if(r.ok) _status('✓ Salvato su GitHub','Gli obiettivi sono salvati e si ritrovano da qualsiasi dispositivo.');
+      else _status('⚠ Salvato solo su questo browser','GitHub ha risposto '+r.status+'. Riprova più tardi.');
+    }catch(e){ _status('⚠ Salvato solo su questo browser','Salvataggio su GitHub non riuscito: '+e.message); }
+  }
+  function _applyRemote(d){
+    _objAnnuale=d.a||0;
+    [[_objQTotal,d.q],[_objData,d.d],[_objDataFil,d.f]].forEach(function(p){Object.keys(p[0]).forEach(function(k){delete p[0][k];}); Object.assign(p[0],p[1]||{});});
+    _ts=d.ts||0; _last=_snap();
+    try{localStorage.setItem(_LS,JSON.stringify(_body()));}catch(e){}
+    objRenderInputs(); objCalc();
+  }
+  async function _ghLoad(){
+    if(_ghLoaded) return; _ghLoaded=true;
+    try{
+      const token=localStorage.getItem('gh_pat'); if(!token) return;
+      const r=await fetch(_GH_URL,{cache:'no-store',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
+      if(r.status===404){ if(/[1-9]/.test(_last)) _ghPush(); return; }
+      if(!r.ok) return;
+      const j=await r.json(); const raw=(j.content||'').replace(/\n/g,'').trim(); if(!raw) return;
+      const d=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(raw),function(c){return c.charCodeAt(0);})));
+      if((d.ts||0)>_ts){ _applyRemote(d); _status('✓ Obiettivi caricati da GitHub'); }
+      else if(_ts>(d.ts||0)){ _ghPush(); }
+      else _status('✓ Salvato su GitHub');
+    }catch(e){ console.warn('[obj] GH load:',e.message); }
+  }
   window.objGetTargets=function(){return {annuale:_objAnnuale,qTotal:_objQTotal,data:_objData,fil:_objDataFil};};
   window.objCalc = function(){
     _persist();
@@ -4218,13 +4270,22 @@ calcPolizza();
 
   window.objSaveInput = objSaveInput;
 
+  // A fine digitazione il valore diventa «1.234.567,00»
+  document.addEventListener('focusout', function(e){
+    const t=e.target; if(!t||!t.matches) return;
+    if(t.matches('#obj-annual-total,#obj-q-total,.obj-month-input[data-q],.obj-fil-input')){
+      const v=pf(t.value); t.value = v>0 ? fe2(v) : '';
+    }
+  });
   document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(_ghLoad,600);
     _restore();
     _initQTabs();
     objRenderInputs();
     objCalc();
   });
   if(document.readyState !== 'loading'){
+    setTimeout(_ghLoad,600);
     _restore();
     _initQTabs();
     objRenderInputs();
