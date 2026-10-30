@@ -481,7 +481,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.91.1 · 29/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.91.2 · 30/10/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -843,7 +843,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.91.1 · 29/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.91.2 · 30/10/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -1521,12 +1521,12 @@ body.guest-mode .comm-sel{
           <!-- Top control bar (full width) -->
           <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border)">
             <!-- Periodo — visual month picker -->
-            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div id="an-period-wrap" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
               <span style="font-size:12px;font-weight:600;color:var(--ink2);white-space:nowrap">📅 Periodo:</span>
               <div id="kpi-period-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"></div>
             </div>
             <!-- Separator -->
-            <div style="width:1px;height:20px;background:var(--border2)"></div>
+            <div id="an-period-sep" style="width:1px;height:20px;background:var(--border2)"></div>
             <!-- Filiale tabs -->
             <div style="display:flex;align-items:center;gap:8px">
               <span style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px">Filiale:</span>
@@ -1618,8 +1618,9 @@ body.guest-mode .comm-sel{
             <div data-kt="fil">
               <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">📈 Confronto nel tempo</h3>
               <div id="comm-yoy-panel" style="display:none;margin-bottom:16px"></div>
+              <div id="an-period-slot" style="display:none;margin:4px 0 12px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px"></div>
               <h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin:0 0 4px;color:var(--ink)">🏢 Dettaglio per filiale</h3>
-              <div class="k-note">Una riga per filiale, più il totale. Segue Periodo e Filiale scelti in alto.</div>
+              <div class="k-note">Una riga per filiale, più il totale. Segue il mese scelto qui sopra e la Filiale scelta nella barra in alto.</div>
               <div id="comm-kpi-cards"></div>
             </div>
             <div data-kt="com">
@@ -7136,7 +7137,7 @@ calcPolizza();
 <script>
 (function(){
   var INTRO={
-    fil:'<b>Analisi Filiali.</b> Come vanno le filiali, singole e nel totale: obiettivi, confronto col passato, produttività e ticket/tasso medio per anno. <b>Periodo</b> e <b>Filiale</b> in alto guidano obiettivi, confronti e dettaglio; la produttività ha filtri propri; ticket e tasso per anno sono su tutto il file.',
+    fil:'<b>Analisi Filiali.</b> Come vanno le filiali, singole e nel totale: obiettivi, confronto col passato, produttività e ticket/tasso medio per anno. Il <b>Periodo</b> (selettore sopra «Dettaglio per filiale») e la <b>Filiale</b> (barra in alto) guidano obiettivi, confronti e dettaglio; la produttività ha filtri propri; ticket e tasso per anno sono su tutto il file.',
     com:'<b>Analisi Commerciali.</b> Le prestazioni delle singole persone, raggruppate per filiale: dettaglio del periodo, produttività giornaliera, storico mensile del singolo e ticket/tasso medio per anno. <b>Periodo</b> e <b>Filiale</b> in alto guidano il dettaglio; la produttività ha filtri propri; storico e medie sono su tutto il file.'
   };
   window.commNav=function(mode,btn){
@@ -7167,6 +7168,12 @@ calcPolizza();
     var i=document.getElementById('kt-intro'); if(i) i.innerHTML=INTRO[t]||'';
     var a1=document.getElementById('an-title'); if(a1) a1.textContent={fil:'Analisi Filiali',com:'Analisi Commerciali'}[t]||'';
     var a2=document.getElementById('an-sub'); if(a2) a2.textContent={fil:'Erogato, obiettivi e produttività per filiale',com:'Erogato e produttività per singolo commerciale'}[t]||'';
+    // Selettore del mese: in Analisi Filiali sta sopra «Dettaglio per filiale», in Analisi Commerciali nella barra in alto
+    var pw=document.getElementById('an-period-wrap'), slot=document.getElementById('an-period-slot'), sep=document.getElementById('an-period-sep');
+    if(pw&&slot){
+      if(t==='fil'){ slot.appendChild(pw); slot.style.display=''; if(sep) sep.style.display='none'; }
+      else { var bar=sep&&sep.parentNode; if(bar&&pw.parentNode!==bar) bar.insertBefore(pw,bar.firstChild); slot.style.display='none'; if(sep) sep.style.display=''; }
+    }
     window.__ktab=t;
   };
   kSetTab('fil');
