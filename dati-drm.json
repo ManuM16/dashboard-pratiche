@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-03T14:56:07.351Z",
+  "exportedAt": "2026-11-03T14:56:09.741Z",
   "panels": [
     {
       "id": 1,
@@ -29,7 +29,28 @@
           "debitoRes": ""
         }
       ]
+    },
+    {
+      "id": 3,
+      "name": "",
+      "numPratica": "",
+      "redditi": [
+        {
+          "desc": "",
+          "importo": ""
+        }
+      ],
+      "rate": [
+        {
+          "tipo": "",
+          "istituto": "",
+          "ruolo": "intestatario",
+          "importo": "",
+          "scadenza": "",
+          "debitoRes": ""
+        }
+      ]
     }
   ],
-  "nextId": 3
+  "nextId": 4
 }
