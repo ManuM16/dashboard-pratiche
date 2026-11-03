@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-03T15:17:20.394Z",
+  "exportedAt": "2026-11-03T15:17:21.941Z",
   "panels": [
     {
       "id": 1,
       "name": "Esposito Maria Giuseppina",
       "redditi": [
         {
-          "desc": "Reddito Co1",
-          "importo": "879"
+          "desc": "",
+          "importo": ""
         },
         {
           "desc": "",
@@ -58,7 +58,8 @@
         }
       ],
       "numPratica": "5065265301",
-      "rows": 9
+      "rows": 9,
+      "nuova": ""
     },
     {
       "id": 3,
