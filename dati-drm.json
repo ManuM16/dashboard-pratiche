@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-03T14:56:34.921Z",
+  "exportedAt": "2026-11-03T14:56:38.005Z",
   "panels": [
     {
       "id": 1,
@@ -8,18 +8,10 @@
       "redditi": [
         {
           "desc": "Reddito Co1",
-          "importo": "87"
+          "importo": "879"
         }
       ],
       "rate": [
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "",
-          "scadenza": "",
-          "debitoRes": ""
-        },
         {
           "tipo": "",
           "istituto": "",
