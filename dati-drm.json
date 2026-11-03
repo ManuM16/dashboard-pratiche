@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-03T14:56:10.855Z",
+  "exportedAt": "2026-11-03T14:56:22.005Z",
   "panels": [
     {
       "id": 1,
@@ -28,7 +28,8 @@
           "scadenza": "",
           "debitoRes": ""
         }
-      ]
+      ],
+      "numPratica": "5065265301 "
     },
     {
       "id": 3,
@@ -71,7 +72,28 @@
           "debitoRes": ""
         }
       ]
+    },
+    {
+      "id": 5,
+      "name": "",
+      "numPratica": "",
+      "redditi": [
+        {
+          "desc": "",
+          "importo": ""
+        }
+      ],
+      "rate": [
+        {
+          "tipo": "",
+          "istituto": "",
+          "ruolo": "intestatario",
+          "importo": "",
+          "scadenza": "",
+          "debitoRes": ""
+        }
+      ]
     }
   ],
-  "nextId": 5
+  "nextId": 6
 }
