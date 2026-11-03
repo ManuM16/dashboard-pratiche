@@ -248,64 +248,60 @@ tr:hover td{background:var(--surface3)}
 .drm-row-del:hover{color:var(--red)}
 
 /* ── DRM/DTI Calculator — layout compatto ── */
-.drmc-panel{background:#fff;border:1.5px solid #1b1b1b;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);container-type:inline-size}
-.dx-head{display:flex;align-items:stretch;border-bottom:1.5px solid #1b1b1b;background:#FFF2CC}
-.dx-lbl{background:#BDD7EE;color:#1b1b1b;font-weight:600;font-size:15px;padding:14px 22px;display:flex;align-items:center;border-right:1.5px solid #1b1b1b;white-space:nowrap}
-.drmc-panel-name{flex:1;min-width:120px;border:none;background:transparent;font-size:16px;font-weight:600;font-family:'Outfit',sans-serif;color:#1b1b1b;outline:none;padding:0 14px}
-.drmc-panel-name::placeholder{color:rgba(0,0,0,.35);font-weight:400}
-.drmc-panel-num{width:150px;border:none;border-left:1px dotted #777;background:transparent;font-size:14px;font-family:'Outfit',sans-serif;color:#1b1b1b;padding:0 12px;outline:none}
-.drmc-panel-num::placeholder{color:rgba(0,0,0,.35)}
-.drmc-panel-del{border:none;border-left:1.5px solid #1b1b1b;background:#BDD7EE;cursor:pointer;color:#1b1b1b;font-size:15px;padding:0 14px;transition:.12s}
-.drmc-panel-del:hover{background:#e57373}
-.dx-main{display:grid;grid-template-columns:minmax(0,1fr) 200px}
+.drmc-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);container-type:inline-size}
+.dx-head{display:flex;align-items:stretch;background:var(--an-blue,#2C2C31);color:#fff}
+.dx-lbl{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.6);padding:0 6px 0 18px;display:flex;align-items:center;white-space:nowrap}
+.drmc-panel-name{flex:1;min-width:120px;border:none;background:transparent;font-size:17px;font-weight:600;font-family:'Outfit',sans-serif;color:#fff;outline:none;padding:14px 12px}
+.drmc-panel-name::placeholder{color:rgba(255,255,255,.35);font-weight:400}
+.drmc-panel-num{width:140px;border:none;border-left:1px solid rgba(255,255,255,.15);background:transparent;font-size:14px;font-family:'Outfit',sans-serif;color:#fff;padding:0 12px;outline:none}
+.drmc-panel-num::placeholder{color:rgba(255,255,255,.35)}
+.drmc-panel-name:focus,.drmc-panel-num:focus{background:rgba(255,255,255,.08)}
+.drmc-panel-del{border:none;border-left:1px solid rgba(255,255,255,.15);background:transparent;cursor:pointer;color:rgba(255,255,255,.65);font-size:15px;padding:0 16px;transition:.12s}
+.drmc-panel-del:hover{background:#B82525;color:#fff}
+.dx-main{display:block}
 .dx-tablewrap{overflow-x:auto;min-width:0}
-.dx-t{width:100%;min-width:700px;border-collapse:collapse;table-layout:fixed;font-size:14px}
-.dx-t th{background:#BDD7EE;color:#1b1b1b;font-weight:600;font-size:13px;letter-spacing:0;text-transform:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:8px 4px;text-align:center;border-bottom:1.5px solid #1b1b1b;border-right:1px solid #1b1b1b}
-.dx-t th:last-child{border-right:none}
-.dx-t td{background:#FFF2CC;padding:0;height:34px;border-bottom:1px dotted #555;border-right:1px solid #1b1b1b;vertical-align:middle}
-.dx-t td:last-child{border-right:none;background:#fff}
-.dx-t td.dx-m{text-align:center;color:#444;font-size:13px}
-.dx-t td.dx-new{background:#FFFF00;font-weight:700}
-.dx-t td.dx-newl{background:#FFFF00;text-align:center;font-weight:600;font-size:13px;color:#1b1b1b}
-.dx-t tfoot td{background:#FFF2CC;border-top:1.5px solid #1b1b1b;border-bottom:none;font-weight:700;text-align:right;padding:8px 10px;height:auto}
-.dx-t tfoot td.dx-empty{background:#fff}
-.dx-in{width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:14px;color:#1b1b1b;padding:6px 10px;outline:none;box-sizing:border-box;min-width:0}
+.dx-t{width:100%;min-width:38em;border-collapse:collapse;table-layout:fixed;font-size:15px}
+.dx-t th{background:var(--surface2);color:var(--ink2);font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 4px;text-align:center;border-bottom:1px solid var(--border2)}
+.dx-t td{background:var(--surface);padding:0;height:36px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle}
+.dx-t td:last-child{border-right:none}
+.dx-t tbody tr:hover td{background:var(--surface3)}
+.dx-t td.dx-m{text-align:center;color:var(--ink2);font-size:15px}
+.dx-t td.dx-new,.dx-t td.dx-newl,.dx-t tbody tr:hover td.dx-new,.dx-t tbody tr:hover td.dx-newl{background:#FFF1A8;font-weight:700}
+.dx-t td.dx-new{box-shadow:inset 3px 0 0 var(--amber-m)}
+.dx-t td.dx-newl{text-align:center;font-weight:600;font-size:13px;color:var(--amber);white-space:nowrap}
+.dx-t tfoot td{background:var(--ink);color:#fff;border:none;font-weight:700;font-size:15px;text-align:right;padding:10px 8px;height:auto;white-space:nowrap}
+.dx-t tfoot td.dx-empty{background:var(--ink)}
+.dx-in{width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;color:var(--ink);padding:6px 8px;outline:none;box-sizing:border-box;min-width:0}
 .dx-in.r{text-align:right}
 .dx-hc{position:relative}
-.dx-hc .dx-in{padding-left:22px}
-.dx-h{position:absolute;left:3px;top:50%;transform:translateY(-50%);cursor:grab;color:#999;font-size:13px;letter-spacing:-3px;line-height:1;padding:6px 4px;user-select:none;z-index:1}
-.dx-h:hover{color:#1A3D6B}
+.dx-hc .dx-in{padding-left:20px}
+.dx-h{position:absolute;left:3px;top:50%;transform:translateY(-50%);cursor:grab;color:var(--ink3);font-size:13px;letter-spacing:-3px;line-height:1;padding:6px 4px;user-select:none;z-index:1}
+.dx-h:hover{color:var(--ink)}
 .dx-h:active{cursor:grabbing}
 .dx-dragging{opacity:.45}
-.dx-t tr.dx-over td{box-shadow:inset 0 3px 0 #5B9BD5}
-.dx-in.c{text-align:center;padding:6px 2px;font-size:13px}
-.dx-in:focus{background:rgba(91,155,213,.18);box-shadow:inset 0 0 0 2px #5B9BD5}
-.dx-in:disabled{color:#888}
-.dx-x{border:none;background:none;cursor:pointer;color:#999;font-size:13px;padding:4px;width:100%}
-.dx-x:hover{color:#C0392B}
-.dx-side{display:flex;flex-direction:column;border-left:1.5px solid #1b1b1b;background:#DEEAF6}
-.dx-kpi{flex:1;display:flex;flex-direction:column;min-width:0}
-.dx-kpi+.dx-kpi{border-top:1.5px solid #1b1b1b}
-.dx-kh{background:#BDD7EE;text-align:center;font-weight:600;font-size:14px;padding:8px;border-bottom:1.5px solid #1b1b1b}
-.dx-kv{flex:1;display:flex;align-items:center;justify-content:center;font-style:italic;font-size:22px;font-weight:600;padding:18px 8px;text-align:center;line-height:1.1}
-.dx-ks{font-size:11px;color:#555;text-align:center;padding:0 8px 10px}
-.dx-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid #ddd;background:#fafafa}
-.dx-actions button{border:1px dashed #5B9BD5;background:rgba(91,155,213,.08);cursor:pointer;color:#1A3D6B;font-size:13px;font-weight:600;padding:5px 12px;border-radius:4px;font-family:'Outfit',sans-serif}
-.dx-actions button:hover{background:rgba(91,155,213,.2)}
-.dx-actions .dx-hint{font-size:12px;color:#666}
-.dx-actions .dx-hint i{display:inline-block;width:12px;height:12px;background:#FFFF00;border:1px solid #999;vertical-align:-2px;margin-right:4px}
-@container (max-width:940px){
-  .dx-main{grid-template-columns:1fr}
-  .dx-side{flex-direction:row;border-left:none;border-top:1.5px solid #1b1b1b}
-  .dx-kpi{flex:1}
-  .dx-kpi+.dx-kpi{border-top:none;border-left:1.5px solid #1b1b1b}
-  .dx-kv{padding:12px 8px}
-  .dx-head{flex-wrap:wrap}
-  .dx-lbl{padding:10px 16px}
-  .drmc-panel-name{flex:1 1 200px;padding:10px 12px}
-  .drmc-panel-num{flex:1 1 120px;width:auto;padding:10px 12px}
+.dx-t tr.dx-over td{box-shadow:inset 0 3px 0 var(--blue)}
+.dx-in.c{text-align:center;padding:6px 0;font-size:13px}
+.dx-in:focus{background:var(--blue-l);box-shadow:inset 0 0 0 2px var(--blue-m)}
+.dx-in:disabled{color:var(--ink3)}
+.dx-x{border:none;background:none;cursor:pointer;color:var(--ink3);font-size:13px;padding:4px;width:100%}
+.dx-x:hover{color:var(--red)}
+.dx-side{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border)}
+.dx-kpi{display:flex;flex-direction:column;min-width:0;padding:14px 16px 12px;border-top:3px solid var(--border2);background:var(--surface)!important}
+.dx-kpi+.dx-kpi{border-left:1px solid var(--border)}
+.dx-kh{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);text-align:left}
+.dx-kv{font-family:'Syne','Outfit',sans-serif;font-style:normal;font-size:28px;font-weight:700;padding:6px 0 2px;line-height:1.1}
+.dx-ks{font-size:12px;color:var(--ink3);padding:0}
+.dx-kpi.k-pos{border-top-color:var(--green)}.dx-kpi.k-neu{border-top-color:var(--amber-m)}.dx-kpi.k-neg{border-top-color:var(--red)}
+.dx-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--border);background:var(--surface3)}
+.dx-actions button{border:1px solid var(--border2);background:var(--surface);cursor:pointer;color:var(--ink);font-size:13px;font-weight:600;padding:5px 12px;border-radius:7px;font-family:'Outfit',sans-serif}
+.dx-actions button:hover{background:var(--surface2)}
+.dx-actions .dx-hint{font-size:12px;color:var(--ink3)}
+.dx-actions .dx-hint i{display:inline-block;width:12px;height:12px;background:#FFF1A8;border:1px solid var(--amber-m);border-radius:3px;vertical-align:-2px;margin-right:4px}
+@container (max-width:520px){
+  .dx-lbl{display:none}
+  .drmc-panel-name{padding-left:16px}
 }
-.drmc-pos{color:#2f7d32}.drmc-neg{color:#C0392B}
+.drmc-pos{color:var(--green)}.drmc-neg{color:#C0392B}
 .drmc-neutral{color:#B8860B}
 .drmc-section-label{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:7px}
 .drmc-global-kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-width:130px}
@@ -510,7 +506,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.95.0 · 03/11/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.97.0 · 03/11/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -872,7 +868,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.95.0 · 03/11/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.97.0 · 03/11/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -1990,7 +1986,7 @@ body.guest-mode .comm-sel{
     <!-- ═══ CALCOLATORE DRM / DTI ═══ -->
     <div class="section" id="s-calc-drm">
       <div class="zm-bar"><span>Testo e impaginazione</span><button onclick="calcZoom(-1)" title="Riduci testo e impaginazione">A−</button><button onclick="calcZoom(0)" title="Ripristina dimensione standard" class="zm-pct" id="zm-pct-drm">100%</button><button onclick="calcZoom(1)" title="Ingrandisci testo e impaginazione">A+</button></div>
-      <div style="max-width:1200px;margin:0 auto">
+      <div style="max-width:none;margin:0 auto">
 
         <!-- Top bar -->
         <div style="display:flex;justify-content:flex-end;margin-bottom:18px">
@@ -2000,7 +1996,7 @@ body.guest-mode .comm-sel{
         </div>
 
         <!-- Griglia pannelli -->
-        <div id="drmc-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,680px),1fr));gap:20px">
+        <div id="drmc-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,max(540px,calc((100% - 60px)/4))),1fr));gap:20px">
           <!-- panels injected by JS -->
         </div>
 
@@ -3755,8 +3751,9 @@ calcPolizza();
       el.textContent=dtiTxt(dti,totRed);
       el.classList.remove('drmc-pos','drmc-neg','drmc-neutral'); el.classList.add(totRed<=0?'':(dti<=0.35?'drmc-pos':(dti<=0.50?'drmc-neutral':'drmc-neg')));
     });
-    upd('[data-dti-box]', el=>{ el.style.background = totRed<=0?'':(dti<=0.35?'#DEEAF6':(dti<=0.50?'#FFF2CC':'#FDEAEA')); });
-    upd('[data-drm-box]', el=>{ el.style.background = drm>=0?'#DEEAF6':'#FDEAEA'; });
+    const kc=(el,c)=>{ el.classList.remove('k-pos','k-neu','k-neg'); if(c) el.classList.add(c); };
+    upd('[data-dti-box]', el=>kc(el, totRed<=0?'':(dti<=0.35?'k-pos':(dti<=0.50?'k-neu':'k-neg'))));
+    upd('[data-drm-box]', el=>kc(el, drm>=0?'k-pos':'k-neg'));
     panel.querySelectorAll('.drmc-mesi-span').forEach(td=>{
       const i=+td.dataset.i; const r=(p.rate||[])[i]; if(!r){ td.textContent=''; return; }
       const m=mesiAlla(r.scadenza);
@@ -3778,14 +3775,14 @@ calcPolizza();
     tr.innerHTML = `
       <td class="dx-hc"><span class="dx-h" draggable="true" data-kind="red" title="Trascina per riordinare i redditi">⋮⋮</span><input class="dx-in r" data-k="red" value="${esc(red.importo)}" title="${esc(red.desc||'')}" inputmode="decimal"></td>
       ${isNew
-        ? `<td class="dx-new"><input class="dx-in r" data-k="nuova" value="${esc(p.nuova||'')}" inputmode="decimal" placeholder="Nuova rata" title="Nuova rata proposta: concorre a DRM e DTI"></td>
+        ? `<td class="dx-new"><input class="dx-in r" data-k="nuova" value="${esc(p.nuova||'')}" inputmode="decimal" placeholder="0,00" title="Nuova rata proposta: concorre a DRM e DTI"></td>
            <td class="dx-newl">Nuova rata</td><td class="dx-newl"></td><td class="dx-newl"></td><td></td>`
         : `<td class="dx-hc"><span class="dx-h" draggable="true" data-kind="rata" title="Trascina per riordinare le rate">⋮⋮</span><input class="dx-in r" data-k="rata" value="${esc(rt.importo)}" inputmode="decimal"></td>
            <td><input class="dx-in" data-k="ist" value="${esc(rt.istituto||'')}"></td>
            <td><input class="dx-in c" data-k="sca" type="date" value="${esc(rt.scadenza||'')}"></td>
            <td class="dx-m drmc-mesi-span" data-i="${r-1}">${m!==null?m:''}</td>
            <td><input class="dx-in r" data-k="deb" value="${esc(rt.debitoRes||'')}" inputmode="decimal"></td>`}
-      <td style="width:30px;background:#fff"><button class="dx-x" type="button" title="Svuota la riga">✕</button></td>`;
+      <td style="background:#fff"><button class="dx-x" type="button" title="Svuota la riga">✕</button></td>`;
     // la ✕ è nell'ultima cella: la tabella ha 7 colonne (6 + comandi)
     const pid=p.id;
     const money = (inp,setter)=>{
@@ -3830,7 +3827,7 @@ calcPolizza();
         <div>
           <div class="dx-tablewrap">
             <table class="dx-t">
-              <colgroup><col style="width:15%"><col style="width:15%"><col><col style="width:19%"><col style="width:11%"><col style="width:15%"><col style="width:30px"></colgroup>
+              <colgroup><col style="width:6.6em"><col style="width:6.6em"><col><col style="width:7.8em"><col style="width:5.8em"><col style="width:6.8em"><col style="width:2em"></colgroup>
               <thead><tr><th>Redditi</th><th>Rate</th><th>Istit.</th><th>Scadenza</th><th>Mesi scad.</th><th>Debito Res.</th><th></th></tr></thead>
               <tbody class="dx-body"></tbody>
               <tfoot><tr>
@@ -3845,12 +3842,12 @@ calcPolizza();
           </div>
         </div>
         <div class="dx-side">
-          <div class="dx-kpi" data-drm-box style="background:${drm>=0?'#DEEAF6':'#FDEAEA'}">
+          <div class="dx-kpi ${drm>=0?'k-pos':'k-neg'}" data-drm-box>
             <div class="dx-kh">DRM</div>
             <div class="dx-kv ${drm>=0?'drmc-pos':'drmc-neg'}" data-drm>${eur(drm)}</div>
             <div class="dx-ks">redditi − rate</div>
           </div>
-          <div class="dx-kpi" data-dti-box style="background:${totRed<=0?'#DEEAF6':(dti<=0.35?'#DEEAF6':(dti<=0.50?'#FFF2CC':'#FDEAEA'))}">
+          <div class="dx-kpi ${totRed<=0?'':(dti<=0.35?'k-pos':(dti<=0.50?'k-neu':'k-neg'))}" data-dti-box>
             <div class="dx-kh">DTI</div>
             <div class="dx-kv ${dtiCls}" data-dti>${dtiTxt(dti,totRed)}</div>
             <div class="dx-ks">rate ÷ redditi</div>
