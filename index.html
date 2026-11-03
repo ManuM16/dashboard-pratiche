@@ -355,6 +355,12 @@ tr:hover td{background:var(--surface3)}
 .prod-lbl{font-size:11px;color:var(--ink3);margin-bottom:4px;font-weight:500}
 .prod-seg{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
 .ktab-hide{display:none!important}
+.zm-bar{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin:0 0 12px;font-size:12px;color:var(--ink3)}
+.zm-bar button{font:inherit;font-weight:600;font-size:12px;border-radius:6px;padding:5px 11px;cursor:pointer;border:1px solid var(--border2);background:var(--surface);color:var(--ink)}
+.zm-bar button:hover{background:var(--surface3)}
+.zm-bar .zm-pct{min-width:52px}
+#s-calc-prestito>:not(.zm-bar),#s-calc-cqs>:not(.zm-bar),#s-calc-polizza>:not(.zm-bar),#s-calc-drm>:not(.zm-bar){zoom:var(--calc-zoom,1)}
+@media print{.zm-bar{display:none!important}}
 body[data-cview="fil"] .main>.topbar,body[data-cview="com"] .main>.topbar{display:none!important}
 #comm-kpi-section{--an-blue:#2C2C31;--an-ink:#18181A;--an-soft:#ECEBE7;--an-ok:#11743b;--an-bad:#b3261e;font-family:'Source Sans 3','Outfit',sans-serif}
 #comm-kpi-section h3{font-family:'Source Sans 3','Syne',sans-serif!important;color:var(--ink)!important;font-size:1.2rem!important;font-weight:700!important}
@@ -484,7 +490,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.92.3 · 30/10/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.93.0 · 03/11/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -846,7 +852,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.92.3 · 30/10/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.93.0 · 03/11/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -1703,6 +1709,7 @@ body.guest-mode .comm-sel{
 
     <!-- ═══ CALCOLATORE PRESTITO ═══ -->
     <div class="section" id="s-calc-prestito">
+      <div class="zm-bar"><span>Testo e impaginazione</span><button onclick="calcZoom(-1)" title="Riduci testo e impaginazione">A−</button><button onclick="calcZoom(0)" title="Ripristina dimensione standard" class="zm-pct" id="zm-pct-prestito">100%</button><button onclick="calcZoom(1)" title="Ingrandisci testo e impaginazione">A+</button></div>
       <style>
         .calc-wrap{max-width:780px}
         .calc-sec-title{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--ink3);padding:14px 0 6px;margin-top:4px}
@@ -1827,6 +1834,7 @@ body.guest-mode .comm-sel{
 
     <!-- ═══ CALCOLATORE CQS ═══ -->
     <div class="section" id="s-calc-cqs">
+      <div class="zm-bar"><span>Testo e impaginazione</span><button onclick="calcZoom(-1)" title="Riduci testo e impaginazione">A−</button><button onclick="calcZoom(0)" title="Ripristina dimensione standard" class="zm-pct" id="zm-pct-cqs">100%</button><button onclick="calcZoom(1)" title="Ingrandisci testo e impaginazione">A+</button></div>
       <div class="calc-wrap">
         <div class="card">
           <div class="card-title">Parametri cessione del quinto</div>
@@ -1870,6 +1878,7 @@ body.guest-mode .comm-sel{
 
     <!-- ═══ CALCOLATORE RIMBORSO POLIZZA METLIFE ═══ -->
     <div class="section" id="s-calc-polizza">
+      <div class="zm-bar"><span>Testo e impaginazione</span><button onclick="calcZoom(-1)" title="Riduci testo e impaginazione">A−</button><button onclick="calcZoom(0)" title="Ripristina dimensione standard" class="zm-pct" id="zm-pct-polizza">100%</button><button onclick="calcZoom(1)" title="Ingrandisci testo e impaginazione">A+</button></div>
       <div class="calc-wrap">
         <div class="card">
           <div class="card-title">Parametri polizza MetLife</div>
@@ -1960,6 +1969,7 @@ body.guest-mode .comm-sel{
 
     <!-- ═══ CALCOLATORE DRM / DTI ═══ -->
     <div class="section" id="s-calc-drm">
+      <div class="zm-bar"><span>Testo e impaginazione</span><button onclick="calcZoom(-1)" title="Riduci testo e impaginazione">A−</button><button onclick="calcZoom(0)" title="Ripristina dimensione standard" class="zm-pct" id="zm-pct-drm">100%</button><button onclick="calcZoom(1)" title="Ingrandisci testo e impaginazione">A+</button></div>
       <div style="max-width:1200px;margin:0 auto">
 
         <!-- Top bar -->
@@ -7203,6 +7213,18 @@ calcPolizza();
     fil:'Come vanno le filiali, singole e nel totale: obiettivi, confronto col passato, produttività e ticket/tasso medio per anno. Il <b>Periodo</b> (selettore sopra «Dettaglio per filiale») e la <b>Filiale</b> (barra in alto) guidano obiettivi, confronti e dettaglio; la produttività ha filtri propri; ticket e tasso per anno sono su tutto il file.',
     com:'Le prestazioni delle singole persone, raggruppate per filiale: dettaglio del periodo, produttività giornaliera, storico mensile del singolo e ticket/tasso medio per anno. <b>Periodo</b> e <b>Filiale</b> in alto guidano il dettaglio; la produttività ha filtri propri; storico e medie sono su tutto il file.'
   };
+  // Zoom (testo e impaginazione) condiviso dai quattro calcolatori
+  function calcZoomApply(z){
+    document.documentElement.style.setProperty('--calc-zoom',z);
+    document.querySelectorAll('.zm-pct').forEach(function(b){b.textContent=Math.round(z*100)+'%';});
+  }
+  window.calcZoom=function(d){
+    var z=1; try{z=parseFloat(localStorage.getItem('calc_zoom'))||1;}catch(e){}
+    z = d===0 ? 1 : Math.min(1.5,Math.max(0.8,Math.round((z+d*0.1)*100)/100));
+    try{localStorage.setItem('calc_zoom',String(z));}catch(e){}
+    calcZoomApply(z);
+  };
+  (function(){var z=1; try{z=parseFloat(localStorage.getItem('calc_zoom'))||1;}catch(e){} calcZoomApply(z);})();
   window.commNav=function(mode,btn){
     btn=btn||document.querySelector('.sb-item[data-cv="'+mode+'"]');
     document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
