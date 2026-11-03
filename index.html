@@ -248,45 +248,65 @@ tr:hover td{background:var(--surface3)}
 .drm-row-del:hover{color:var(--red)}
 
 /* ── DRM/DTI Calculator — layout compatto ── */
-.drmc-panel{background:#fff;border:1px solid #C8C8C8;border-radius:var(--r);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)}
-.drmc-panel-head{background:#BDD7EE;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:none}
-.drmc-panel-name{flex:1;border:none;background:transparent;font-size:19px;font-weight:700;font-family:'Syne',sans-serif;color:#1A3D6B;outline:none;min-width:120px}
-.drmc-panel-name::placeholder{color:rgba(26,61,107,.45);font-weight:400}
-.drmc-panel-num{width:180px;border:1px solid rgba(26,61,107,.3);border-radius:5px;background:rgba(255,255,255,.5);font-size:14px;font-family:'Outfit',sans-serif;color:#1A3D6B;padding:4px 9px;outline:none}
-.drmc-panel-num:focus{border-color:#4472C4;background:#fff}
-.drmc-panel-num::placeholder{color:rgba(26,61,107,.4)}
-.drmc-panel-del{border:none;background:rgba(26,61,107,.12);cursor:pointer;color:#1A3D6B;font-size:15px;padding:4px 8px;border-radius:4px;transition:.12s}
-.drmc-panel-del:hover{background:rgba(220,50,50,.7)}
-/* Corpo: tabella unica a due colonne (redditi | rate) */
-.drmc-body{display:grid;grid-template-columns:1fr 2.4fr;border-bottom:1px solid #D8D8D8}
-.drmc-col{padding:14px 16px}
-.drmc-col+.drmc-col{border-left:1px solid #E0E0E0}
-.drmc-col-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#1A3D6B;background:#BDD7EE;padding:5px 8px;border-radius:4px;margin-bottom:10px;display:inline-block}
-/* Tabella interna compatta */
-.drmc-t{width:100%;border-collapse:collapse;font-size:14.5px;table-layout:fixed}
-.drmc-t th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#1A3D6B;background:#BDD7EE;padding:7px 8px;white-space:nowrap;overflow:hidden}
-.drmc-t th.r{text-align:right}
-.drmc-t td{padding:4px 5px;border-bottom:1px solid #EEEEEE;vertical-align:middle}
-.drmc-t td.r{text-align:right}
-.drmc-t tr:last-child td{border-bottom:none}
-.drmc-t tr:nth-child(even) td{background:#FFF2CC}
-.drmc-ci{width:100%;border:1px solid transparent;border-radius:4px;padding:5px 7px;font-size:14px;font-family:'Outfit',sans-serif;color:var(--ink);background:transparent;outline:none;box-sizing:border-box;min-width:0}
-.drmc-ci:focus{background:#DEEBF7;border-color:#5B9BD5}
-.drmc-ci.r{text-align:right}
-.drmc-ci-date{font-size:13px}
-.drmc-add-r{border:1px dashed #5B9BD5;background:rgba(91,155,213,.08);cursor:pointer;color:#1A3D6B;font-size:16px;font-weight:700;padding:4px 12px;border-radius:4px;font-family:'Outfit',sans-serif;margin-top:6px;transition:.12s;display:inline-block;width:fit-content;line-height:1}
-.drmc-add-r:hover{background:rgba(91,155,213,.18)}
-.drmc-del-r{border:none;background:none;cursor:pointer;color:#AAAAAA;font-size:14px;padding:3px 6px;border-radius:3px;line-height:1;transition:.12s}
-.drmc-del-r:hover{color:#C0392B;background:#FDEAEA}
-/* Footer KPI */
-.drmc-footer{display:flex;align-items:stretch;gap:0;background:#DAE3F3;border-top:2px solid #BDD7EE}
-.drmc-kpi-box{flex:1;padding:12px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.drmc-kpi-box+.drmc-kpi-box{border-left:1px solid #BDD7EE}
-.drmc-kpi-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#52514E}
-.drmc-kpi-val{font-size:22px;font-weight:700;font-family:'Syne',sans-serif;line-height:1.15;white-space:nowrap;overflow:visible}
-.drmc-pos{color:#4A8C28}.drmc-neg{color:#C0392B}
+.drmc-panel{background:#fff;border:1.5px solid #1b1b1b;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);container-type:inline-size}
+.dx-head{display:flex;align-items:stretch;border-bottom:1.5px solid #1b1b1b;background:#FFF2CC}
+.dx-lbl{background:#BDD7EE;color:#1b1b1b;font-weight:600;font-size:15px;padding:14px 22px;display:flex;align-items:center;border-right:1.5px solid #1b1b1b;white-space:nowrap}
+.drmc-panel-name{flex:1;min-width:120px;border:none;background:transparent;font-size:16px;font-weight:600;font-family:'Outfit',sans-serif;color:#1b1b1b;outline:none;padding:0 14px}
+.drmc-panel-name::placeholder{color:rgba(0,0,0,.35);font-weight:400}
+.drmc-panel-num{width:150px;border:none;border-left:1px dotted #777;background:transparent;font-size:14px;font-family:'Outfit',sans-serif;color:#1b1b1b;padding:0 12px;outline:none}
+.drmc-panel-num::placeholder{color:rgba(0,0,0,.35)}
+.drmc-panel-del{border:none;border-left:1.5px solid #1b1b1b;background:#BDD7EE;cursor:pointer;color:#1b1b1b;font-size:15px;padding:0 14px;transition:.12s}
+.drmc-panel-del:hover{background:#e57373}
+.dx-main{display:grid;grid-template-columns:minmax(0,1fr) 200px}
+.dx-tablewrap{overflow-x:auto;min-width:0}
+.dx-t{width:100%;min-width:700px;border-collapse:collapse;table-layout:fixed;font-size:14px}
+.dx-t th{background:#BDD7EE;color:#1b1b1b;font-weight:600;font-size:13px;letter-spacing:0;text-transform:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:8px 4px;text-align:center;border-bottom:1.5px solid #1b1b1b;border-right:1px solid #1b1b1b}
+.dx-t th:last-child{border-right:none}
+.dx-t td{background:#FFF2CC;padding:0;height:34px;border-bottom:1px dotted #555;border-right:1px solid #1b1b1b;vertical-align:middle}
+.dx-t td:last-child{border-right:none;background:#fff}
+.dx-t td.dx-m{text-align:center;color:#444;font-size:13px}
+.dx-t td.dx-new{background:#FFFF00;font-weight:700}
+.dx-t td.dx-newl{background:#FFFF00;text-align:center;font-weight:600;font-size:13px;color:#1b1b1b}
+.dx-t tfoot td{background:#FFF2CC;border-top:1.5px solid #1b1b1b;border-bottom:none;font-weight:700;text-align:right;padding:8px 10px;height:auto}
+.dx-t tfoot td.dx-empty{background:#fff}
+.dx-in{width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:14px;color:#1b1b1b;padding:6px 10px;outline:none;box-sizing:border-box;min-width:0}
+.dx-in.r{text-align:right}
+.dx-hc{position:relative}
+.dx-hc .dx-in{padding-left:22px}
+.dx-h{position:absolute;left:3px;top:50%;transform:translateY(-50%);cursor:grab;color:#999;font-size:13px;letter-spacing:-3px;line-height:1;padding:6px 4px;user-select:none;z-index:1}
+.dx-h:hover{color:#1A3D6B}
+.dx-h:active{cursor:grabbing}
+.dx-dragging{opacity:.45}
+.dx-t tr.dx-over td{box-shadow:inset 0 3px 0 #5B9BD5}
+.dx-in.c{text-align:center;padding:6px 2px;font-size:13px}
+.dx-in:focus{background:rgba(91,155,213,.18);box-shadow:inset 0 0 0 2px #5B9BD5}
+.dx-in:disabled{color:#888}
+.dx-x{border:none;background:none;cursor:pointer;color:#999;font-size:13px;padding:4px;width:100%}
+.dx-x:hover{color:#C0392B}
+.dx-side{display:flex;flex-direction:column;border-left:1.5px solid #1b1b1b;background:#DEEAF6}
+.dx-kpi{flex:1;display:flex;flex-direction:column;min-width:0}
+.dx-kpi+.dx-kpi{border-top:1.5px solid #1b1b1b}
+.dx-kh{background:#BDD7EE;text-align:center;font-weight:600;font-size:14px;padding:8px;border-bottom:1.5px solid #1b1b1b}
+.dx-kv{flex:1;display:flex;align-items:center;justify-content:center;font-style:italic;font-size:22px;font-weight:600;padding:18px 8px;text-align:center;line-height:1.1}
+.dx-ks{font-size:11px;color:#555;text-align:center;padding:0 8px 10px}
+.dx-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 12px;border-top:1px solid #ddd;background:#fafafa}
+.dx-actions button{border:1px dashed #5B9BD5;background:rgba(91,155,213,.08);cursor:pointer;color:#1A3D6B;font-size:13px;font-weight:600;padding:5px 12px;border-radius:4px;font-family:'Outfit',sans-serif}
+.dx-actions button:hover{background:rgba(91,155,213,.2)}
+.dx-actions .dx-hint{font-size:12px;color:#666}
+.dx-actions .dx-hint i{display:inline-block;width:12px;height:12px;background:#FFFF00;border:1px solid #999;vertical-align:-2px;margin-right:4px}
+@container (max-width:940px){
+  .dx-main{grid-template-columns:1fr}
+  .dx-side{flex-direction:row;border-left:none;border-top:1.5px solid #1b1b1b}
+  .dx-kpi{flex:1}
+  .dx-kpi+.dx-kpi{border-top:none;border-left:1.5px solid #1b1b1b}
+  .dx-kv{padding:12px 8px}
+  .dx-head{flex-wrap:wrap}
+  .dx-lbl{padding:10px 16px}
+  .drmc-panel-name{flex:1 1 200px;padding:10px 12px}
+  .drmc-panel-num{flex:1 1 120px;width:auto;padding:10px 12px}
+}
+.drmc-pos{color:#2f7d32}.drmc-neg{color:#C0392B}
 .drmc-neutral{color:#B8860B}
-.drmc-mesi-auto{font-size:12px;color:#A5A5A5}
 .drmc-section-label{font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:7px}
 .drmc-global-kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 16px;min-width:130px}
 .drmc-global-kpi .gl{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin-bottom:2px}
@@ -490,7 +510,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.93.0 · 03/11/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.95.0 · 03/11/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -852,7 +872,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.93.0 · 03/11/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.95.0 · 03/11/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -1980,7 +2000,7 @@ body.guest-mode .comm-sel{
         </div>
 
         <!-- Griglia pannelli -->
-        <div id="drmc-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:20px">
+        <div id="drmc-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,680px),1fr));gap:20px">
           <!-- panels injected by JS -->
         </div>
 
@@ -3678,7 +3698,8 @@ calcPolizza();
   }
   function calcPanel(p){
     const totRed = (p.redditi||[]).reduce((a,r)=>a+parseN(r.importo),0);
-    const totRate = (p.rate||[]).reduce((a,r)=>a+parseN(r.importo),0);
+    // la nuova rata proposta concorre al conteggio insieme alle rate in corso
+    const totRate = (p.rate||[]).reduce((a,r)=>a+parseN(r.importo),0) + parseN(p.nuova);
     const totDebit = (p.rate||[]).reduce((a,r)=>a+parseN(r.debitoRes),0);
     const drm = totRed - totRate;
     const dti = totRed>0 ? totRate/totRed : 0;
@@ -3693,6 +3714,18 @@ calcPolizza();
     return Math.max(0,diff);
   }
   function fe(n){ return n.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  const MIN_ROWS = 8;
+  let _drag=null;
+  const emptyRed  = ()=>({desc:'',importo:''});
+  const emptyRata = ()=>({tipo:'',istituto:'',ruolo:'intestatario',importo:'',scadenza:'',debitoRes:''});
+  function rowsCount(p){
+    let last=-1;
+    (p.redditi||[]).forEach((r,i)=>{ if(r&&(r.importo||r.desc)) last=Math.max(last,i); });
+    (p.rate||[]).forEach((r,i)=>{ if(r&&(r.importo||r.istituto||r.scadenza||r.debitoRes)) last=Math.max(last,i+1); });
+    return Math.max(MIN_ROWS, p.rows||0, last+2);
+  }
+  const eur = v => fe(v)+' €';
+  const dtiTxt = (dti,totRed) => totRed>0 ? (dti*100).toFixed(2).replace('.',',')+'%' : '—';
 
   /* ── Render ── */
   function renderAll(){
@@ -3704,80 +3737,78 @@ calcPolizza();
     else { empty.style.display='none'; panels.forEach(p=>grid.appendChild(buildPanel(p))); }
   }
 
-  // Aggiorna solo la sezione risultati senza toccare gli input — nessuna perdita di focus
+  // Aggiorna solo i risultati senza toccare gli input — nessuna perdita di focus
   function updateResults(id){
     const p=findPanel(id); if(!p) return;
     const {totRed,totRate,totDebit,drm,dti} = calcPanel(p);
-    const drmCls = drm>=0?'drmc-pos':'drmc-neg';
-    const dtiCls = dti<=0.35?'drmc-pos':(dti<=0.50?'drmc-neutral':'drmc-neg');
-    const dtiIcon = dti<=0.35?'✅':(dti<=0.50?'⚠️':'❌');
     const panel = document.getElementById('drmc-panel-'+id);
     if(!panel) return;
-
     const upd=(sel,fn)=>{ const el=panel.querySelector(sel); if(el) fn(el); };
-    upd('[data-tot-red]', el=>{ el.textContent='€ '+fe(totRed); });
-    upd('[data-tot-rate]', el=>{ el.textContent='€ '+fe(totRate); });
-    upd('[data-debit-tot]', el=>{ el.textContent=totDebit>0?'€ '+fe(totDebit):'—'; });
+    upd('[data-tot-red]', el=>{ el.textContent=eur(totRed); });
+    upd('[data-tot-rate]', el=>{ el.textContent=eur(totRate); });
+    upd('[data-debit-tot]', el=>{ el.textContent=totDebit>0?eur(totDebit):'—'; });
     upd('[data-drm]', el=>{
-      el.textContent='€ '+fe(drm);
-      el.classList.remove('drmc-pos','drmc-neg','drmc-neutral'); el.classList.add(drmCls);
-      const box=el.closest('.drmc-kpi-box');
-      if(box){ box.style.background=drm>=0?'#DAE3F3':'#FDEAEA'; box.style.borderLeft='3px solid '+(drm>=0?'#5B9BD5':'#C0392B'); }
+      el.textContent=eur(drm);
+      el.classList.remove('drmc-pos','drmc-neg','drmc-neutral'); el.classList.add(drm>=0?'drmc-pos':'drmc-neg');
     });
     upd('[data-dti]', el=>{
-      el.textContent=(dti*100).toFixed(1).replace('.',',')+' %';
-      el.classList.remove('drmc-pos','drmc-neg','drmc-neutral'); el.classList.add(dtiCls);
-      const box=el.closest('.drmc-kpi-box');
-      if(box){ box.style.background=dti<=0.35?'#EBF5DF':(dti<=0.50?'#FFFBE6':'#FDEAEA'); box.style.borderLeft='3px solid '+(dti<=0.35?'#70AD47':(dti<=0.50?'#FFC000':'#C0392B')); }
+      el.textContent=dtiTxt(dti,totRed);
+      el.classList.remove('drmc-pos','drmc-neg','drmc-neutral'); el.classList.add(totRed<=0?'':(dti<=0.35?'drmc-pos':(dti<=0.50?'drmc-neutral':'drmc-neg')));
     });
-    upd('[data-dti-lbl]', el=>{ el.textContent='DTI '+dtiIcon; });
-
-    // Mesi alla scadenza
-    panel.querySelectorAll('.drmc-mesi-span').forEach((td,i)=>{
-      const r=p.rate[i]; if(!r) return;
+    upd('[data-dti-box]', el=>{ el.style.background = totRed<=0?'':(dti<=0.35?'#DEEAF6':(dti<=0.50?'#FFF2CC':'#FDEAEA')); });
+    upd('[data-drm-box]', el=>{ el.style.background = drm>=0?'#DEEAF6':'#FDEAEA'; });
+    panel.querySelectorAll('.drmc-mesi-span').forEach(td=>{
+      const i=+td.dataset.i; const r=(p.rate||[])[i]; if(!r){ td.textContent=''; return; }
       const m=mesiAlla(r.scadenza);
       td.textContent = m!==null ? m+'' : '';
     });
   }
 
-  const TIPO_OPTS = [{v:'',l:'Tipo'},{v:'P.f.',l:'P.f.'},{v:'Mutuo',l:'Mutuo'},{v:'P.p.',l:'P.p.'},{v:'CQS',l:'CQS'},{v:'Carta',l:'Carta'}];
-  const RUOLO_OPTS = [{v:'intestatario',l:'Int.'},{v:'coobbligato',l:'Coobb.'},{v:'garante',l:'Garante'}];
+  // garantisce che esistano le voci fino all'indice richiesto
+  function ensureRed(p,i){ p.redditi=p.redditi||[]; while(p.redditi.length<=i) p.redditi.push(emptyRed()); return p.redditi[i]; }
+  function ensureRata(p,i){ p.rate=p.rate||[]; while(p.rate.length<=i) p.rate.push(emptyRata()); return p.rate[i]; }
 
-  function mkSel(opts, val, cls){
-    return `<select class="${cls||''}" style="font-size:11.5px;padding:2px 3px;border:1px solid var(--border2);border-radius:4px;background:var(--surface);color:var(--ink);font-family:'Outfit',sans-serif;width:100%">
-      ${opts.map(o=>`<option value="${o.v}"${o.v===val?' selected':''}>${o.l}</option>`).join('')}
-    </select>`;
-  }
-
-  /* ── Riga reddito ── */
-  function buildRedRow(pid, r, i){
+  /* ── Riga del foglio: reddito | rata | istituto | scadenza | mesi | debito ── */
+  function buildRow(p, r){
+    const red = (p.redditi||[])[r] || emptyRed();
+    const isNew = r===0;
+    const rt = isNew ? null : ((p.rate||[])[r-1] || emptyRata());
+    const m = (!isNew && rt.scadenza) ? mesiAlla(rt.scadenza) : null;
     const tr = document.createElement('tr');
-    tr.innerHTML=`
-      <td><input class="drmc-ci" value="${esc(r.desc)}" placeholder="es. Stipendio netto"></td>
-      <td class="r" style="width:80px"><input class="drmc-ci r" value="${esc(r.importo)}" placeholder="0,00"></td>
-      <td style="width:22px"><button class="drmc-del-r" type="button">✕</button></td>`;
-    tr.querySelectorAll('input')[0].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.redditi[i].desc=this.value; savePanels();} });
-    tr.querySelectorAll('input')[1].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.redditi[i].importo=this.value; savePanels(); updateResults(pid);} });
-    tr.querySelector('button').addEventListener('click', ()=>drmDelReddito(pid,i));
-    return tr;
-  }
-
-  /* ── Riga rata/impegno ── */
-  function buildRateRow(pid, r, i){
-    const m = mesiAlla(r.scadenza);
-    const tr = document.createElement('tr');
-    tr.innerHTML=`
-      <td><input class="drmc-ci" value="${esc(r.istituto||'')}" placeholder="Istituto"></td>
-      <td class="r" style="width:80px"><input class="drmc-ci r" value="${esc(r.importo)}" placeholder="0,00"></td>
-      <td style="width:138px"><input class="drmc-ci drmc-ci-date" type="date" value="${esc(r.scadenza||'')}"></td>
-      <td class="r drmc-mesi-span" style="width:52px;font-size:13px;color:var(--ink3);white-space:nowrap">${m!==null?m+'':''}</td>
-      <td class="r" style="width:90px"><input class="drmc-ci r" value="${esc(r.debitoRes||'')}" placeholder="—"></td>
-      <td style="width:22px"><button class="drmc-del-r" type="button">✕</button></td>`;
-    tr.querySelectorAll('input')[0].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].istituto=this.value; savePanels();} });
-    tr.querySelectorAll('input')[1].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].importo=this.value; savePanels(); updateResults(pid);} });
-    tr.querySelectorAll('input')[2].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].scadenza=this.value; savePanels(); updateResults(pid);} });
-    tr.querySelectorAll('input')[3].addEventListener('input', function(){ const p=findPanel(pid); if(p){p.rate[i].debitoRes=this.value; savePanels(); updateResults(pid);} });
-    tr.querySelector('button').addEventListener('click', ()=>drmDelRata(pid,i));
+    tr.innerHTML = `
+      <td class="dx-hc"><span class="dx-h" draggable="true" data-kind="red" title="Trascina per riordinare i redditi">⋮⋮</span><input class="dx-in r" data-k="red" value="${esc(red.importo)}" title="${esc(red.desc||'')}" inputmode="decimal"></td>
+      ${isNew
+        ? `<td class="dx-new"><input class="dx-in r" data-k="nuova" value="${esc(p.nuova||'')}" inputmode="decimal" placeholder="Nuova rata" title="Nuova rata proposta: concorre a DRM e DTI"></td>
+           <td class="dx-newl">Nuova rata</td><td class="dx-newl"></td><td class="dx-newl"></td><td></td>`
+        : `<td class="dx-hc"><span class="dx-h" draggable="true" data-kind="rata" title="Trascina per riordinare le rate">⋮⋮</span><input class="dx-in r" data-k="rata" value="${esc(rt.importo)}" inputmode="decimal"></td>
+           <td><input class="dx-in" data-k="ist" value="${esc(rt.istituto||'')}"></td>
+           <td><input class="dx-in c" data-k="sca" type="date" value="${esc(rt.scadenza||'')}"></td>
+           <td class="dx-m drmc-mesi-span" data-i="${r-1}">${m!==null?m:''}</td>
+           <td><input class="dx-in r" data-k="deb" value="${esc(rt.debitoRes||'')}" inputmode="decimal"></td>`}
+      <td style="width:30px;background:#fff"><button class="dx-x" type="button" title="Svuota la riga">✕</button></td>`;
+    // la ✕ è nell'ultima cella: la tabella ha 7 colonne (6 + comandi)
+    const pid=p.id;
+    const money = (inp,setter)=>{
+      inp.addEventListener('input',()=>{ const pp=findPanel(pid); if(!pp) return; setter(pp,inp.value); savePanels(); updateResults(pid); });
+      inp.addEventListener('blur',()=>{ const v=parseN(inp.value); const t=v?fe(v):''; if(inp.value!==t){ inp.value=t; const pp=findPanel(pid); if(pp){ setter(pp,t); savePanels(); updateResults(pid);} } });
+    };
+    const q=k=>tr.querySelector('[data-k="'+k+'"]');
+    money(q('red'),(pp,v)=>{ ensureRed(pp,r).importo=v; });
+    if(isNew){ money(q('nuova'),(pp,v)=>{ pp.nuova=v; }); }
+    else {
+      money(q('rata'),(pp,v)=>{ ensureRata(pp,r-1).importo=v; });
+      money(q('deb'),(pp,v)=>{ ensureRata(pp,r-1).debitoRes=v; });
+      q('ist').addEventListener('input',function(){ const pp=findPanel(pid); if(pp){ ensureRata(pp,r-1).istituto=this.value; savePanels(); } });
+      q('sca').addEventListener('input',function(){ const pp=findPanel(pid); if(pp){ ensureRata(pp,r-1).scadenza=this.value; savePanels(); updateResults(pid);} });
+    }
+    tr.querySelector('.dx-x').addEventListener('click',()=>drmClearRow(pid,r));
+    tr.querySelectorAll('.dx-h').forEach(hd=>{
+      hd.addEventListener('dragstart',e=>{ _drag={pid,kind:hd.dataset.kind,from:r}; e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain','drm'); try{e.dataTransfer.setDragImage(tr,20,15);}catch(_){} tr.classList.add('dx-dragging'); });
+      hd.addEventListener('dragend',()=>{ _drag=null; tr.classList.remove('dx-dragging'); document.querySelectorAll('.dx-over').forEach(x=>x.classList.remove('dx-over')); });
+    });
+    tr.addEventListener('dragover',e=>{ if(!_drag||_drag.pid!==pid) return; if(_drag.kind==='rata'&&r===0) return; e.preventDefault(); tr.classList.add('dx-over'); });
+    tr.addEventListener('dragleave',()=>tr.classList.remove('dx-over'));
+    tr.addEventListener('drop',e=>{ if(!_drag||_drag.pid!==pid) return; e.preventDefault(); tr.classList.remove('dx-over'); const d=_drag; _drag=null; drmMoveRow(pid,d.kind,d.from,r); });
     return tr;
   }
 
@@ -3787,86 +3818,52 @@ calcPolizza();
     wrap.className='drmc-panel';
     wrap.id='drmc-panel-'+p.id;
     const {totRed,totRate,totDebit,drm,dti} = calcPanel(p);
-    const drmCls = drm>=0?'drmc-pos':'drmc-neg';
-    const dtiCls = dti<=0.35?'drmc-pos':(dti<=0.50?'drmc-neutral':'drmc-neg');
-    const dtiIcon = dti<=0.35?'✅':(dti<=0.50?'⚠️':'❌');
-
+    const dtiCls = totRed<=0?'':(dti<=0.35?'drmc-pos':(dti<=0.50?'drmc-neutral':'drmc-neg'));
     wrap.innerHTML=`
-      <!-- Header -->
-      <div class="drmc-panel-head">
-        <input class="drmc-panel-name" value="${esc(p.name)}" placeholder="Nome cliente / pratica">
+      <div class="dx-head">
+        <div class="dx-lbl">Intestatari</div>
+        <input class="drmc-panel-name" value="${esc(p.name)}" placeholder="Nome cliente / intestatari">
         <input class="drmc-panel-num" value="${esc(p.numPratica||'')}" placeholder="N° pratica">
-        <button class="drmc-panel-del" type="button" title="Elimina">🗑</button>
+        <button class="drmc-panel-del" type="button" title="Elimina il pannello">🗑</button>
       </div>
-      <!-- Corpo a due colonne -->
-      <div class="drmc-body">
-        <!-- SINISTRA: redditi -->
-        <div class="drmc-col">
-          <div class="drmc-col-label">💰 Redditi</div>
-          <table class="drmc-t">
-            <colgroup><col style="width:auto"><col style="width:100px"><col style="width:28px"></colgroup>
-            <thead><tr><th>Fonte</th><th class="r">€/mese</th><th></th></tr></thead>
-            <tbody class="drmc-red-body"></tbody>
-          </table>
-          <button class="drmc-add-r drmc-add-red" type="button">＋</button>
+      <div class="dx-main">
+        <div>
+          <div class="dx-tablewrap">
+            <table class="dx-t">
+              <colgroup><col style="width:15%"><col style="width:15%"><col><col style="width:19%"><col style="width:11%"><col style="width:15%"><col style="width:30px"></colgroup>
+              <thead><tr><th>Redditi</th><th>Rate</th><th>Istit.</th><th>Scadenza</th><th>Mesi scad.</th><th>Debito Res.</th><th></th></tr></thead>
+              <tbody class="dx-body"></tbody>
+              <tfoot><tr>
+                <td data-tot-red>${eur(totRed)}</td><td data-tot-rate>${eur(totRate)}</td>
+                <td class="dx-empty" colspan="3"></td><td data-debit-tot>${totDebit>0?eur(totDebit):'—'}</td><td class="dx-empty"></td>
+              </tr></tfoot>
+            </table>
+          </div>
+          <div class="dx-actions">
+            <button type="button" class="dx-add">＋ Aggiungi riga</button>
+            <span class="dx-hint"><i></i>La riga gialla è la <b>nuova rata proposta</b>: concorre a rate totali, DRM e DTI.</span>
+          </div>
         </div>
-        <!-- DESTRA: rate/impegni -->
-        <div class="drmc-col">
-          <div class="drmc-col-label">📋 Impegni / rate in corso</div>
-          <table class="drmc-t">
-            <colgroup>
-              <col style="width:auto">
-              <col style="width:90px">
-              <col style="width:138px">
-              <col style="width:52px">
-              <col style="width:100px">
-              <col style="width:28px">
-            </colgroup>
-            <thead><tr>
-              <th>Istituto</th>
-              <th class="r">Rata</th><th>Scadenza</th><th class="r">Mesi</th>
-              <th class="r">Deb. res.</th><th></th>
-            </tr></thead>
-            <tbody class="drmc-rate-body"></tbody>
-          </table>
-          <button class="drmc-add-r drmc-add-rate" type="button">＋</button>
-        </div>
-      </div>
-      <!-- Footer KPI -->
-      <div class="drmc-footer">
-        <div class="drmc-kpi-box">
-          <div class="drmc-kpi-lbl">Redditi tot.</div>
-          <div style="font-size:16px;font-weight:700;color:#4A8C28;white-space:nowrap" data-tot-red>€ ${fe(totRed)}</div>
-        </div>
-        <div class="drmc-kpi-box">
-          <div class="drmc-kpi-lbl">Rate tot.</div>
-          <div style="font-size:16px;font-weight:700;color:#C0392B;white-space:nowrap" data-tot-rate>€ ${fe(totRate)}</div>
-        </div>
-        <div class="drmc-kpi-box">
-          <div class="drmc-kpi-lbl">Deb. residui</div>
-          <div style="font-size:16px;font-weight:700;color:#666;white-space:nowrap" data-debit-tot>${totDebit>0?'€ '+fe(totDebit):'—'}</div>
-        </div>
-        <div class="drmc-kpi-box" style="flex:1.6;background:${drm>=0?'#DAE3F3':'#FDEAEA'};border-left:3px solid ${drm>=0?'#5B9BD5':'#C0392B'}">
-          <div class="drmc-kpi-lbl">DRM — Disponibilità mensile</div>
-          <div class="drmc-kpi-val ${drmCls}" data-drm>€ ${fe(drm)}</div>
-        </div>
-        <div class="drmc-kpi-box" style="flex:1.2;background:${dti<=0.35?'#DAE3F3':(dti<=0.50?'#FFF2CC':'#FDEAEA')};border-left:3px solid ${dti<=0.35?'#4472C4':(dti<=0.50?'#FFC000':'#C0392B')}">
-          <div class="drmc-kpi-lbl" data-dti-lbl>DTI ${dtiIcon}</div>
-          <div class="drmc-kpi-val ${dtiCls}" data-dti>${(dti*100).toFixed(1).replace('.',',')} %</div>
+        <div class="dx-side">
+          <div class="dx-kpi" data-drm-box style="background:${drm>=0?'#DEEAF6':'#FDEAEA'}">
+            <div class="dx-kh">DRM</div>
+            <div class="dx-kv ${drm>=0?'drmc-pos':'drmc-neg'}" data-drm>${eur(drm)}</div>
+            <div class="dx-ks">redditi − rate</div>
+          </div>
+          <div class="dx-kpi" data-dti-box style="background:${totRed<=0?'#DEEAF6':(dti<=0.35?'#DEEAF6':(dti<=0.50?'#FFF2CC':'#FDEAEA'))}">
+            <div class="dx-kh">DTI</div>
+            <div class="dx-kv ${dtiCls}" data-dti>${dtiTxt(dti,totRed)}</div>
+            <div class="dx-ks">rate ÷ redditi</div>
+          </div>
         </div>
       </div>`;
-
-    const redBody = wrap.querySelector('.drmc-red-body');
-    (p.redditi||[]).forEach((r,i)=>redBody.appendChild(buildRedRow(p.id,r,i)));
-    const rateBody = wrap.querySelector('.drmc-rate-body');
-    (p.rate||[]).forEach((r,i)=>rateBody.appendChild(buildRateRow(p.id,r,i)));
-
+    const body = wrap.querySelector('.dx-body');
+    const n = rowsCount(p);
+    for(let r=0;r<n;r++) body.appendChild(buildRow(p,r));
     wrap.querySelector('.drmc-panel-name').addEventListener('input', function(){ const pp=findPanel(p.id); if(pp){pp.name=this.value; savePanels();} });
     wrap.querySelector('.drmc-panel-num').addEventListener('input', function(){ const pp=findPanel(p.id); if(pp){pp.numPratica=this.value; savePanels();} });
     wrap.querySelector('.drmc-panel-del').addEventListener('click', ()=>drmDelPanel(p.id));
-    wrap.querySelector('.drmc-add-red').addEventListener('click', ()=>drmAddReddito(p.id));
-    wrap.querySelector('.drmc-add-rate').addEventListener('click', ()=>drmAddRata(p.id));
-
+    wrap.querySelector('.dx-add').addEventListener('click', ()=>drmAddRow(p.id));
     return wrap;
   }
 
@@ -3884,7 +3881,7 @@ calcPolizza();
 
   /* ── Public API ── */
   window.drmAddPanel = function(){
-    const p={id:_nextId++, name:'', numPratica:'', redditi:[{desc:'',importo:''}], rate:[{tipo:'',istituto:'',ruolo:'intestatario',importo:'',scadenza:'',debitoRes:''}]};
+    const p={id:_nextId++, name:'', numPratica:'', redditi:[], rate:[], nuova:'', rows:MIN_ROWS};
     panels.push(p);
     savePanels();
     renderAll();
@@ -3899,25 +3896,23 @@ calcPolizza();
     renderAll();
   };
 
-  window.drmAddReddito = function(id){
-    const p=findPanel(id); if(!p) return;
-    p.redditi.push({desc:'',importo:''});
+  // sposta un reddito (kind 'red') o una rata (kind 'rata') da riga 'from' a riga 'to'
+  window.drmMoveRow = function(id,kind,from,to){
+    const p=findPanel(id); if(!p||from===to) return;
+    if(kind==='red'){ ensureRed(p,Math.max(from,to)); const [x]=p.redditi.splice(from,1); p.redditi.splice(to,0,x); }
+    else { if(from<1||to<1) return; ensureRata(p,Math.max(from,to)-1); const [x]=p.rate.splice(from-1,1); p.rate.splice(to-1,0,x); }
     savePanels(); reRenderPanel(id);
   };
-  window.drmDelReddito = function(id,i){
+  window.drmAddRow = function(id){
     const p=findPanel(id); if(!p) return;
-    p.redditi.splice(i,1);
+    p.rows = rowsCount(p)+1;
     savePanels(); reRenderPanel(id);
   };
-
-  window.drmAddRata = function(id){
+  // «✕»: svuota reddito e rata della riga (la riga 1 svuota anche la nuova rata)
+  window.drmClearRow = function(id,r){
     const p=findPanel(id); if(!p) return;
-    p.rate.push({tipo:'',istituto:'',ruolo:'intestatario',importo:'',scadenza:'',debitoRes:''});
-    savePanels(); reRenderPanel(id);
-  };
-  window.drmDelRata = function(id,i){
-    const p=findPanel(id); if(!p) return;
-    p.rate.splice(i,1);
+    if(p.redditi && p.redditi[r]) p.redditi[r]=emptyRed();
+    if(r===0) p.nuova=''; else if(p.rate && p.rate[r-1]) p.rate[r-1]=emptyRata();
     savePanels(); reRenderPanel(id);
   };
 
