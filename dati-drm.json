@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-04T10:09:03.646Z",
+  "exportedAt": "2026-11-04T10:09:11.610Z",
   "panels": [
     {
       "id": 1,
@@ -130,7 +130,7 @@
         },
         {
           "desc": "",
-          "importo": "238"
+          "importo": "238,00"
         }
       ],
       "rate": [
@@ -142,7 +142,8 @@
           "scadenza": "",
           "debitoRes": ""
         }
-      ]
+      ],
+      "nuova": "535"
     },
     {
       "id": 5,
