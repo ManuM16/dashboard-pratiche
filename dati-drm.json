@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-09T14:27:49.471Z",
+  "exportedAt": "2026-11-09T14:28:15.789Z",
   "panels": [
     {
       "id": 1,
@@ -163,7 +163,7 @@
     },
     {
       "id": 5,
-      "name": "",
+      "name": "VENTURO HIDALGO CHRISTIAM WALT ER",
       "numPratica": "",
       "redditi": [
         {
@@ -180,7 +180,7 @@
           "tipo": "",
           "istituto": "",
           "ruolo": "intestatario",
-          "importo": "566",
+          "importo": "",
           "scadenza": "",
           "debitoRes": ""
         }
