@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-09T11:20:13.902Z",
+  "exportedAt": "2026-11-09T11:20:44.322Z",
   "panels": [
     {
       "id": 1,
@@ -117,7 +117,7 @@
     },
     {
       "id": 4,
-      "name": "Folt",
+      "name": "Foltz",
       "numPratica": "",
       "redditi": [
         {
@@ -159,7 +159,7 @@
           "debitoRes": ""
         }
       ],
-      "nuova": "724,00"
+      "nuova": ""
     },
     {
       "id": 5,
