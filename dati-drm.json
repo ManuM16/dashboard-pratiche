@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-09T15:48:27.024Z",
+  "exportedAt": "2026-11-09T15:48:49.745Z",
   "panels": [
     {
       "id": 1,
@@ -224,7 +224,7 @@
     },
     {
       "id": 7,
-      "name": "Cavac",
+      "name": "Cavaciocchi",
       "numPratica": "",
       "redditi": [
         {
@@ -242,7 +242,7 @@
           "debitoRes": ""
         }
       ],
-      "nuova": "491,00",
+      "nuova": "",
       "rows": 8
     }
   ],
