@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-09T09:18:55.329Z",
+  "exportedAt": "2026-11-09T09:20:59.996Z",
   "panels": [
     {
       "id": 1,
@@ -117,7 +117,7 @@
     },
     {
       "id": 4,
-      "name": "Fenu Maria Br",
+      "name": "Fenu Maria Bruna",
       "numPratica": "",
       "redditi": [
         {
@@ -138,7 +138,7 @@
           "tipo": "",
           "istituto": "",
           "ruolo": "intestatario",
-          "importo": "",
+          "importo": "344",
           "scadenza": "",
           "debitoRes": ""
         }
