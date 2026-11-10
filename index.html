@@ -249,24 +249,28 @@ tr:hover td{background:var(--surface3)}
 
 /* ── DRM/DTI Calculator — layout compatto ── */
 .drmc-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);container-type:inline-size}
-.dx-head{display:flex;align-items:stretch;background:var(--an-blue,#2C2C31);color:#fff}
-.dx-lbl{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.6);padding:0 6px 0 18px;display:flex;align-items:center;white-space:nowrap}
-.drmc-panel-name{flex:1;min-width:120px;border:none;background:transparent;font-size:17px;font-weight:600;font-family:'Outfit',sans-serif;color:#fff;outline:none;padding:14px 12px}
-.drmc-panel-name::placeholder{color:rgba(255,255,255,.35);font-weight:400}
-.drmc-panel-num{width:140px;border:none;border-left:1px solid rgba(255,255,255,.15);background:transparent;font-size:14px;font-family:'Outfit',sans-serif;color:#fff;padding:0 12px;outline:none}
-.drmc-panel-num::placeholder{color:rgba(255,255,255,.35)}
-.drmc-panel-name:focus,.drmc-panel-num:focus{background:rgba(255,255,255,.08)}
-.drmc-panel-del{border:none;border-left:1px solid rgba(255,255,255,.15);background:transparent;cursor:pointer;color:rgba(255,255,255,.65);font-size:15px;padding:0 16px;transition:.12s}
-.drmc-panel-del:hover{background:#B82525;color:#fff}
+.dx-head{display:flex;align-items:stretch;background:var(--surface);color:var(--ink);border-top:3px solid var(--an-blue,#2C2C31);border-bottom:1px solid var(--border2)}
+.dx-fld{display:flex;flex-direction:column;justify-content:center;min-width:0;padding:8px 14px 7px 16px}
+.dx-fld.f1{flex:1 1 180px}
+.dx-fld.f2{flex:0 1 170px;border-left:1px solid var(--border)}
+.dx-fld:focus-within{background:var(--blue-l)}
+.dx-lbl{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);white-space:nowrap;cursor:text}
+.drmc-panel-name{width:100%;min-width:0;border:none;background:transparent;font-size:18px;font-weight:600;font-family:'Outfit',sans-serif;color:var(--ink);outline:none;padding:1px 0 0}
+.drmc-panel-name::placeholder,.drmc-panel-num::placeholder{color:var(--ink3);font-weight:400;opacity:.7}
+.drmc-panel-num{width:100%;min-width:0;border:none;background:transparent;font-size:16px;font-weight:600;font-family:'Outfit',sans-serif;color:var(--ink);padding:2px 0 0;outline:none}
+
+
+.drmc-panel-del{border:none;border-left:1px solid var(--border);background:transparent;cursor:pointer;color:var(--ink3);font-size:15px;padding:0 16px;transition:.12s}
+.drmc-panel-del:hover{background:var(--red-l);color:var(--red)}
 .dx-main{display:block}
 .dx-nuova{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:#FFF6C9;border-bottom:1px solid var(--border2);box-shadow:inset 4px 0 0 var(--amber-m)}
 .dx-nuova label{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--amber);white-space:nowrap}
 .dx-nuova .dx-in{width:7.5em;height:36px;background:#fff;border:1px solid var(--amber-m);border-radius:7px;font-size:18px;font-weight:700}
 .dx-nuova span{font-size:12px;color:var(--ink2)}
 .dx-in.dx-bad{box-shadow:inset 0 0 0 2px var(--red);background:var(--red-l)}
-.dx-t tfoot td.dx-totl{text-align:left;font-weight:500;font-size:12px;color:rgba(255,255,255,.6);padding-left:10px;overflow:hidden;text-overflow:ellipsis}
+.dx-t tfoot td.dx-totl{text-align:left;font-weight:500;font-size:12px;color:var(--ink2);padding-left:10px;overflow:hidden;text-overflow:ellipsis}
 .dx-tablewrap{overflow-x:auto;min-width:0}
-.dx-t{width:100%;min-width:47em;border-collapse:collapse;table-layout:fixed;font-size:15px}
+.dx-t{width:100%;min-width:45em;border-collapse:collapse;table-layout:fixed;font-size:15px}
 .dx-t th{background:var(--surface2);color:var(--ink2);font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 4px;text-align:center;border-bottom:1px solid var(--border2)}
 .dx-t td{background:var(--surface);padding:0;height:36px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle}
 .dx-t td:last-child{border-right:none}
@@ -275,8 +279,8 @@ tr:hover td{background:var(--surface3)}
 .dx-t td.dx-new,.dx-t td.dx-newl,.dx-t tbody tr:hover td.dx-new,.dx-t tbody tr:hover td.dx-newl{background:#FFF1A8;font-weight:700}
 .dx-t td.dx-new{box-shadow:inset 3px 0 0 var(--amber-m)}
 .dx-t td.dx-newl{text-align:center;font-weight:600;font-size:13px;color:var(--amber);white-space:nowrap}
-.dx-t tfoot td{background:var(--ink);color:#fff;border:none;font-weight:700;font-size:15px;text-align:right;padding:10px 8px;height:auto;white-space:nowrap}
-.dx-t tfoot td.dx-empty{background:var(--ink)}
+.dx-t tfoot td{background:var(--surface2);color:var(--ink);border:none;border-top:2px solid var(--ink);font-weight:700;font-size:16px;text-align:right;padding:10px 8px;height:auto;white-space:nowrap}
+.dx-t tfoot td.dx-empty{background:var(--surface2)}
 .dx-in{width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;color:var(--ink);padding:6px 8px;outline:none;box-sizing:border-box;min-width:0}
 .dx-in.r{text-align:right}
 .dx-hc{position:relative}
@@ -294,13 +298,26 @@ tr:hover td{background:var(--surface3)}
 .dx-side{display:grid;grid-template-columns:1fr 1fr 1.5fr;border-top:1px solid var(--border)}
 .dx-kliq .dx-kv{color:var(--ink)}
 .dx-l2{margin-left:14px}
-.dx-sel{width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:var(--ink2);padding:6px 2px 6px 6px;outline:none;cursor:pointer;box-sizing:border-box;min-width:0}
-.dx-sel:focus{background:var(--blue-l);box-shadow:inset 0 0 0 2px var(--blue-m)}
+.dx-stb{display:flex;align-items:center;gap:5px;width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:500;color:var(--ink3);padding:0 6px;outline:none;cursor:pointer;box-sizing:border-box;min-width:0;text-align:left;white-space:nowrap}
+.dx-stb i{flex:0 0 7px;width:7px;height:7px;border-radius:50%;background:var(--border2)}
+.dx-stb span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.dx-stb::after{content:'▾';font-size:10px;color:var(--ink3);opacity:.7}
+.dx-stb:hover{color:var(--ink)}
+.dx-stb[data-v="est"]{color:var(--teal);font-weight:700}.dx-stb[data-v="est"] i{background:var(--teal-m)}
+.dx-stb[data-v="no"]{color:var(--ink2);font-weight:600}.dx-stb[data-v="no"] i{background:var(--ink3)}
+.dx-stmenu{position:fixed;z-index:9999;width:300px;max-width:calc(100vw - 16px);background:var(--surface);border:1px solid var(--border2);border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.16);padding:5px;font-family:'Outfit',sans-serif}
+.dx-stmenu button{display:flex;gap:9px;align-items:flex-start;width:100%;border:none;background:none;text-align:left;padding:8px 10px;border-radius:7px;cursor:pointer;font-family:inherit;color:var(--ink);outline:none}
+.dx-stmenu button:hover,.dx-stmenu button:focus{background:var(--surface2)}
+.dx-stmenu button.on{background:var(--blue-l)}
+.dx-stmenu i{flex:0 0 9px;width:9px;height:9px;border-radius:50%;margin-top:5px;background:var(--border2)}
+.dx-stmenu b{display:block;font-size:14px;font-weight:600}
+.dx-stmenu small{display:block;white-space:normal;font-size:12px;color:var(--ink3);line-height:1.3}
+.dx-stb:focus{background:var(--blue-l);box-shadow:inset 0 0 0 2px var(--blue-m)}
 .dx-t tr.dx-st-est td:nth-child(n+2):nth-child(-n+7){background:var(--teal-l)!important}
-.dx-t tr.dx-st-est .dx-sel{color:var(--teal);font-weight:700}
+
 .dx-t tr.dx-st-est [data-k="rata"]{text-decoration:line-through;color:var(--teal)}
 .dx-t tr.dx-st-no td:nth-child(n+2):nth-child(-n+7){background:var(--surface2)!important}
-.dx-t tr.dx-st-no td:nth-child(n+2):nth-child(-n+7) .dx-in,.dx-t tr.dx-st-no .dx-sel,.dx-t tr.dx-st-no td.dx-m{color:var(--ink3)}
+.dx-t tr.dx-st-no td:nth-child(n+2):nth-child(-n+7) .dx-in,.dx-t tr.dx-st-no td.dx-m{color:var(--ink3)}
 .dx-t tr.dx-st-no [data-k="rata"]{text-decoration:line-through}
 @container (max-width:700px){
   .dx-side{grid-template-columns:1fr 1fr}
@@ -318,8 +335,8 @@ tr:hover td{background:var(--surface3)}
 .dx-actions .dx-hint{font-size:12px;color:var(--ink3)}
 .dx-actions .dx-hint i{display:inline-block;width:12px;height:12px;background:#FFF1A8;border:1px solid var(--amber-m);border-radius:3px;vertical-align:-2px;margin-right:4px}
 @container (max-width:520px){
-  .dx-lbl{display:none}
-  .drmc-panel-name{padding-left:16px}
+
+  .dx-fld.f2{flex-basis:120px}
 }
 .drmc-pos{color:var(--green)}.drmc-neg{color:#C0392B}
 .drmc-neutral{color:#B8860B}
@@ -526,7 +543,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.99.0 · 10/11/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.100.0 · 10/11/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -888,7 +905,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.99.0 · 10/11/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.100.0 · 10/11/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3834,11 +3851,7 @@ calcPolizza();
     tr.innerHTML = `
       <td class="dx-hc"><span class="dx-h" draggable="true" data-kind="red" title="Trascina per riordinare i redditi">⋮⋮</span><input class="dx-in r" data-k="red" value="${esc(red.importo)}" title="${esc(red.desc||'')}" inputmode="decimal"></td>
       <td class="dx-hc"><span class="dx-h" draggable="true" data-kind="rata" title="Trascina per riordinare le rate">⋮⋮</span><input class="dx-in r" data-k="rata" value="${esc(rt.importo)}" inputmode="decimal"></td>
-      <td><select class="dx-sel" data-k="st" title="In corso: entra in DRM e DTI · Da estinguere: esclusa, il debito residuo si toglie dalla liquidità · Non considerare: esclusa (garante, in scadenza, intestata alla ditta…)">
-            <option value=""${!rt.stato?' selected':''}>In corso</option>
-            <option value="est"${rt.stato==='est'?' selected':''}>Da estinguere</option>
-            <option value="no"${rt.stato==='no'?' selected':''}>Non considerare</option>
-          </select></td>
+      <td><button type="button" class="dx-stb" data-k="st" data-v="${rt.stato||''}" title="Stato della rata: clic per cambiare"><i></i><span>${ST_SHORT[rt.stato||'']}</span></button></td>
       <td><input class="dx-in" data-k="ist" value="${esc(rt.istituto||'')}"></td>
       <td><input class="dx-in c" data-k="sca" value="${esc(isoToIt(rt.scadenza))}" inputmode="numeric" title="Scadenza: giorno/mese/anno oppure mese/anno"></td>
       <td class="dx-m drmc-mesi-span" data-i="${r}">${m!==null?m:''}</td>
@@ -3847,12 +3860,14 @@ calcPolizza();
     const pid=p.id;
     const q=k=>tr.querySelector('[data-k="'+k+'"]');
     if(rt.stato) tr.classList.add('dx-st-'+rt.stato);
-    q('st').addEventListener('change',function(){
+    const stb=q('st');
+    stb.addEventListener('click',()=>stMenu(stb,v=>{
       const pp=findPanel(pid); if(!pp) return;
-      ensureRata(pp,r).stato=this.value;
-      tr.classList.remove('dx-st-est','dx-st-no'); if(this.value) tr.classList.add('dx-st-'+this.value);
+      ensureRata(pp,r).stato=v;
+      stb.dataset.v=v; stb.querySelector('span').textContent=ST_SHORT[v];
+      tr.classList.remove('dx-st-est','dx-st-no'); if(v) tr.classList.add('dx-st-'+v);
       savePanels(); updateResults(pid);
-    });
+    }));
     bindMoney(q('red'),pid,(pp,v)=>{ ensureRed(pp,r).importo=v; });
     bindMoney(q('rata'),pid,(pp,v)=>{ ensureRata(pp,r).importo=v; });
     bindMoney(q('deb'),pid,(pp,v)=>{ ensureRata(pp,r).debitoRes=v; });
@@ -3877,7 +3892,40 @@ calcPolizza();
   }
 
   /* ── Tastiera: frecce tra le celle, Invio conferma e scende, Tab avanza ── */
-  const KCOLS=['red','rata','ist','sca','deb'];
+  const KCOLS=['red','rata','st','ist','sca','deb'];
+  const ST_LBL={'':'In corso','est':'Da estinguere','no':'Non considerare'};
+  const ST_SHORT={'':'In corso','est':'Estinzione','no':'Esclusa'};
+  const ST_DESC={'':'Entra nel calcolo di DRM e DTI','est':'Esclusa: il debito residuo si toglie dalla liquidità','no':'Esclusa: garante, in scadenza, intestata alla ditta…'};
+  const ST_DOT={'':'var(--border2)','est':'var(--teal-m)','no':'var(--ink3)'};
+  let _stMenu=null;
+  function stMenuClose(){ if(_stMenu){ _stMenu.el.remove(); document.removeEventListener('mousedown',_stMenu.out,true); window.removeEventListener('scroll',stMenuClose,true); window.removeEventListener('resize',stMenuClose); _stMenu=null; } }
+  // menu di scelta dello stato, agganciato sotto il pulsante
+  function stMenu(btn,onPick){
+    if(_stMenu && _stMenu.btn===btn){ stMenuClose(); return; }
+    stMenuClose();
+    const el=document.createElement('div'); el.className='dx-stmenu';
+    ['','est','no'].forEach(v=>{
+      const b=document.createElement('button'); b.type='button'; if((btn.dataset.v||'')===v) b.className='on';
+      b.innerHTML='<i style="background:'+ST_DOT[v]+'"></i><div><b>'+ST_LBL[v]+'</b><small>'+ST_DESC[v]+'</small></div>';
+      b.addEventListener('click',()=>{ stMenuClose(); onPick(v); btn.focus(); });
+      el.appendChild(b);
+    });
+    el.addEventListener('keydown',e=>{
+      const it=[...el.querySelectorAll('button')], i=it.indexOf(document.activeElement);
+      if(e.key==='ArrowDown'){ e.preventDefault(); it[(i+1)%it.length].focus(); }
+      else if(e.key==='ArrowUp'){ e.preventDefault(); it[(i+it.length-1)%it.length].focus(); }
+      else if(e.key==='Escape'||e.key==='Tab'){ e.preventDefault(); stMenuClose(); btn.focus(); }
+    });
+    document.body.appendChild(el);
+    const r=btn.getBoundingClientRect(), mh=el.offsetHeight, mw=el.offsetWidth;
+    el.style.left=Math.max(8,Math.min(r.left, innerWidth-mw-8))+'px';
+    el.style.top=(r.bottom+mh+8>innerHeight ? Math.max(8,r.top-mh-4) : r.bottom+4)+'px';
+    const out=e=>{ if(!el.contains(e.target) && e.target!==btn && !btn.contains(e.target)) stMenuClose(); };
+    document.addEventListener('mousedown',out,true);
+    window.addEventListener('scroll',stMenuClose,true); window.addEventListener('resize',stMenuClose);
+    _stMenu={el,btn,out};
+    (el.querySelector('button.on')||el.querySelector('button')).focus();
+  }
   function bindKeys(wrap){
     const go=el=>{ if(el){ el.focus(); try{el.select();}catch(_){} } return !!el; };
     // all'ingresso in una cella il contenuto viene selezionato: scrivendo lo si sostituisce
@@ -3885,7 +3933,8 @@ calcPolizza();
     wrap.addEventListener('mouseup',e=>{ const t=e.target; if(t._dxSel){ t._dxSel=false; e.preventDefault(); } });
     wrap.addEventListener('focusout',e=>{ if(e.target) e.target._dxSel=false; });
     wrap.addEventListener('keydown',e=>{
-      const t=e.target; if(!t.classList||!t.classList.contains('dx-in')) return;
+      const t=e.target; if(!t.classList||!(t.classList.contains('dx-in')||t.classList.contains('dx-stb'))) return;
+      const isBtn=t.classList.contains('dx-stb');
       if(e.altKey||e.ctrlKey||e.metaKey) return;
       const k=t.dataset.k, rows=[...wrap.querySelectorAll('.dx-body tr')];
       const nuova=wrap.querySelector('[data-k="nuova"]');
@@ -3899,8 +3948,8 @@ calcPolizza();
         return;
       }
       const ri=rows.indexOf(t.closest('tr')), ci=KCOLS.indexOf(k); if(ri<0||ci<0) return;
-      const len=t.value.length, s0=t.selectionStart, s1=t.selectionEnd, all=(s0===0&&s1===len);
-      if(e.key==='Enter'){ e.preventDefault(); if(!go(cell(ri+1,k))) t.blur(); }
+      const len=isBtn?0:t.value.length, s0=isBtn?0:t.selectionStart, s1=isBtn?0:t.selectionEnd, all=isBtn||(s0===0&&s1===len);
+      if(e.key==='Enter'){ if(isBtn) return; e.preventDefault(); if(!go(cell(ri+1,k))) t.blur(); }
       else if(e.key==='ArrowDown'){ e.preventDefault(); go(cell(ri+1,k)); }
       else if(e.key==='ArrowUp'){ e.preventDefault(); if(ri===0){ if(k==='rata') go(nuova); } else go(cell(ri-1,k)); }
       else if(e.key==='ArrowLeft' && (all||(s0===0&&s1===0))){ if(ci>0){ e.preventDefault(); go(cell(ri,KCOLS[ci-1])); } }
@@ -3918,9 +3967,10 @@ calcPolizza();
     const dtiCls = totRed<=0?'':(dti<=0.35?'drmc-pos':(dti<=0.50?'drmc-neutral':'drmc-neg'));
     wrap.innerHTML=`
       <div class="dx-head">
-        <div class="dx-lbl">Intestatari</div>
-        <input class="drmc-panel-name" value="${esc(p.name)}" placeholder="Nome cliente / intestatari">
-        <input class="drmc-panel-num" value="${esc(p.numPratica||'')}" placeholder="N° pratica">
+        <label class="dx-fld f1"><span class="dx-lbl">Intestatari</span>
+          <input class="drmc-panel-name" value="${esc(p.name)}" placeholder="Nome cliente"></label>
+        <label class="dx-fld f2"><span class="dx-lbl">N° pratica</span>
+          <input class="drmc-panel-num" value="${esc(p.numPratica||'')}" placeholder="—"></label>
         <button class="drmc-panel-del" type="button" title="Elimina il pannello">🗑</button>
       </div>
       <div class="dx-nuova">
@@ -3933,7 +3983,7 @@ calcPolizza();
         <div>
           <div class="dx-tablewrap">
             <table class="dx-t">
-              <colgroup><col style="width:6.8em"><col style="width:6.8em"><col style="width:9.4em"><col><col style="width:6.8em"><col style="width:3.6em"><col style="width:6.8em"><col style="width:2.2em"></colgroup>
+              <colgroup><col style="width:6.8em"><col style="width:6.8em"><col style="width:6.9em"><col><col style="width:6.8em"><col style="width:3.6em"><col style="width:6.8em"><col style="width:2.2em"></colgroup>
               <thead><tr><th>Redditi</th><th>Rate</th><th>Stato</th><th>Istituto</th><th>Scadenza</th><th title="Mesi alla scadenza">Mesi</th><th>Debito res.</th><th></th></tr></thead>
               <tbody class="dx-body"></tbody>
               <tfoot><tr>
