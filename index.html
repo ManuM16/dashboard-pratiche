@@ -266,7 +266,7 @@ tr:hover td{background:var(--surface3)}
 .dx-in.dx-bad{box-shadow:inset 0 0 0 2px var(--red);background:var(--red-l)}
 .dx-t tfoot td.dx-totl{text-align:left;font-weight:500;font-size:12px;color:rgba(255,255,255,.6);padding-left:10px;overflow:hidden;text-overflow:ellipsis}
 .dx-tablewrap{overflow-x:auto;min-width:0}
-.dx-t{width:100%;min-width:38em;border-collapse:collapse;table-layout:fixed;font-size:15px}
+.dx-t{width:100%;min-width:47em;border-collapse:collapse;table-layout:fixed;font-size:15px}
 .dx-t th{background:var(--surface2);color:var(--ink2);font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 4px;text-align:center;border-bottom:1px solid var(--border2)}
 .dx-t td{background:var(--surface);padding:0;height:36px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle}
 .dx-t td:last-child{border-right:none}
@@ -291,7 +291,21 @@ tr:hover td{background:var(--surface3)}
 .dx-in:disabled{color:var(--ink3)}
 .dx-x{border:none;background:none;cursor:pointer;color:var(--ink3);font-size:13px;padding:4px;width:100%}
 .dx-x:hover{color:var(--red)}
-.dx-side{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border)}
+.dx-side{display:grid;grid-template-columns:1fr 1fr 1.5fr;border-top:1px solid var(--border)}
+.dx-kliq .dx-kv{color:var(--ink)}
+.dx-l2{margin-left:14px}
+.dx-sel{width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;color:var(--ink2);padding:6px 2px 6px 6px;outline:none;cursor:pointer;box-sizing:border-box;min-width:0}
+.dx-sel:focus{background:var(--blue-l);box-shadow:inset 0 0 0 2px var(--blue-m)}
+.dx-t tr.dx-st-est td:nth-child(n+2):nth-child(-n+7){background:var(--teal-l)!important}
+.dx-t tr.dx-st-est .dx-sel{color:var(--teal);font-weight:700}
+.dx-t tr.dx-st-est [data-k="rata"]{text-decoration:line-through;color:var(--teal)}
+.dx-t tr.dx-st-no td:nth-child(n+2):nth-child(-n+7){background:var(--surface2)!important}
+.dx-t tr.dx-st-no td:nth-child(n+2):nth-child(-n+7) .dx-in,.dx-t tr.dx-st-no .dx-sel,.dx-t tr.dx-st-no td.dx-m{color:var(--ink3)}
+.dx-t tr.dx-st-no [data-k="rata"]{text-decoration:line-through}
+@container (max-width:700px){
+  .dx-side{grid-template-columns:1fr 1fr}
+  .dx-kliq{grid-column:1 / -1;border-left:none!important;border-top:1px solid var(--border)}
+}
 .dx-kpi{display:flex;flex-direction:column;min-width:0;padding:14px 16px 12px;border-top:3px solid var(--border2);background:var(--surface)!important}
 .dx-kpi+.dx-kpi{border-left:1px solid var(--border)}
 .dx-kh{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);text-align:left}
@@ -512,7 +526,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.98.0 · 10/11/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.99.0 · 10/11/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -874,7 +888,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.98.0 · 10/11/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.99.0 · 10/11/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -2002,7 +2016,7 @@ body.guest-mode .comm-sel{
         </div>
 
         <!-- Griglia pannelli -->
-        <div id="drmc-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,max(540px,calc((100% - 60px)/4))),1fr));gap:20px">
+        <div id="drmc-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,max(640px,calc((100% - 60px)/4))),1fr));gap:20px">
           <!-- panels injected by JS -->
         </div>
 
@@ -3701,11 +3715,18 @@ calcPolizza();
   function calcPanel(p){
     const totRed = (p.redditi||[]).reduce((a,r)=>a+parseN(r.importo),0);
     // la nuova rata proposta concorre al conteggio insieme alle rate in corso
-    const totRate = (p.rate||[]).reduce((a,r)=>a+parseN(r.importo),0) + parseN(p.nuova);
-    const totDebit = (p.rate||[]).reduce((a,r)=>a+parseN(r.debitoRes),0);
+    // stato della rata: '' = in corso (conteggiata) · 'est' = da estinguere · 'no' = da non considerare
+    const rate = p.rate||[];
+    const totRate = rate.reduce((a,r)=>a+(r.stato?0:parseN(r.importo)),0) + parseN(p.nuova);
+    const totDebit = rate.reduce((a,r)=>a+parseN(r.debitoRes),0);
+    const est = rate.filter(r=>r.stato==='est' && (parseN(r.importo)||parseN(r.debitoRes)||r.istituto));
+    const estDebit = est.reduce((a,r)=>a+parseN(r.debitoRes),0);
+    const estMissing = est.filter(r=>!parseN(r.debitoRes)).length;   // da estinguere senza debito residuo
+    const estRate = est.reduce((a,r)=>a+parseN(r.importo),0);
+    const liq = parseN(p.liquidita);
     const drm = totRed - totRate;
     const dti = totRed>0 ? totRate/totRed : 0;
-    return {totRed, totRate, totDebit, drm, dti};
+    return {totRed, totRate, totDebit, drm, dti, liq, estDebit, estMissing, estN:est.length, estRate, liqNetta:liq-estDebit};
   }
   function mesiAlla(scadenza){
     if(!scadenza) return null;
@@ -3719,14 +3740,22 @@ calcPolizza();
   const MIN_ROWS = 5;
   let _drag=null;
   const emptyRed  = ()=>({desc:'',importo:''});
-  const emptyRata = ()=>({tipo:'',istituto:'',ruolo:'intestatario',importo:'',scadenza:'',debitoRes:''});
+  const emptyRata = ()=>({tipo:'',istituto:'',ruolo:'intestatario',importo:'',scadenza:'',debitoRes:'',stato:''});
   function rowsCount(p){
     let last=-1;
     (p.redditi||[]).forEach((r,i)=>{ if(r&&(r.importo||r.desc)) last=Math.max(last,i); });
-    (p.rate||[]).forEach((r,i)=>{ if(r&&(r.importo||r.istituto||r.scadenza||r.debitoRes)) last=Math.max(last,i); });
+    (p.rate||[]).forEach((r,i)=>{ if(r&&(r.importo||r.istituto||r.scadenza||r.debitoRes||r.stato)) last=Math.max(last,i); });
     return Math.max(1, p.rows!=null?p.rows:MIN_ROWS, last+1);
   }
   const eur = v => fe(v)+' €';
+  // testi del riquadro «Liquidità netta»
+  function liqView(c){
+    if(!c.liq && !c.estN) return {val:'—', sub:'liquidità totale − debiti da estinguere', cls:''};
+    let sub = c.estN ? (eur(c.liq)+' − '+eur(c.estDebit)+' di estinzioni ('+c.estN+(c.estN===1?' rata':' rate')+')') : 'nessuna rata da estinguere';
+    if(c.estMissing) sub += ' · manca il debito residuo di '+c.estMissing+(c.estMissing===1?' rata':' rate');
+    if(!c.liq) return {val:'—', sub:'inserisci la liquidità totale · estinzioni '+eur(c.estDebit), cls:''};
+    return {val:eur(c.liqNetta), sub, cls:c.liqNetta<0?'k-neg':(c.estMissing?'k-neu':'k-pos')};
+  }
   const dtiTxt = (dti,totRed) => totRed>0 ? (dti*100).toFixed(2).replace('.',',')+'%' : '—';
 
   /* ── Render ── */
@@ -3742,7 +3771,8 @@ calcPolizza();
   // Aggiorna solo i risultati senza toccare gli input — nessuna perdita di focus
   function updateResults(id){
     const p=findPanel(id); if(!p) return;
-    const {totRed,totRate,totDebit,drm,dti} = calcPanel(p);
+    const C = calcPanel(p);
+    const {totRed,totRate,totDebit,drm,dti} = C;
     const panel = document.getElementById('drmc-panel-'+id);
     if(!panel) return;
     const upd=(sel,fn)=>{ const el=panel.querySelector(sel); if(el) fn(el); };
@@ -3760,6 +3790,10 @@ calcPolizza();
     const kc=(el,c)=>{ el.classList.remove('k-pos','k-neu','k-neg'); if(c) el.classList.add(c); };
     upd('[data-dti-box]', el=>kc(el, totRed<=0?'':(dti<=0.35?'k-pos':(dti<=0.50?'k-neu':'k-neg'))));
     upd('[data-drm-box]', el=>kc(el, drm>=0?'k-pos':'k-neg'));
+    const L=liqView(C);
+    upd('[data-liq]', el=>{ el.textContent=L.val; el.classList.toggle('drmc-neg',L.cls==='k-neg'); });
+    upd('[data-liq-sub]', el=>{ el.textContent=L.sub; });
+    upd('[data-liq-box]', el=>kc(el,L.cls));
     panel.querySelectorAll('.drmc-mesi-span').forEach(td=>{
       const i=+td.dataset.i; const r=(p.rate||[])[i]; if(!r){ td.textContent=''; return; }
       const m=mesiAlla(r.scadenza);
@@ -3800,6 +3834,11 @@ calcPolizza();
     tr.innerHTML = `
       <td class="dx-hc"><span class="dx-h" draggable="true" data-kind="red" title="Trascina per riordinare i redditi">⋮⋮</span><input class="dx-in r" data-k="red" value="${esc(red.importo)}" title="${esc(red.desc||'')}" inputmode="decimal"></td>
       <td class="dx-hc"><span class="dx-h" draggable="true" data-kind="rata" title="Trascina per riordinare le rate">⋮⋮</span><input class="dx-in r" data-k="rata" value="${esc(rt.importo)}" inputmode="decimal"></td>
+      <td><select class="dx-sel" data-k="st" title="In corso: entra in DRM e DTI · Da estinguere: esclusa, il debito residuo si toglie dalla liquidità · Non considerare: esclusa (garante, in scadenza, intestata alla ditta…)">
+            <option value=""${!rt.stato?' selected':''}>In corso</option>
+            <option value="est"${rt.stato==='est'?' selected':''}>Da estinguere</option>
+            <option value="no"${rt.stato==='no'?' selected':''}>Non considerare</option>
+          </select></td>
       <td><input class="dx-in" data-k="ist" value="${esc(rt.istituto||'')}"></td>
       <td><input class="dx-in c" data-k="sca" value="${esc(isoToIt(rt.scadenza))}" inputmode="numeric" title="Scadenza: giorno/mese/anno oppure mese/anno"></td>
       <td class="dx-m drmc-mesi-span" data-i="${r}">${m!==null?m:''}</td>
@@ -3807,6 +3846,13 @@ calcPolizza();
       <td><button class="dx-x" type="button" tabindex="-1" title="Elimina la riga">✕</button></td>`;
     const pid=p.id;
     const q=k=>tr.querySelector('[data-k="'+k+'"]');
+    if(rt.stato) tr.classList.add('dx-st-'+rt.stato);
+    q('st').addEventListener('change',function(){
+      const pp=findPanel(pid); if(!pp) return;
+      ensureRata(pp,r).stato=this.value;
+      tr.classList.remove('dx-st-est','dx-st-no'); if(this.value) tr.classList.add('dx-st-'+this.value);
+      savePanels(); updateResults(pid);
+    });
     bindMoney(q('red'),pid,(pp,v)=>{ ensureRed(pp,r).importo=v; });
     bindMoney(q('rata'),pid,(pp,v)=>{ ensureRata(pp,r).importo=v; });
     bindMoney(q('deb'),pid,(pp,v)=>{ ensureRata(pp,r).debitoRes=v; });
@@ -3844,8 +3890,12 @@ calcPolizza();
       const k=t.dataset.k, rows=[...wrap.querySelectorAll('.dx-body tr')];
       const nuova=wrap.querySelector('[data-k="nuova"]');
       const cell=(ri,kk)=> rows[ri] ? rows[ri].querySelector('[data-k="'+kk+'"]') : null;
-      if(k==='nuova'){
-        if(e.key==='Enter'||e.key==='ArrowDown'){ e.preventDefault(); go(cell(0,'rata')); }
+      if(k==='nuova'||k==='liq'){
+        const liqEl=wrap.querySelector('[data-k="liq"]'), len=t.value.length, s0=t.selectionStart, s1=t.selectionEnd, all=(s0===0&&s1===len);
+        if(e.key==='Enter'){ e.preventDefault(); go(k==='nuova'?liqEl:cell(0,'red')); }
+        else if(e.key==='ArrowDown'){ e.preventDefault(); go(cell(0,'rata')); }
+        else if(e.key==='ArrowRight' && k==='nuova' && (all||(s0===len&&s1===len))){ e.preventDefault(); go(liqEl); }
+        else if(e.key==='ArrowLeft' && k==='liq' && (all||(s0===0&&s1===0))){ e.preventDefault(); go(nuova); }
         return;
       }
       const ri=rows.indexOf(t.closest('tr')), ci=KCOLS.indexOf(k); if(ri<0||ci<0) return;
@@ -3863,7 +3913,8 @@ calcPolizza();
     const wrap = document.createElement('div');
     wrap.className='drmc-panel';
     wrap.id='drmc-panel-'+p.id;
-    const {totRed,totRate,totDebit,drm,dti} = calcPanel(p);
+    const C0 = calcPanel(p), L0 = liqView(C0);
+    const {totRed,totRate,totDebit,drm,dti} = C0;
     const dtiCls = totRed<=0?'':(dti<=0.35?'drmc-pos':(dti<=0.50?'drmc-neutral':'drmc-neg'));
     wrap.innerHTML=`
       <div class="dx-head">
@@ -3875,18 +3926,19 @@ calcPolizza();
       <div class="dx-nuova">
         <label for="dx-nuova-${p.id}">Nuova rata proposta</label>
         <input class="dx-in r" id="dx-nuova-${p.id}" data-k="nuova" value="${esc(p.nuova||'')}" inputmode="decimal" placeholder="0,00">
-        <span>€ · conteggiata nel totale rate, nel DRM e nel DTI</span>
+        <label for="dx-liq-${p.id}" class="dx-l2">Liquidità totale</label>
+        <input class="dx-in r" id="dx-liq-${p.id}" data-k="liq" value="${esc(p.liquidita||'')}" inputmode="decimal" placeholder="0,00">
       </div>
       <div class="dx-main">
         <div>
           <div class="dx-tablewrap">
             <table class="dx-t">
-              <colgroup><col style="width:6.8em"><col style="width:6.8em"><col><col style="width:6.8em"><col style="width:3.6em"><col style="width:6.8em"><col style="width:2.2em"></colgroup>
-              <thead><tr><th>Redditi</th><th>Rate</th><th>Istituto</th><th>Scadenza</th><th title="Mesi alla scadenza">Mesi</th><th>Debito res.</th><th></th></tr></thead>
+              <colgroup><col style="width:6.8em"><col style="width:6.8em"><col style="width:9.4em"><col><col style="width:6.8em"><col style="width:3.6em"><col style="width:6.8em"><col style="width:2.2em"></colgroup>
+              <thead><tr><th>Redditi</th><th>Rate</th><th>Stato</th><th>Istituto</th><th>Scadenza</th><th title="Mesi alla scadenza">Mesi</th><th>Debito res.</th><th></th></tr></thead>
               <tbody class="dx-body"></tbody>
               <tfoot><tr>
                 <td data-tot-red>${eur(totRed)}</td><td data-tot-rate>${eur(totRate)}</td>
-                <td class="dx-empty dx-totl" colspan="3">Totali · rate inclusa la nuova</td><td data-debit-tot>${totDebit>0?eur(totDebit):'—'}</td><td class="dx-empty"></td>
+                <td class="dx-empty dx-totl" colspan="4">Totali · rate in corso + nuova rata</td><td data-debit-tot>${totDebit>0?eur(totDebit):'—'}</td><td class="dx-empty"></td>
               </tr></tfoot>
             </table>
           </div>
@@ -3905,6 +3957,11 @@ calcPolizza();
             <div class="dx-kv ${dtiCls}" data-dti>${dtiTxt(dti,totRed)}</div>
             <div class="dx-ks">rate ÷ redditi</div>
           </div>
+          <div class="dx-kpi dx-kliq ${L0.cls}" data-liq-box>
+            <div class="dx-kh">Liquidità netta</div>
+            <div class="dx-kv ${L0.cls==='k-neg'?'drmc-neg':''}" data-liq>${L0.val}</div>
+            <div class="dx-ks" data-liq-sub>${esc(L0.sub)}</div>
+          </div>
         </div>
       </div>`;
     const body = wrap.querySelector('.dx-body');
@@ -3915,6 +3972,7 @@ calcPolizza();
     wrap.querySelector('.drmc-panel-del').addEventListener('click', ()=>drmDelPanel(p.id));
     wrap.querySelector('.dx-add').addEventListener('click', ()=>drmAddRow(p.id));
     bindMoney(wrap.querySelector('[data-k="nuova"]'),p.id,(pp,v)=>{ pp.nuova=v; });
+    bindMoney(wrap.querySelector('[data-k="liq"]'),p.id,(pp,v)=>{ pp.liquidita=v; });
     bindKeys(wrap);
     return wrap;
   }
