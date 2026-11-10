@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-10T08:59:02.495Z",
+  "exportedAt": "2026-11-10T08:59:05.903Z",
   "panels": [
     {
       "id": 1,
@@ -87,12 +87,12 @@
     },
     {
       "id": 3,
-      "name": "Milia Car",
+      "name": "Milia Carlo",
       "numPratica": "",
       "redditi": [
         {
           "desc": "",
-          "importo": "1974,00"
+          "importo": "208,00"
         }
       ],
       "rate": [
