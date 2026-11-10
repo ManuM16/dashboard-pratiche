@@ -295,7 +295,7 @@ tr:hover td{background:var(--surface3)}
 .dx-in:disabled{color:var(--ink3)}
 .dx-x{border:none;background:none;cursor:pointer;color:var(--ink3);font-size:13px;padding:4px;width:100%}
 .dx-x:hover{color:var(--red)}
-.dx-side{display:grid;grid-template-columns:1fr 1fr 1.5fr;border-top:1px solid var(--border)}
+.dx-side{display:grid;grid-template-columns:auto auto 1fr;border-top:1px solid var(--border)}
 .dx-kliq .dx-kv{color:var(--ink)}
 .dx-l2{margin-left:14px}
 .dx-stb{display:flex;align-items:center;gap:5px;width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:500;color:var(--ink3);padding:0 6px;outline:none;cursor:pointer;box-sizing:border-box;min-width:0;text-align:left;white-space:nowrap}
@@ -323,13 +323,15 @@ tr:hover td{background:var(--surface3)}
   .dx-side{grid-template-columns:1fr 1fr}
   .dx-kliq{grid-column:1 / -1;border-left:none!important;border-top:1px solid var(--border)}
 }
-.dx-kpi{display:flex;flex-direction:column;min-width:0;padding:14px 16px 12px;border-top:3px solid var(--border2);background:var(--surface)!important}
+.dx-kpi{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:2px 10px;min-width:0;padding:8px 14px;border-top:3px solid var(--border2);background:var(--surface)!important}
 .dx-kpi+.dx-kpi{border-left:1px solid var(--border)}
 .dx-kh{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);text-align:left}
-.dx-kv{font-family:'Syne','Outfit',sans-serif;font-style:normal;font-size:28px;font-weight:700;padding:6px 0 2px;line-height:1.1}
-.dx-ks{font-size:12px;color:var(--ink3);padding:0}
+.dx-kv{font-family:'Syne','Outfit',sans-serif;font-style:normal;font-size:21px;font-weight:700;padding:0;line-height:1.15;white-space:nowrap}
+.dx-ks{font-size:11.5px;color:var(--ink3);padding:0;display:none}
+.dx-kliq .dx-ks{display:block;flex:0 1 auto}
+.dx-kliq .dx-ks:empty{display:none}
 .dx-kpi.k-pos{border-top-color:var(--green)}.dx-kpi.k-neu{border-top-color:var(--amber-m)}.dx-kpi.k-neg{border-top-color:var(--red)}
-.dx-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--border);background:var(--surface3)}
+.dx-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 12px;border-top:1px solid var(--border);background:var(--surface3)}
 .dx-actions button{border:1px solid var(--border2);background:var(--surface);cursor:pointer;color:var(--ink);font-size:13px;font-weight:600;padding:5px 12px;border-radius:7px;font-family:'Outfit',sans-serif}
 .dx-actions button:hover{background:var(--surface2)}
 .dx-actions .dx-hint{font-size:12px;color:var(--ink3)}
@@ -543,7 +545,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.100.0 · 10/11/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.101.0 · 10/11/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -905,7 +907,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.100.0 · 10/11/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.101.0 · 10/11/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3767,7 +3769,7 @@ calcPolizza();
   const eur = v => fe(v)+' €';
   // testi del riquadro «Liquidità netta»
   function liqView(c){
-    if(!c.liq && !c.estN) return {val:'—', sub:'liquidità totale − debiti da estinguere', cls:''};
+    if(!c.liq && !c.estN) return {val:'—', sub:'', cls:''};
     let sub = c.estN ? (eur(c.liq)+' − '+eur(c.estDebit)+' di estinzioni ('+c.estN+(c.estN===1?' rata':' rate')+')') : 'nessuna rata da estinguere';
     if(c.estMissing) sub += ' · manca il debito residuo di '+c.estMissing+(c.estMissing===1?' rata':' rate');
     if(!c.liq) return {val:'—', sub:'inserisci la liquidità totale · estinzioni '+eur(c.estDebit), cls:''};
@@ -3997,17 +3999,17 @@ calcPolizza();
           </div>
         </div>
         <div class="dx-side">
-          <div class="dx-kpi ${drm>=0?'k-pos':'k-neg'}" data-drm-box>
+          <div class="dx-kpi ${drm>=0?'k-pos':'k-neg'}" data-drm-box title="DRM = redditi − rate (in corso + nuova rata)">
             <div class="dx-kh">DRM</div>
             <div class="dx-kv ${drm>=0?'drmc-pos':'drmc-neg'}" data-drm>${eur(drm)}</div>
             <div class="dx-ks">redditi − rate</div>
           </div>
-          <div class="dx-kpi ${totRed<=0?'':(dti<=0.35?'k-pos':(dti<=0.50?'k-neu':'k-neg'))}" data-dti-box>
+          <div class="dx-kpi ${totRed<=0?'':(dti<=0.35?'k-pos':(dti<=0.50?'k-neu':'k-neg'))}" data-dti-box title="DTI = rate (in corso + nuova rata) ÷ redditi">
             <div class="dx-kh">DTI</div>
             <div class="dx-kv ${dtiCls}" data-dti>${dtiTxt(dti,totRed)}</div>
             <div class="dx-ks">rate ÷ redditi</div>
           </div>
-          <div class="dx-kpi dx-kliq ${L0.cls}" data-liq-box>
+          <div class="dx-kpi dx-kliq ${L0.cls}" data-liq-box title="Liquidità netta = liquidità totale − debiti residui delle rate da estinguere">
             <div class="dx-kh">Liquidità netta</div>
             <div class="dx-kv ${L0.cls==='k-neg'?'drmc-neg':''}" data-liq>${L0.val}</div>
             <div class="dx-ks" data-liq-sub>${esc(L0.sub)}</div>
