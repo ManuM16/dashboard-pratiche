@@ -263,9 +263,18 @@ tr:hover td{background:var(--surface3)}
 .drmc-panel-del{border:none;border-left:1px solid var(--border);background:transparent;cursor:pointer;color:var(--ink3);font-size:15px;padding:0 16px;transition:.12s}
 .drmc-panel-del:hover{background:var(--red-l);color:var(--red)}
 .dx-main{display:block}
-.dx-nuova{display:grid;grid-template-columns:1fr 1fr;background:#FFF6C9;border-bottom:1px solid var(--border2);box-shadow:inset 4px 0 0 var(--amber-m)}
+.dx-nuova{display:grid;grid-template-columns:1fr 1fr;align-items:start;background:#FFF6C9;border-bottom:1px solid var(--border2);box-shadow:inset 4px 0 0 var(--amber-m)}
+.dx-nr{min-width:0;border-left:1px solid rgba(146,80,10,.18);align-self:stretch}
+.dx-net{margin:0 14px 9px 16px;padding-top:5px;border-top:1px dashed rgba(146,80,10,.35);max-width:17.5em;font-family:'Outfit',sans-serif}
+.dx-netrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13px;color:var(--amber);white-space:nowrap}
+.dx-netrow b{font-weight:600;color:var(--ink)}
+.dx-netrow.tot{margin-top:2px;font-size:13.5px;font-weight:700;color:var(--ink)}
+.dx-netrow.tot b{font-size:19px;font-weight:700;font-family:'Syne','Outfit',sans-serif}
+.dx-net.k-pos .tot b{color:var(--green)}.dx-net.k-neg .tot b{color:var(--red)}.dx-net.k-neu .tot b{color:var(--amber)}
+.dx-net small{display:block;font-size:11.5px;line-height:1.3;color:var(--red);white-space:normal;margin-top:2px}
+.dx-net small:empty{display:none}
 .dx-nf{display:flex;flex-wrap:wrap;align-items:center;column-gap:6px;min-width:0;padding:7px 14px 8px 16px;cursor:text}
-.dx-nf+.dx-nf{border-left:1px solid rgba(146,80,10,.18)}
+
 .dx-nf span{flex:0 0 100%;font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dx-nf em{font-style:normal;font-weight:600;font-size:15px;color:var(--amber)}
 .dx-nuova .dx-in{flex:0 1 9.5em;width:9.5em;height:32px;background:#fff;border:1px solid var(--amber-m);border-radius:7px;font-size:17px;font-weight:700;margin-top:3px}
@@ -275,7 +284,7 @@ tr:hover td{background:var(--surface3)}
 .dx-t tfoot td.dx-totl{text-align:left;font-weight:500;font-size:12px;color:var(--ink2);padding-left:10px;overflow:hidden;text-overflow:ellipsis}
 .dx-tablewrap{overflow-x:auto;min-width:0}
 .dx-t{width:100%;min-width:41em;border-collapse:collapse;table-layout:fixed;font-size:15px}
-.dx-t th{background:var(--surface2);color:var(--ink2);font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 4px;text-align:center;border-bottom:1px solid var(--border2)}
+.dx-t th{background:var(--surface2);color:var(--ink);font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 4px;text-align:center;border-bottom:1px solid var(--border2)}
 .dx-t td{background:var(--surface);padding:0;height:36px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle}
 .dx-t td:last-child{border-right:none}
 .dx-t tbody tr:hover td{background:var(--surface3)}
@@ -299,8 +308,8 @@ tr:hover td{background:var(--surface3)}
 .dx-in:disabled{color:var(--ink3)}
 .dx-x{border:none;background:none;cursor:pointer;color:var(--ink3);font-size:13px;padding:4px;width:100%}
 .dx-x:hover{color:var(--red)}
-.dx-side{display:grid;grid-template-columns:auto auto 1fr;border-top:1px solid var(--border)}
-.dx-kliq .dx-kv{color:var(--ink)}
+.dx-side{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border2)}
+
 
 .dx-stb{display:flex;align-items:center;gap:5px;width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:500;color:var(--ink3);padding:0 6px;outline:none;cursor:pointer;box-sizing:border-box;min-width:0;text-align:left;white-space:nowrap}
 .dx-stb i{flex:0 0 7px;width:7px;height:7px;border-radius:50%;background:var(--border2)}
@@ -324,17 +333,17 @@ tr:hover td{background:var(--surface3)}
 .dx-t tr.dx-st-no td:nth-child(n+2):nth-child(-n+7) .dx-in,.dx-t tr.dx-st-no td.dx-m{color:var(--ink3)}
 .dx-t tr.dx-st-no [data-k="rata"]{text-decoration:line-through}
 @container (max-width:700px){
-  .dx-side{grid-template-columns:1fr 1fr}
-  .dx-kliq{grid-column:1 / -1;border-left:none!important;border-top:1px solid var(--border)}
+
+
 }
-.dx-kpi{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:2px 10px;min-width:0;padding:8px 14px;border-top:3px solid var(--border2);background:var(--surface)!important}
-.dx-kpi+.dx-kpi{border-left:1px solid var(--border)}
-.dx-kh{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);text-align:left}
-.dx-kv{font-family:'Syne','Outfit',sans-serif;font-style:normal;font-size:21px;font-weight:700;padding:0;line-height:1.15;white-space:nowrap}
-.dx-ks{font-size:11.5px;color:var(--ink3);padding:0;display:none}
-.dx-kliq .dx-ks{display:block;flex:0 1 auto}
-.dx-kliq .dx-ks:empty{display:none}
-.dx-kpi.k-pos{border-top-color:var(--green)}.dx-kpi.k-neu{border-top-color:var(--amber-m)}.dx-kpi.k-neg{border-top-color:var(--red)}
+.dx-kpi{display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:2px 10px;min-width:0;padding:11px 16px 12px;border-top:3px solid var(--border2);background:var(--surface2)}
+.dx-kpi+.dx-kpi{border-left:1px solid rgba(0,0,0,.08)}
+.dx-kh{font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink);text-align:left}
+.dx-kv{font-family:'Syne','Outfit',sans-serif;font-style:normal;font-size:24px;font-weight:700;padding:0;line-height:1.15;white-space:nowrap}
+.dx-ks{flex:0 0 100%;font-size:11.5px;color:var(--ink2);padding:0}
+
+
+.dx-kpi.k-pos{border-top-color:var(--green);background:var(--green-l)}.dx-kpi.k-neu{border-top-color:var(--amber-m);background:var(--amber-l)}.dx-kpi.k-neg{border-top-color:var(--red);background:var(--red-l)}
 .dx-t tfoot td.dx-addc{padding:0;text-align:center}
 .dx-t th:last-child,.dx-t td:last-child{position:sticky;right:0;z-index:2}
 .dx-t tbody td:last-child{background:var(--surface);box-shadow:-1px 0 0 var(--border)}
@@ -553,7 +562,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.103.0 · 10/11/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.104.0 · 10/11/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -915,7 +924,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.103.0 · 10/11/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.104.0 · 10/11/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3777,11 +3786,11 @@ calcPolizza();
   const eur = v => fe(v)+' €';
   // testi del riquadro «Liquidità netta»
   function liqView(c){
-    if(!c.liq && !c.estN) return {val:'—', sub:'', cls:''};
-    let sub = c.estN ? (eur(c.liq)+' − '+eur(c.estDebit)+' di estinzioni ('+c.estN+(c.estN===1?' rata':' rate')+')') : 'nessuna rata da estinguere';
-    if(c.estMissing) sub += ' · manca il debito residuo di '+c.estMissing+(c.estMissing===1?' rata':' rate');
-    if(!c.liq) return {val:'—', sub:'inserisci la liquidità totale · estinzioni '+eur(c.estDebit), cls:''};
-    return {val:eur(c.liqNetta), sub, cls:c.liqNetta<0?'k-neg':(c.estMissing?'k-neu':'k-pos')};
+    const n = c.estN ? ' ('+c.estN+(c.estN===1?' rata':' rate')+')' : '';
+    const est = c.estN ? '− '+eur(c.estDebit) : '—';
+    const warn = c.estMissing ? ('Manca il debito residuo di '+c.estMissing+(c.estMissing===1?' rata':' rate')+' in estinzione: la liquidità netta è sovrastimata') : '';
+    if(!c.liq) return {estLbl:'− Rate in estinzione'+n, est, val:'—', warn: c.estN?'Inserisci la liquidità totale per calcolare la netta':'', cls:''};
+    return {estLbl:'− Rate in estinzione'+n, est, val:eur(c.liqNetta), warn, cls:c.liqNetta<0?'k-neg':(c.estMissing?'k-neu':'k-pos')};
   }
   const dtiTxt = (dti,totRed) => totRed>0 ? (dti*100).toFixed(2).replace('.',',')+'%' : '—';
 
@@ -3818,8 +3827,10 @@ calcPolizza();
     upd('[data-dti-box]', el=>kc(el, totRed<=0?'':(dti<=0.35?'k-pos':(dti<=0.50?'k-neu':'k-neg'))));
     upd('[data-drm-box]', el=>kc(el, drm>=0?'k-pos':'k-neg'));
     const L=liqView(C);
-    upd('[data-liq]', el=>{ el.textContent=L.val; el.classList.toggle('drmc-neg',L.cls==='k-neg'); });
-    upd('[data-liq-sub]', el=>{ el.textContent=L.sub; });
+    upd('[data-liq]', el=>{ el.textContent=L.val; });
+    upd('[data-est]', el=>{ el.textContent=L.est; });
+    upd('[data-est-lbl]', el=>{ el.textContent=L.estLbl; });
+    upd('[data-liq-sub]', el=>{ el.textContent=L.warn; });
     upd('[data-liq-box]', el=>kc(el,L.cls));
     panel.querySelectorAll('.drmc-mesi-span').forEach(td=>{
       const i=+td.dataset.i; const r=(p.rate||[])[i]; if(!r){ td.textContent=''; return; }
@@ -3986,8 +3997,15 @@ calcPolizza();
       <div class="dx-nuova">
         <label class="dx-nf" title="Rata della nuova proposta: entra nel totale rate, nel DRM e nel DTI"><span>Nuova rata proposta</span>
           <input class="dx-in r" data-k="nuova" value="${esc(p.nuova||'')}" inputmode="decimal" placeholder="0,00"><em>€</em></label>
-        <label class="dx-nf" title="Importo totale erogato: tolti i debiti delle rate da estinguere dà la liquidità netta"><span>Liquidità totale</span>
-          <input class="dx-in r" data-k="liq" value="${esc(p.liquidita||'')}" inputmode="decimal" placeholder="0,00"><em>€</em></label>
+        <div class="dx-nr">
+          <label class="dx-nf" title="Importo totale erogato con la nuova pratica"><span>Liquidità totale</span>
+            <input class="dx-in r" data-k="liq" value="${esc(p.liquidita||'')}" inputmode="decimal" placeholder="0,00"><em>€</em></label>
+          <div class="dx-net ${L0.cls}" data-liq-box title="Liquidità netta = liquidità totale − debiti residui delle rate segnate «Da estinguere»">
+            <div class="dx-netrow"><span data-est-lbl>${esc(L0.estLbl)}</span><b data-est>${L0.est}</b></div>
+            <div class="dx-netrow tot"><span>= Liquidità netta</span><b data-liq>${L0.val}</b></div>
+            <small data-liq-sub>${esc(L0.warn)}</small>
+          </div>
+        </div>
       </div>
       <div class="dx-main">
         <div>
@@ -4007,17 +4025,12 @@ calcPolizza();
           <div class="dx-kpi ${drm>=0?'k-pos':'k-neg'}" data-drm-box title="DRM = redditi − rate (in corso + nuova rata)">
             <div class="dx-kh">DRM</div>
             <div class="dx-kv ${drm>=0?'drmc-pos':'drmc-neg'}" data-drm>${eur(drm)}</div>
-            <div class="dx-ks">redditi − rate</div>
+            <div class="dx-ks">redditi − rate in corso e nuova rata</div>
           </div>
           <div class="dx-kpi ${totRed<=0?'':(dti<=0.35?'k-pos':(dti<=0.50?'k-neu':'k-neg'))}" data-dti-box title="DTI = rate (in corso + nuova rata) ÷ redditi">
             <div class="dx-kh">DTI</div>
             <div class="dx-kv ${dtiCls}" data-dti>${dtiTxt(dti,totRed)}</div>
-            <div class="dx-ks">rate ÷ redditi</div>
-          </div>
-          <div class="dx-kpi dx-kliq ${L0.cls}" data-liq-box title="Liquidità netta = liquidità totale − debiti residui delle rate da estinguere">
-            <div class="dx-kh">Liquidità netta</div>
-            <div class="dx-kv ${L0.cls==='k-neg'?'drmc-neg':''}" data-liq>${L0.val}</div>
-            <div class="dx-ks" data-liq-sub>${esc(L0.sub)}</div>
+            <div class="dx-ks">rate in corso e nuova rata ÷ redditi</div>
           </div>
         </div>
       </div>`;
