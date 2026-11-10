@@ -274,7 +274,7 @@ tr:hover td{background:var(--surface3)}
 .dx-in.dx-bad{box-shadow:inset 0 0 0 2px var(--red);background:var(--red-l)}
 .dx-t tfoot td.dx-totl{text-align:left;font-weight:500;font-size:12px;color:var(--ink2);padding-left:10px;overflow:hidden;text-overflow:ellipsis}
 .dx-tablewrap{overflow-x:auto;min-width:0}
-.dx-t{width:100%;min-width:45em;border-collapse:collapse;table-layout:fixed;font-size:15px}
+.dx-t{width:100%;min-width:41em;border-collapse:collapse;table-layout:fixed;font-size:15px}
 .dx-t th{background:var(--surface2);color:var(--ink2);font-family:'Syne','Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 4px;text-align:center;border-bottom:1px solid var(--border2)}
 .dx-t td{background:var(--surface);padding:0;height:36px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);vertical-align:middle}
 .dx-t td:last-child{border-right:none}
@@ -283,7 +283,7 @@ tr:hover td{background:var(--surface3)}
 .dx-t td.dx-new,.dx-t td.dx-newl,.dx-t tbody tr:hover td.dx-new,.dx-t tbody tr:hover td.dx-newl{background:#FFF1A8;font-weight:700}
 .dx-t td.dx-new{box-shadow:inset 3px 0 0 var(--amber-m)}
 .dx-t td.dx-newl{text-align:center;font-weight:600;font-size:13px;color:var(--amber);white-space:nowrap}
-.dx-t tfoot td{background:var(--surface2);color:var(--ink);border:none;border-top:2px solid var(--ink);font-weight:700;font-size:16px;text-align:right;padding:10px 8px;height:auto;white-space:nowrap}
+.dx-t tfoot td{background:var(--surface2);color:var(--ink);border:none;border-top:2px solid var(--ink);font-weight:700;font-size:16px;text-align:right;padding:13px 8px;height:auto;white-space:nowrap}
 .dx-t tfoot td.dx-empty{background:var(--surface2)}
 .dx-in{width:100%;height:100%;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:16px;font-weight:500;color:var(--ink);padding:6px 8px;outline:none;box-sizing:border-box;min-width:0}
 .dx-in.r{text-align:right}
@@ -336,8 +336,10 @@ tr:hover td{background:var(--surface3)}
 .dx-kliq .dx-ks:empty{display:none}
 .dx-kpi.k-pos{border-top-color:var(--green)}.dx-kpi.k-neu{border-top-color:var(--amber-m)}.dx-kpi.k-neg{border-top-color:var(--red)}
 .dx-t tfoot td.dx-addc{padding:0;text-align:center}
-.dx-add{width:24px;height:24px;border-radius:50%;border:none;background:var(--ink);color:#fff;font-size:15px;font-weight:700;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;transition:.12s}
-.dx-add:hover{background:var(--blue);transform:scale(1.1)}
+.dx-t th:last-child,.dx-t td:last-child{position:sticky;right:0;z-index:2}
+.dx-t tbody td:last-child{background:var(--surface);box-shadow:-1px 0 0 var(--border)}
+.dx-add{width:30px;height:30px;border-radius:50%;border:none;background:var(--blue);color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.25);font-size:18px;font-weight:700;line-height:1;cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;transition:.12s}
+.dx-add:hover{background:var(--ink);transform:scale(1.1)}
 
 
 
@@ -551,7 +553,7 @@ body.guest-mode .comm-sel{
       Dashboard Pratiche
     </div>
     <div style="font-size:13px;color:#9B9892;margin-bottom:36px">Seleziona il tipo di accesso</div>
-    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.102.0 · 10/11/2026</div>
+    <div style="font-size:11px;color:#B5B2AB;margin:-28px 0 28px;letter-spacing:.3px">v14.103.0 · 10/11/2026</div>
     
     <div id="net-status" style="display:none;margin:-8px 0 18px;padding:9px 12px;border-radius:10px;font-size:12.5px;font-weight:600;text-align:left;align-items:center;gap:8px"></div>
     <div id="login-choices" style="display:flex;flex-direction:column;gap:14px">
@@ -913,7 +915,7 @@ body.guest-mode .comm-sel{
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="sb-logo-title">Dashboard</div>
-    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.102.0 · 10/11/2026</div>
+    <div style="margin-top:6px;font-size:13px;color:rgba(255,255,255,.28);letter-spacing:.4px;font-family:'Outfit',sans-serif">v14.103.0 · 10/11/2026</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-section">Analisi</div>
@@ -3991,12 +3993,12 @@ calcPolizza();
         <div>
           <div class="dx-tablewrap">
             <table class="dx-t">
-              <colgroup><col style="width:6.8em"><col style="width:6.8em"><col style="width:6.9em"><col><col style="width:6.8em"><col style="width:3.6em"><col style="width:6.8em"><col style="width:2.2em"></colgroup>
+              <colgroup><col style="width:6.3em"><col style="width:6.3em"><col style="width:6.7em"><col><col style="width:6.3em"><col style="width:3.2em"><col style="width:6.5em"><col style="width:3em"></colgroup>
               <thead><tr><th>Redditi</th><th>Rate</th><th>Stato</th><th>Istituto</th><th>Scadenza</th><th title="Mesi alla scadenza">Mesi</th><th>Debito res.</th><th></th></tr></thead>
               <tbody class="dx-body"></tbody>
               <tfoot><tr>
                 <td data-tot-red>${eur(totRed)}</td><td data-tot-rate>${eur(totRate)}</td>
-                <td class="dx-empty dx-totl" colspan="4">Totali · rate in corso + nuova rata</td><td data-debit-tot>${totDebit>0?eur(totDebit):'—'}</td><td class="dx-addc"><button type="button" class="dx-add" title="Aggiungi una riga">＋</button></td>
+                <td class="dx-empty dx-totl" colspan="4">Totali · rate in corso + nuova rata</td><td data-debit-tot>${totDebit>0?eur(totDebit):'—'}</td><td class="dx-addc"><button type="button" class="dx-add" title="Aggiungi una riga" aria-label="Aggiungi una riga">+</button></td>
               </tr></tfoot>
             </table>
           </div>
