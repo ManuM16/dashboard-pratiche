@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-11T08:20:59.174Z",
+  "exportedAt": "2026-11-11T15:45:09.020Z",
   "panels": [
     {
       "id": 1,
@@ -239,7 +239,7 @@
     },
     {
       "id": 7,
-      "name": "Cavaciocchi",
+      "name": "pALL",
       "numPratica": "",
       "redditi": [
         {
