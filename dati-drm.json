@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-11T15:45:12.739Z",
+  "exportedAt": "2026-11-11T15:45:40.674Z",
   "panels": [
     {
       "id": 1,
@@ -239,7 +239,7 @@
     },
     {
       "id": 7,
-      "name": "Pallini Franc",
+      "name": "Pallini Francesco",
       "numPratica": "",
       "redditi": [
         {
@@ -258,7 +258,7 @@
           "stato": ""
         }
       ],
-      "nuova": "249,00",
+      "nuova": "392",
       "rows": 5
     }
   ],
