@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-11T15:45:09.020Z",
+  "exportedAt": "2026-11-11T15:45:10.712Z",
   "panels": [
     {
       "id": 1,
@@ -239,7 +239,7 @@
     },
     {
       "id": 7,
-      "name": "pALL",
+      "name": "",
       "numPratica": "",
       "redditi": [
         {
