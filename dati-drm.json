@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T14:18:23.259Z",
+  "exportedAt": "2026-11-12T14:18:25.054Z",
   "panels": [
     {
       "id": 1,
@@ -266,7 +266,7 @@
           "tipo": "",
           "istituto": "",
           "ruolo": "intestatario",
-          "importo": "29",
+          "importo": "290,00",
           "scadenza": "",
           "debitoRes": "",
           "stato": ""
