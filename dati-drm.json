@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T14:27:42.707Z",
+  "exportedAt": "2026-11-12T14:27:46.756Z",
   "panels": [
     {
       "id": 1,
@@ -255,7 +255,7 @@
       "rate": [
         {
           "tipo": "",
-          "istituto": "Avv",
+          "istituto": "Avvera",
           "ruolo": "intestatario",
           "importo": "255,00",
           "scadenza": "",
@@ -273,7 +273,7 @@
         },
         {
           "tipo": "",
-          "istituto": "",
+          "istituto": "Ag",
           "ruolo": "intestatario",
           "importo": "78,00",
           "scadenza": "",
