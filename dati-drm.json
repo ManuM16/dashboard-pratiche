@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T14:15:30.510Z",
+  "exportedAt": "2026-11-12T14:15:32.652Z",
   "panels": [
     {
       "id": 1,
@@ -242,7 +242,12 @@
       "id": 6,
       "name": "ESPOSITO MARIA G",
       "numPratica": "5065265301 ",
-      "redditi": [],
+      "redditi": [
+        {
+          "desc": "",
+          "importo": "879"
+        }
+      ],
       "rate": [],
       "nuova": "401,00",
       "rows": 4,
