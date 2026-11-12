@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T14:15:26.442Z",
+  "exportedAt": "2026-11-12T14:15:27.914Z",
   "panels": [
     {
       "id": 1,
@@ -242,42 +242,10 @@
       "id": 6,
       "name": "ESPOSITO MARIA G",
       "numPratica": "5065265301 ",
-      "redditi": [
-        {
-          "desc": "",
-          "importo": ""
-        }
-      ],
-      "rate": [
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "494,00",
-          "scadenza": "",
-          "debitoRes": ""
-        },
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "131,00",
-          "scadenza": "",
-          "debitoRes": "",
-          "stato": "no"
-        },
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "110,00",
-          "scadenza": "",
-          "debitoRes": "",
-          "stato": ""
-        }
-      ],
+      "redditi": [],
+      "rate": [],
       "nuova": "401,00",
-      "rows": 4,
+      "rows": 1,
       "liquidita": "40.000,00"
     },
     {
