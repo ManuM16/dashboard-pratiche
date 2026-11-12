@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T14:16:16.558Z",
+  "exportedAt": "2026-11-12T14:18:11.019Z",
   "panels": [
     {
       "id": 1,
@@ -252,7 +252,17 @@
           "importo": "2524,00"
         }
       ],
-      "rate": [],
+      "rate": [
+        {
+          "tipo": "",
+          "istituto": "",
+          "ruolo": "intestatario",
+          "importo": "255",
+          "scadenza": "",
+          "debitoRes": "",
+          "stato": ""
+        }
+      ],
       "nuova": "401,00",
       "rows": 4,
       "liquidita": "40.000,00"
