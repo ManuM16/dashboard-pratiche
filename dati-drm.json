@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T14:28:01.580Z",
+  "exportedAt": "2026-11-12T14:31:22.554Z",
   "panels": [
     {
       "id": 1,
@@ -282,7 +282,7 @@
         },
         {
           "tipo": "",
-          "istituto": "Fin",
+          "istituto": "Findom",
           "ruolo": "intestatario",
           "importo": "238,00",
           "scadenza": "",
@@ -290,7 +290,7 @@
           "stato": "est"
         }
       ],
-      "nuova": "401,00",
+      "nuova": "2",
       "rows": 6,
       "liquidita": "40.000,00"
     },
