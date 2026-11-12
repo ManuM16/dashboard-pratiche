@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T14:23:52.004Z",
+  "exportedAt": "2026-11-12T14:27:42.707Z",
   "panels": [
     {
       "id": 1,
@@ -255,7 +255,7 @@
       "rate": [
         {
           "tipo": "",
-          "istituto": "",
+          "istituto": "Avv",
           "ruolo": "intestatario",
           "importo": "255,00",
           "scadenza": "",
