@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T14:20:28.647Z",
+  "exportedAt": "2026-11-12T14:20:30.595Z",
   "panels": [
     {
       "id": 1,
@@ -260,7 +260,7 @@
           "importo": "255,00",
           "scadenza": "",
           "debitoRes": "",
-          "stato": ""
+          "stato": "est"
         },
         {
           "tipo": "",
