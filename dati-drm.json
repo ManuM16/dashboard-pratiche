@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-12T10:08:17.848Z",
+  "exportedAt": "2026-11-12T10:08:20.735Z",
   "panels": [
     {
       "id": 1,
@@ -97,7 +97,7 @@
           "debitoRes": ""
         }
       ],
-      "nuova": "660"
+      "nuova": "660,00"
     },
     {
       "id": 4,
