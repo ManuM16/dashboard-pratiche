@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-13T10:09:56.118Z",
+  "exportedAt": "2026-11-13T11:50:48.054Z",
   "panels": [
     {
       "id": 1,
@@ -347,7 +347,16 @@
       "nuova": "392,00",
       "rows": 6,
       "liquidita": "30.000,00"
+    },
+    {
+      "id": 8,
+      "name": "",
+      "numPratica": "",
+      "redditi": [],
+      "rate": [],
+      "nuova": "",
+      "rows": 5
     }
   ],
-  "nextId": 8
+  "nextId": 9
 }
