@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-13T11:50:57.628Z",
+  "exportedAt": "2026-11-13T11:51:01.101Z",
   "panels": [
     {
       "id": 1,
@@ -352,7 +352,12 @@
       "id": 8,
       "name": "Massa Renato",
       "numPratica": "",
-      "redditi": [],
+      "redditi": [
+        {
+          "desc": "",
+          "importo": "2106"
+        }
+      ],
       "rate": [],
       "nuova": "214,00",
       "rows": 5
