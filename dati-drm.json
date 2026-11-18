@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-17T10:00:49.382Z",
+  "exportedAt": "2026-11-18T17:25:20.501Z",
   "panels": [
     {
       "id": 1,
@@ -290,19 +290,10 @@
           "scadenza": "",
           "debitoRes": "3334,52",
           "stato": "est"
-        },
-        {
-          "tipo": "",
-          "istituto": "Compass",
-          "ruolo": "intestatario",
-          "importo": "131,00",
-          "scadenza": "",
-          "debitoRes": "",
-          "stato": "no"
         }
       ],
       "nuova": "263,00",
-      "rows": 6,
+      "rows": 5,
       "liquidita": "19.000,00"
     },
     {
