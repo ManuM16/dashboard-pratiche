@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-18T17:25:27.516Z",
+  "exportedAt": "2026-11-18T17:25:29.702Z",
   "panels": [
     {
       "id": 1,
@@ -245,7 +245,17 @@
       "name": "ESPOSITO MARIA G",
       "numPratica": "5065265301 ",
       "redditi": [],
-      "rate": [],
+      "rate": [
+        {
+          "tipo": "",
+          "istituto": "",
+          "ruolo": "intestatario",
+          "importo": "545",
+          "scadenza": "",
+          "debitoRes": "",
+          "stato": ""
+        }
+      ],
       "nuova": "263,00",
       "rows": 5,
       "liquidita": "19.000,00"
