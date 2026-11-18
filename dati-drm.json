@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-18T17:25:20.501Z",
+  "exportedAt": "2026-11-18T17:25:22.518Z",
   "panels": [
     {
       "id": 1,
@@ -244,56 +244,10 @@
       "id": 6,
       "name": "ESPOSITO MARIA G",
       "numPratica": "5065265301 ",
-      "redditi": [
-        {
-          "desc": "",
-          "importo": "879,00"
-        },
-        {
-          "desc": "",
-          "importo": "2524,00"
-        }
-      ],
-      "rate": [
-        {
-          "tipo": "",
-          "istituto": "Avvera",
-          "ruolo": "intestatario",
-          "importo": "255,00",
-          "scadenza": "",
-          "debitoRes": "1999,00",
-          "stato": "est"
-        },
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "474,00",
-          "scadenza": "",
-          "debitoRes": "",
-          "stato": ""
-        },
-        {
-          "tipo": "",
-          "istituto": "Agos",
-          "ruolo": "intestatario",
-          "importo": "78,00",
-          "scadenza": "",
-          "debitoRes": "602,88",
-          "stato": "est"
-        },
-        {
-          "tipo": "",
-          "istituto": "Findom",
-          "ruolo": "intestatario",
-          "importo": "238,00",
-          "scadenza": "",
-          "debitoRes": "3334,52",
-          "stato": "est"
-        }
-      ],
+      "redditi": [],
+      "rate": [],
       "nuova": "263,00",
-      "rows": 5,
+      "rows": 1,
       "liquidita": "19.000,00"
     },
     {
