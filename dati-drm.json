@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-19T14:01:51.689Z",
+  "exportedAt": "2026-11-19T14:01:57.723Z",
   "panels": [
     {
       "id": 1,
@@ -60,7 +60,7 @@
           "debitoRes": ""
         }
       ],
-      "numPratica": "5096401301 ",
+      "numPratica": "5117366301 ",
       "rows": 5,
       "nuova": "145,00",
       "liquidita": "50.000,00"
