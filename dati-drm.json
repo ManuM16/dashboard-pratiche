@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-19T14:03:08.583Z",
+  "exportedAt": "2026-11-19T14:03:10.649Z",
   "panels": [
     {
       "id": 1,
@@ -23,7 +23,7 @@
           "importo": "119,00",
           "scadenza": "",
           "debitoRes": "",
-          "stato": ""
+          "stato": "no"
         },
         {
           "tipo": "",
@@ -61,7 +61,7 @@
         }
       ],
       "numPratica": "5117366301 ",
-      "rows": 5,
+      "rows": 6,
       "nuova": "145,00",
       "liquidita": "50.000,00"
     },
