@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-19T15:54:51.789Z",
+  "exportedAt": "2026-11-19T15:54:57.319Z",
   "panels": [
     {
       "id": 1,
@@ -303,7 +303,7 @@
       "redditi": [
         {
           "desc": "",
-          "importo": "1400,00"
+          "importo": "420"
         }
       ],
       "rate": [
