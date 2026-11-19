@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-19T14:54:35.609Z",
+  "exportedAt": "2026-11-19T14:54:39.625Z",
   "panels": [
     {
       "id": 1,
@@ -291,7 +291,7 @@
         },
         {
           "tipo": "",
-          "istituto": "",
+          "istituto": "DB",
           "ruolo": "intestatario",
           "importo": "165,00",
           "scadenza": "",
