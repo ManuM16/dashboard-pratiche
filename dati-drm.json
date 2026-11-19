@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-19T15:46:54.473Z",
+  "exportedAt": "2026-11-19T15:47:39.865Z",
   "panels": [
     {
       "id": 1,
@@ -292,7 +292,7 @@
           "stato": ""
         }
       ],
-      "nuova": "201,00",
+      "nuova": "221",
       "rows": 6,
       "liquidita": "12.500,00"
     },
