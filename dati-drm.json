@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-23T15:12:36.463Z",
+  "exportedAt": "2026-11-23T15:12:37.400Z",
   "panels": [
     {
       "id": 1,
@@ -298,7 +298,7 @@
     },
     {
       "id": 6,
-      "name": "Camp",
+      "name": "Campione",
       "numPratica": "5065265301 ",
       "redditi": [
         {
