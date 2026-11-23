@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-23T15:12:35.001Z",
+  "exportedAt": "2026-11-23T15:12:36.463Z",
   "panels": [
     {
       "id": 1,
@@ -298,7 +298,7 @@
     },
     {
       "id": 6,
-      "name": "",
+      "name": "Camp",
       "numPratica": "5065265301 ",
       "redditi": [
         {
