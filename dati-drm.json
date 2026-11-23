@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-23T15:12:48.458Z",
+  "exportedAt": "2026-11-23T15:13:04.632Z",
   "panels": [
     {
       "id": 1,
@@ -298,7 +298,7 @@
     },
     {
       "id": 6,
-      "name": "CAMPIONEMANUEL",
+      "name": "CAMPIONE MANUEL",
       "numPratica": "5113332301 ",
       "redditi": [
         {
@@ -334,6 +334,15 @@
           "istituto": "",
           "ruolo": "intestatario",
           "importo": "11,00",
+          "scadenza": "",
+          "debitoRes": "",
+          "stato": ""
+        },
+        {
+          "tipo": "",
+          "istituto": "",
+          "ruolo": "intestatario",
+          "importo": "10",
           "scadenza": "",
           "debitoRes": "",
           "stato": ""
