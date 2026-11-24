@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-24T16:35:37.487Z",
+  "exportedAt": "2026-11-24T16:35:38.782Z",
   "panels": [
     {
       "id": 1,
@@ -41,7 +41,7 @@
           "importo": "",
           "scadenza": "",
           "debitoRes": "",
-          "stato": "no"
+          "stato": ""
         },
         {
           "tipo": "",
