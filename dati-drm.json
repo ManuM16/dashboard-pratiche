@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-24T16:37:50.284Z",
+  "exportedAt": "2026-11-24T16:38:00.873Z",
   "panels": [
     {
       "id": 1,
@@ -20,25 +20,7 @@
           "tipo": "",
           "istituto": "",
           "ruolo": "intestatario",
-          "importo": "",
-          "scadenza": "",
-          "debitoRes": "",
-          "stato": ""
-        },
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "",
-          "scadenza": "",
-          "debitoRes": "",
-          "stato": ""
-        },
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "",
+          "importo": "762",
           "scadenza": "",
           "debitoRes": "",
           "stato": ""
@@ -81,7 +63,7 @@
         }
       ],
       "numPratica": "5119275301 ",
-      "rows": 7,
+      "rows": 5,
       "nuova": "4835,00",
       "liquidita": "50.000,00"
     },
