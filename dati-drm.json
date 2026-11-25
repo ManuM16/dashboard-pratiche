@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-25T11:19:10.402Z",
+  "exportedAt": "2026-11-25T11:19:12.359Z",
   "panels": [
     {
       "id": 1,
@@ -36,7 +36,7 @@
         },
         {
           "tipo": "",
-          "istituto": "d",
+          "istituto": "db",
           "ruolo": "intestatario",
           "importo": "324,00",
           "scadenza": "",
@@ -45,7 +45,7 @@
         }
       ],
       "numPratica": "",
-      "rows": 3,
+      "rows": 4,
       "nuova": "668,00",
       "liquidita": ""
     },
