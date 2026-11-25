@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-25T11:18:49.044Z",
+  "exportedAt": "2026-11-25T11:18:51.798Z",
   "panels": [
     {
       "id": 1,
@@ -62,7 +62,7 @@
           "stato": ""
         }
       ],
-      "numPratica": "5119275301 ",
+      "numPratica": "",
       "rows": 5,
       "nuova": "",
       "liquidita": ""
