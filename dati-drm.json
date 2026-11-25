@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-25T11:19:03.271Z",
+  "exportedAt": "2026-11-25T11:19:07.356Z",
   "panels": [
     {
       "id": 1,
@@ -42,19 +42,10 @@
           "scadenza": "",
           "debitoRes": "",
           "stato": ""
-        },
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "",
-          "scadenza": "",
-          "debitoRes": "",
-          "stato": ""
         }
       ],
       "numPratica": "",
-      "rows": 4,
+      "rows": 3,
       "nuova": "668,00",
       "liquidita": ""
     },
