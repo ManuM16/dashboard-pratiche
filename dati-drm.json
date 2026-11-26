@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-26T09:44:50.694Z",
+  "exportedAt": "2026-11-26T09:44:52.808Z",
   "panels": [
     {
       "id": 1,
@@ -356,12 +356,12 @@
         },
         {
           "tipo": "",
-          "istituto": "",
+          "istituto": "Dit",
           "ruolo": "intestatario",
           "importo": "188,00",
           "scadenza": "",
           "debitoRes": "",
-          "stato": ""
+          "stato": "est"
         }
       ],
       "nuova": "",
