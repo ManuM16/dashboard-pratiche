@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-26T09:44:21.262Z",
+  "exportedAt": "2026-11-26T09:44:26.406Z",
   "panels": [
     {
       "id": 1,
@@ -338,7 +338,12 @@
       "id": 7,
       "name": "Castelli",
       "numPratica": "",
-      "redditi": [],
+      "redditi": [
+        {
+          "desc": "",
+          "importo": "1526"
+        }
+      ],
       "rate": [],
       "nuova": "1526,00",
       "rows": 6,
