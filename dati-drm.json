@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-26T09:42:04.566Z",
+  "exportedAt": "2026-11-26T09:42:12.712Z",
   "panels": [
     {
       "id": 1,
@@ -338,31 +338,8 @@
       "id": 7,
       "name": "Pilloni Giovanna",
       "numPratica": "5115851301 ",
-      "redditi": [
-        {
-          "desc": "",
-          "importo": "1955,00"
-        }
-      ],
+      "redditi": [],
       "rate": [
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "99,00",
-          "scadenza": "",
-          "debitoRes": "13.978,18",
-          "stato": "no"
-        },
-        {
-          "tipo": "",
-          "istituto": "",
-          "ruolo": "intestatario",
-          "importo": "130,00",
-          "scadenza": "",
-          "debitoRes": "",
-          "stato": "no"
-        },
         {
           "tipo": "",
           "istituto": "DB",
@@ -391,8 +368,8 @@
           "stato": "est"
         }
       ],
-      "nuova": "152,00",
-      "rows": 6,
+      "nuova": "1526,00",
+      "rows": 4,
       "liquidita": "35.000,00"
     },
     {
