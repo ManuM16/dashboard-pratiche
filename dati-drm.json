@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-26T09:44:34.611Z",
+  "exportedAt": "2026-11-26T09:44:41.568Z",
   "panels": [
     {
       "id": 1,
@@ -347,7 +347,7 @@
       "rate": [
         {
           "tipo": "",
-          "istituto": "",
+          "istituto": "Ditt",
           "ruolo": "intestatario",
           "importo": "126,00",
           "scadenza": "",
