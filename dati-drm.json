@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-26T09:45:12.750Z",
+  "exportedAt": "2026-11-26T09:45:14.758Z",
   "panels": [
     {
       "id": 1,
@@ -365,7 +365,7 @@
         },
         {
           "tipo": "",
-          "istituto": "Pro",
+          "istituto": "Pross.Scad",
           "ruolo": "intestatario",
           "importo": "116,00",
           "scadenza": "",
