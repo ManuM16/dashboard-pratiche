@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-27T15:51:27.400Z",
+  "exportedAt": "2026-11-27T15:51:29.575Z",
   "panels": [
     {
       "id": 1,
@@ -356,12 +356,12 @@
         },
         {
           "tipo": "",
-          "istituto": "Pross.Scad",
+          "istituto": "DB",
           "ruolo": "intestatario",
           "importo": "235,00",
           "scadenza": "",
           "debitoRes": "",
-          "stato": "no"
+          "stato": "est"
         },
         {
           "tipo": "",
