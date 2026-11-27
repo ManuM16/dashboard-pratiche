@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "exportedAt": "2026-11-27T15:50:52.512Z",
+  "exportedAt": "2026-11-27T15:50:58.785Z",
   "panels": [
     {
       "id": 1,
@@ -349,7 +349,7 @@
           "tipo": "",
           "istituto": "Ditta",
           "ruolo": "intestatario",
-          "importo": "188,00",
+          "importo": "118",
           "scadenza": "",
           "debitoRes": "",
           "stato": "no"
